@@ -1,5 +1,7 @@
 <template>
-  <router-link to="/Informations" style="text-decoration: none; color: inherit"
+  <router-link
+    :to="'/Informations/' + heroe.id"
+    style="text-decoration: none; color: inherit"
     ><div class="card">
       <img class="card__img" :src="heroe.image" />
       <div class="card__infos">
@@ -21,12 +23,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import Heroe from "../classes/Heroe.js";
 
 export default {
   name: "Card",
-  computed: mapGetters(["heroes"]),
   methods: {
     setSize(text, size) {
       if (text.length > size + 1) return text.substring(0, size - 2) + "...";

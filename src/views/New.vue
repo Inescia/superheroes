@@ -10,7 +10,7 @@
         />
       </div>
       <v-col>
-        <h3>Id : 124483</h3>
+        <h3>Id : {{ id }}</h3>
         <v-form ref="form">
           <v-row justify="space-between" align="center">
             <v-col cols="5"
@@ -94,8 +94,8 @@ export default {
   components: { Header },
   name: "New",
   data: () => ({
-    description: "",
     name: "",
+    description: "",
     comics: 0,
     stories: 0,
     series: 0,
@@ -106,6 +106,11 @@ export default {
       (v) => (v && v.length <= 30) || "Name must be less than 30 characters",
     ],
   }),
+  computed: {
+    id() {
+      return this.$store.getters.newId;
+    },
+  },
   methods: {
     submitForm() {
       this.$refs.form.validate();

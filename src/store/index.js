@@ -36,8 +36,6 @@ const actions = {
         result = data;
       });
       result.length == 0 ? (isFinished = true) : (isFinished = false);
-      console.log(request);
-
       commit("receiveHeroes", {
         heroes: result.map((data) => {
           return new Heroe(
@@ -66,12 +64,24 @@ const getters = {
   },
 
   //Retourne tous les héros qui ont "text" dans leur nom
-  heroe: (state) => (text) => {
+  heroeByName: (state) => (name) => {
     var h = [];
     state.heroes.forEach((heroe) => {
-      if (heroe.name.includes(text)) h.push(heroe);
+      if (heroe.name.includes(name)) h.push(heroe);
     });
     return h;
+  },
+
+  heroeById: (state) => (id) => {
+    return state.heroes.find((h) => h.id == id);
+  },
+
+  newId() {
+    var id = 0;
+    state.heroes.forEach((h) => {
+      if (h.id > id) id = h.id;
+    });
+    return id++;
   },
 };
 

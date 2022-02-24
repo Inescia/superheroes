@@ -1,63 +1,59 @@
 <template>
-  <div class="page">
+  <div class="page list">
     <Header :btn="false" />
     <h1 class="title1">SUPERHEROES.</h1>
-
-    <div class="bar">
+    <div class="list__bar">
       <v-col cols="1"></v-col
-      ><v-col cols="7"
-        ><v-text-field
-          hide-details="false"
+      ><v-col cols="7">
+        <v-text-field
           prepend-icon="mdi-magnify"
-          append-icon="mdi-close"
           label="Rechercher"
+          v-model="search"
         ></v-text-field></v-col
       ><v-btn to="/New">Nouveau Superhéro</v-btn>
     </div>
-    <div class="bar">
-      <v-col class="switch" cols="3">
-        <p class="text">Affichage :</p>
-        <p class="textSwitch">Liste</p>
+    <div class="list__bar">
+      <v-col class="list__bar__switch" cols="3">
+        <p class="list__bar__text">Affichage :</p>
+        <p class="list__bar__textSwitch">Liste</p>
         <v-switch v-model="display" label="Cartes"></v-switch>
       </v-col>
-      <v-col class="switch" cols="3">
-        <p class="text">Tri :</p>
-        <p class="textSwitch">ID</p>
+      <v-col class="list__bar__switch" cols="3">
+        <p class="list__bar__text">Tri :</p>
+        <p class="list__bar__textSwitch">ID</p>
         <v-switch v-model="sort" label="Nom"></v-switch>
       </v-col>
       <v-col cols="2"></v-col>
       <v-col cols="4"
         ><v-slider
-          label="5 héros/pages"
+          v-model="number"
+          :label="number + ' héros/pages'"
           hide-details
-          max="100"
-          min="5"
+          max="200"
+          min="10"
           persistent-hint
+          step="20"
+          thumb-label
           track-color="grey"
         ></v-slider
       ></v-col>
     </div>
     <v-data-table
       v-if="!display"
-      class="table"
+      class="list__table"
       :headers="headers"
-      :items="desserts"
-      :items-per-page="5"
+      :items="heroesDisplayed"
+      :items-per-page="number"
       :hide-default-footer="true"
     >
     </v-data-table>
-    <div v-else class="list">
-      <Card
-        v-for="heroe in heroes(number, number * (page - 1))"
-        :key="heroe.id"
-        :heroe="heroe"
-      />
+    <div v-else class="list__heroes">
+      <Card v-for="heroe in heroesDisplayed" :key="heroe.id" :heroe="heroe" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import Header from "../components/Header.vue";
 import Card from "../components/Card.vue";
 
@@ -67,84 +63,101 @@ export default {
   data() {
     return {
       display: true,
-      sort: false,
-      number: 20,
+      sort: true,
+      number: 50,
       page: 1,
+      search: "",
       headers: [
-        { text: "ID", value: "name", width: "20%" },
-        { text: "Nom", value: "calories", width: "30%" },
-        { text: "Comics", value: "carbs", align: "center", width: "12.5%" },
-        { text: "Stories", value: "protein", align: "center", width: "12.5%" },
-        { text: "Series", value: "iron", align: "center", width: "12.5%" },
-        { text: "Events", value: "fat", align: "center", width: "12.5%" },
-      ],
-      desserts: [
+        { text: "ID", value: "id", width: "20%", sortable: false },
+        { text: "Nom", value: "name", width: "30%", sortable: false },
         {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%",
+          text: "Comics",
+          value: "comics",
+          align: "center",
+          width: "12.5%",
+          sortable: false,
         },
         {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%",
+          text: "Stories",
+          value: "stories",
+          align: "center",
+          width: "12.5%",
+          sortable: false,
+        },
+        {
+          text: "Series",
+          value: "series",
+          align: "center",
+          width: "12.5%",
+          sortable: false,
+        },
+        {
+          text: "Events",
+          value: "events",
+          align: "center",
+          width: "12.5%",
+          sortable: false,
         },
       ],
     };
   },
 
-  computed: mapGetters(["heroes"]),
-  methods: {
-    toggleDisplay() {
-      this.display = !this.display;
-    },
-    toggleSort() {
-      this.sort = !this.sort;
+  computed: {
+    heroesDisplayed() {
+      var h;
+      if (this.search == "") {
+        h = this.$store.getters.heroes(
+          this.number,
+          this.number * (this.page - 1)
+        );
+        this.sort
+          ? h.sort((a, b) => a.name - b.name)
+          : h.sort((a, b) => a.id - b.id);
+      } else h = this.$store.getters.heroeByName(this.search);
+      return h;
     },
   },
+  methods: {},
 };
 </script>
 
 <style lang="scss">
-.table {
-  margin: 0px 30px;
-  opacity: 0.8;
-}
-
-.bar {
-  display: flex;
-  align-items: center;
-  margin: -10px 20px;
-  justify-content: space-around;
-}
-
-.text {
-  font-size: 14px;
-  color: rgba(0, 0, 0, 0.6);
-  padding-top: 22px;
-  padding-right: 8px;
-}
-.textSwitch {
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.6);
-  padding-top: 20px;
-  padding-right: 8px;
-}
-
-.switch {
-  display: flex;
-  align-items: flex-start;
-}
-
 .list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  &__bar {
+    display: flex;
+    align-items: center;
+    margin: -10px 20px;
+    justify-content: space-around;
+
+    &__switch {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    &__text {
+      font-size: 14px;
+      color: rgba(0, 0, 0, 0.6);
+      padding-top: 22px;
+      padding-right: 8px;
+    }
+
+    &__textSwitch {
+      font-size: 16px;
+      color: rgba(0, 0, 0, 0.6);
+      padding-top: 20px;
+      padding-right: 8px;
+    }
+  }
+
+  &__table {
+    margin: 0px 30px;
+    opacity: 0.8;
+  }
+
+  &__heroes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 </style>

@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <div class="loader" v-if="loading"></div>
-    <router-view v-else />
+    <router-view />
   </v-app>
 </template>
 
@@ -10,7 +9,6 @@ export default {
   name: "App",
   data() {
     return {
-      loading: false,
       load: false,
     };
   },
@@ -31,15 +29,6 @@ h1 {
   padding-right: 20px;
   letter-spacing: 0.15em;
 }
-.title1 {
-  align-self: center;
-  margin-top: -15px;
-  margin-bottom: 10px;
-}
-.title2 {
-  align-self: flex-end;
-}
-
 h3 {
   font-family: "Allerta Stencil";
   font-size: 2em;
@@ -50,8 +39,18 @@ h3 {
   margin-top: -20px;
   margin-right: 20px;
 }
+
 .v-btn {
   margin: 10px;
+}
+
+.title1 {
+  align-self: center;
+  margin-top: -15px;
+  margin-bottom: 10px;
+}
+.title2 {
+  align-self: flex-end;
 }
 .page {
   display: flex;
@@ -61,11 +60,5 @@ h3 {
   background-image: url("./assets/background.jpeg");
   background-attachment: fixed;
   background-size: cover;
-}
-.loader {
-  height: 100%;
-  width: 100%;
-  background: red;
-  opacity: 0.2;
 }
 </style>

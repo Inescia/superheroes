@@ -1,23 +1,20 @@
 <template>
   <div class="page">
-    <Header :btn="true" />
+    <Header />
     <h1 class="title2">INFORMATIONS.</h1>
     <div class="informations">
       <div class="informations__containerImg">
-        <img
-          class="informations__containerImg__img"
-          :src="require('../assets/test.jpeg')"
-        />
+        <img class="informations__containerImg__img" :src="image" />
       </div>
       <v-col>
-        <h3>Id : 124483</h3>
+        <h3>Id : {{ this.id }}</h3>
         <v-form ref="form">
           <v-row justify="space-between" align="center">
             <v-col cols="5"
               ><v-text-field
                 class="informations__name"
                 v-model="name"
-                :rules="nameRules"
+                :rules="rules"
                 counter="30"
                 label="Name"
               ></v-text-field
@@ -89,24 +86,45 @@
 </template>
 
 <script>
+import Heroe from "../classes/Heroe";
 import Header from "../components/Header.vue";
 
 export default {
   components: { Header },
   name: "Informations",
   data: () => ({
-    description: "",
+    heroe: null,
     name: "",
+    description: "",
     comics: 0,
     stories: 0,
     series: 0,
     events: 0,
     favorie: false,
-    nameRules: [
+    image: "../assets/test.jpeg",
+    rules: [
       (v) => !!v || "Name is required",
       (v) => (v && v.length <= 30) || "Name must be less than 30 characters",
     ],
   }),
+
+  props: {
+    id: {
+      require,
+    },
+  },
+  beforeMount() {
+    this.heroe = this.$store.getters.heroeById(this.id);
+    this.name = this.heroe.name;
+    this.description = this.heroe.description;
+    this.comics = this.heroe.comics;
+    this.stories = this.heroe.stories;
+    this.series = this.heroe.series;
+    this.events = this.heroe.events;
+    this.favorie = this.heroe.favorie;
+    this.image = this.heroe.image;
+  },
+
   methods: {
     submitForm() {
       this.$refs.form.validate();

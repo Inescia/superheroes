@@ -1,15 +1,64 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
+import { fetchHeroesAPI, searchHeroe } from "../api/marvel.js";
+import Heroe from "../classes/Heroe.js";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
+const state = {
+  heroes: [],
+};
+
+const mutations = {
+  receiveHeroes(state, { heroes }) {
+    state.heroes = heroes;
   },
-  mutations: {
+};
+
+const actions = {
+  async fetchHeroes({ commit }, name) {
+    fetchHeroesAPI().then((value) => {
+      var h = value.map((data) => {
+        console.log("bonsoir");
+        /*return new Heroe(
+          data.id,
+          data.name,
+          data.description,
+          data.comics.available,
+          data.stories.available,
+          data.series.available,
+          data.events.available,
+          `${data.thumbnail.path}.${data.thumbnail.extension}`
+        );*/
+      });
+      commit("receiveHeroes", {
+        heroes: h,
+      });
+    });
   },
-  actions: {
+};
+
+const getters = {
+  heroes: (state) => {
+    return state.heroes.map((data) => {
+      return {
+        name: data.name,
+        url: data.urls[1] ? data.urls[1].url : data.urls[0].url,
+        image: `${data.thumbnail.path}.${data.thumbnail.extension}`,
+        description:
+          data.description === ""
+            ? "No description listed for this character."
+            : data.description,
+      };
+    });
   },
-  modules: {
-  }
-})
+};
+
+const store = new Vuex.Store({
+  state,
+  mutations,
+  actions,
+  getters,
+});
+
+export default store;

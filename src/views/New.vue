@@ -129,7 +129,7 @@ export default {
     justify-content: center;
 
     &__img {
-      box-shadow: 0px 0px 10px 5px #e5e5e5;
+      box-shadow: 0px 0px 10px 5px #d4d4d4;
       background: white;
       padding: 30px;
       height: auto;

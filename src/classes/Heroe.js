@@ -1,8 +1,8 @@
-export class Heroe {
+export default class Heroe {
   constructor(id, name, description, comics, stories, series, events, image) {
     this.id = id;
     this.name = name;
-    this.description == ""
+    description == ""
       ? (this.description = "No description for this character.")
       : (this.description = description);
     this.comics = comics;
@@ -11,7 +11,6 @@ export class Heroe {
     this.events = events;
     this.image = image;
     this.favorie = false;
-    console.log("okkkk");
   }
 
   toggleFavorie() {

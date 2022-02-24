@@ -11,46 +11,67 @@ const state = {
 
 const mutations = {
   receiveHeroes(state, { heroes }) {
-    state.heroes = heroes;
+    state.heroes.length == 0
+      ? (state.heroes = heroes)
+      : (state.heroes = state.heroes.concat(heroes));
+  },
+  //direct ou dans actions d'abord ?
+  addHeroe(state, heroe) {
+    state.heroes.push(heroe);
+  },
+  removeHeroe(state, heroe) {
+    state.heroes.splice(state.heroes.indexOf(heroe), 1);
   },
 };
 
 const actions = {
-  async fetchHeroes({ commit }, name) {
-    fetchHeroesAPI().then((value) => {
-      var h = value.map((data) => {
-        console.log("bonsoir");
-        /*return new Heroe(
-          data.id,
-          data.name,
-          data.description,
-          data.comics.available,
-          data.stories.available,
-          data.series.available,
-          data.events.available,
-          `${data.thumbnail.path}.${data.thumbnail.extension}`
-        );*/
+  async fetchHeroes({ commit }) {
+    var request = 0,
+      isFinished = true;
+
+    do {
+      var result;
+      //Recupération des héros 100 par 100
+      await fetchHeroesAPI(request).then(function (data) {
+        result = data;
       });
+      result.length == 0 ? (isFinished = true) : (isFinished = false);
+      console.log(request);
+
       commit("receiveHeroes", {
-        heroes: h,
+        heroes: result.map((data) => {
+          return new Heroe(
+            data.id,
+            data.name,
+            data.description,
+            data.comics.available,
+            data.stories.available,
+            data.series.available,
+            data.events.available,
+            `${data.thumbnail.path}.${data.thumbnail.extension}`
+          );
+        }),
       });
-    });
+
+      request++;
+    } while (!isFinished);
+    console.log("Chargement des héros terminé");
   },
 };
 
 const getters = {
-  heroes: (state) => {
-    return state.heroes.map((data) => {
-      return {
-        name: data.name,
-        url: data.urls[1] ? data.urls[1].url : data.urls[0].url,
-        image: `${data.thumbnail.path}.${data.thumbnail.extension}`,
-        description:
-          data.description === ""
-            ? "No description listed for this character."
-            : data.description,
-      };
+  //Retourne tous les héros
+  heroes: (state) => (number, offset) => {
+    return state.heroes.slice(offset, number + offset);
+  },
+
+  //Retourne tous les héros qui ont "text" dans leur nom
+  heroe: (state) => (text) => {
+    var h = [];
+    state.heroes.forEach((heroe) => {
+      if (heroe.name.includes(text)) h.push(heroe);
     });
+    return h;
   },
 };
 

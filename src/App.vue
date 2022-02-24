@@ -1,12 +1,25 @@
 <template>
   <v-app>
-    <router-view />
+    <div class="loader" v-if="loading"></div>
+    <router-view v-else />
   </v-app>
 </template>
 
 <script>
 export default {
   name: "App",
+  data() {
+    return {
+      loading: false,
+      load: false,
+    };
+  },
+  created() {
+    if (!this.load) {
+      this.$store.dispatch("fetchHeroes");
+      this.load = true;
+    }
+  },
 };
 </script>
 
@@ -46,6 +59,13 @@ h3 {
   height: 100%;
   width: 100%;
   background-image: url("./assets/background.jpeg");
+  background-attachment: fixed;
   background-size: cover;
+}
+.loader {
+  height: 100%;
+  width: 100%;
+  background: red;
+  opacity: 0.2;
 }
 </style>

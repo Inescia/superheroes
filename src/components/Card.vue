@@ -2,7 +2,8 @@
   <router-link
     :to="'/Informations/' + heroe.id"
     style="text-decoration: none; color: inherit"
-    ><div class="card">
+  >
+    <div class="card">
       <img class="card__img" :src="heroe.image" />
       <div class="card__infos">
         <v-row>
@@ -64,6 +65,11 @@ $size: 220px;
   box-shadow: 0px 0px 10px 5px #d4d4d4;
   border-radius: 10px;
   margin: 25px;
+  transition: transform 1.2s ease-in-out;
+
+  &:hover {
+    transform: scale(-1, 1);
+  }
 
   &__img {
     border-radius: 10px 10px 0px 0px;

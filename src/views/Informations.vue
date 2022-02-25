@@ -1,5 +1,9 @@
 <template>
-  <div class="page">
+  <List v-if="this.id == ''" />
+  <div v-else class="page">
+    <!-- <v-alert class="alert" dismissible type="success">
+      Modifications enregistrées</v-alert
+    > -->
     <Header />
     <h1 class="title2">INFORMATIONS.</h1>
     <div class="informations">
@@ -76,8 +80,11 @@
             ></v-textarea>
           </v-col>
           <v-row class="informations__btns">
-            <div><v-btn>Supprimer</v-btn><v-btn>Reinitialiser</v-btn></div>
-            <v-btn @click="submitForm">Enregistrer</v-btn></v-row
+            <div>
+              <v-btn @click="removeHeroe">Supprimer</v-btn
+              ><v-btn @click="resetHeroe">Reinitialiser</v-btn>
+            </div>
+            <v-btn @click="updateHeroe">Enregistrer</v-btn></v-row
           >
         </v-form>
       </v-col>
@@ -86,11 +93,11 @@
 </template>
 
 <script>
-import Heroe from "../classes/Heroe";
+import List from "../views/List.vue";
 import Header from "../components/Header.vue";
 
 export default {
-  components: { Header },
+  components: { Header, List },
   name: "Informations",
   data: () => ({
     heroe: null,
@@ -126,8 +133,41 @@ export default {
   },
 
   methods: {
-    submitForm() {
-      this.$refs.form.validate();
+    updateHeroe() {
+      if (this.$refs.form.validate())
+        try {
+          this.heroe.name = this.name;
+          this.heroe.description = this.description;
+          this.heroe.comics = this.comics;
+          this.heroe.stories = this.stories;
+          this.heroe.series = this.series;
+          this.heroe.events = this.events;
+          this.heroe.favorie = this.favorie;
+          this.heroe.image = this.image;
+          alert("Modifications enregistrées");
+        } catch (error) {
+          alert("Modifications non enregistrées\nErreur : " + error);
+        }
+    },
+    removeHeroe() {
+      var id = this.id;
+      if (confirm("Voulez-vous vraiment supprimer ce superhéro ?"))
+        try {
+          this.$store.commit("removeHeroe", { id });
+          alert("Superhéro supprimé");
+        } catch (error) {
+          alert("Superhéro non supprimé \nErreur : " + error);
+        }
+    },
+    resetHeroe() {
+      this.name = this.heroe.name;
+      this.description = this.heroe.description;
+      this.comics = this.heroe.comics;
+      this.stories = this.heroe.stories;
+      this.series = this.heroe.series;
+      this.events = this.heroe.events;
+      this.favorie = this.heroe.favorie;
+      this.image = this.heroe.image;
     },
     toggleFavorie() {
       this.favorie = !this.favorie;
@@ -137,6 +177,13 @@ export default {
 </script>
 
 <style lang="scss">
+.alert {
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  margin: 0px auto;
+}
+
 .informations {
   display: flex;
   flex-direction: row;

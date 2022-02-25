@@ -15,12 +15,13 @@ const mutations = {
       ? (state.heroes = heroes)
       : (state.heroes = state.heroes.concat(heroes));
   },
-  //direct ou dans actions d'abord ?
-  addHeroe(state, heroe) {
-    state.heroes.push(heroe);
+  //a test
+  addHeroe(state, { heroe }) {
+    console.log(heroe);
+    state.heroes = state.heroes.concat(heroe);
   },
-  removeHeroe(state, heroe) {
-    state.heroes.splice(state.heroes.indexOf(heroe), 1);
+  removeHeroe(state, { id }) {
+    state.heroes = state.heroes.filter((h) => h.id != id);
   },
 };
 

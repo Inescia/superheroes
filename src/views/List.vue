@@ -9,6 +9,7 @@
           prepend-icon="mdi-magnify"
           label="Rechercher"
           v-model="search"
+          hide-details
         ></v-text-field></v-col
       ><v-btn to="/New">Nouveau Superhéro</v-btn>
     </div>
@@ -122,6 +123,15 @@ export default {
 </script>
 
 <style lang="scss">
+@keyframes fadeInAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .list {
   &__bar {
     display: flex;
@@ -152,12 +162,18 @@ export default {
   &__table {
     margin: 0px 30px;
     opacity: 0.8;
+    animation: fadeInAnimation ease 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
   }
 
   &__heroes {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    animation: fadeInAnimation ease 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
   }
 }
 </style>

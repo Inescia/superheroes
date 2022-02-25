@@ -80,7 +80,7 @@
           </v-col>
         </v-form>
         <v-row class="new__btn"
-          ><v-btn @click="submitForm">Enregistrer</v-btn></v-row
+          ><v-btn @click="addHeroe">Enregistrer</v-btn></v-row
         >
       </v-col>
     </div>
@@ -88,12 +88,14 @@
 </template>
 
 <script>
+import Heroe from "../classes/Heroe";
 import Header from "../components/Header.vue";
 
 export default {
   components: { Header },
   name: "New",
   data: () => ({
+    id: "",
     name: "",
     description: "",
     comics: 0,
@@ -106,14 +108,29 @@ export default {
       (v) => (v && v.length <= 30) || "Name must be less than 30 characters",
     ],
   }),
-  computed: {
-    id() {
-      return this.$store.getters.newId;
-    },
+  beforeMount() {
+    this.id = this.$store.getters.newId;
   },
   methods: {
-    submitForm() {
-      this.$refs.form.validate();
+    addHeroe() {
+      if (this.$refs.form.validate()) {
+        //try
+        var heroe = new Heroe(
+          this.id,
+          this.name,
+          this.description,
+          this.comics,
+          this.stories,
+          this.series,
+          this.events,
+          this.image,
+          this.favorie
+        );
+        this.$store.commit("addHeroe", { heroe });
+        alert("Superhéro créé");
+      } /*catch (error) {
+          alert("Superhéro non créé\nErreur : " + error);
+        }*/
     },
     toggleFavorie() {
       this.favorie = !this.favorie;

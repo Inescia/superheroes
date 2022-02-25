@@ -1,5 +1,15 @@
 export default class Heroe {
-  constructor(id, name, description, comics, stories, series, events, image) {
+  constructor(
+    id,
+    name,
+    description,
+    comics,
+    stories,
+    series,
+    events,
+    image,
+    favorie = false
+  ) {
     this.id = id;
     this.name = name;
     description == ""
@@ -10,7 +20,7 @@ export default class Heroe {
     this.series = series;
     this.events = events;
     this.image = image;
-    this.favorie = false;
+    this.favorie = favorie;
   }
 
   toggleFavorie() {

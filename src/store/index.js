@@ -15,11 +15,11 @@ const mutations = {
       ? (state.heroes = heroes)
       : (state.heroes = state.heroes.concat(heroes));
   },
-  //a test
+
   addHeroe(state, { heroe }) {
-    console.log(heroe);
     state.heroes = state.heroes.concat(heroe);
   },
+
   removeHeroe(state, { id }) {
     state.heroes = state.heroes.filter((h) => h.id != id);
   },
@@ -73,10 +73,12 @@ const getters = {
     return h;
   },
 
+  //Retourne le héro associé à l'id
   heroeById: (state) => (id) => {
     return state.heroes.find((h) => h.id == id);
   },
 
+  //Retourne un nouvel id non utilisé
   newId() {
     var id = 0;
     state.heroes.forEach((h) => {

@@ -1,6 +1,7 @@
 <template>
   <v-app>
-    <router-view />
+    <div v-if="false" style="background: red; width: 100%; height: 100%"></div>
+    <router-view v-else />
   </v-app>
 </template>
 
@@ -26,18 +27,18 @@ export default {
 h1 {
   font-family: "Allerta Stencil";
   font-size: 4em;
-  padding-right: 20px;
   letter-spacing: 0.15em;
+  padding-right: 20px;
 }
 h3 {
+  align-self: flex-end;
   font-family: "Allerta Stencil";
   font-size: 2em;
-  align-self: flex-end;
-  text-align: right;
-  padding-right: 20px;
   letter-spacing: 0.05em;
   margin-top: -20px;
   margin-right: 20px;
+  padding-right: 20px;
+  text-align: right;
 }
 
 .v-btn {
@@ -46,19 +47,19 @@ h3 {
 
 .title1 {
   align-self: center;
-  margin-top: -15px;
   margin-bottom: 10px;
+  margin-top: -15px;
 }
 .title2 {
   align-self: flex-end;
 }
 .page {
+  background-attachment: fixed;
+  background-image: url("./assets/background.jpeg");
+  background-size: cover;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
-  background-image: url("./assets/background.jpeg");
-  background-attachment: fixed;
-  background-size: cover;
 }
 </style>

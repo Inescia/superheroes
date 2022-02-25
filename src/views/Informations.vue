@@ -7,7 +7,12 @@
     <Header />
     <h1 class="title2">INFORMATIONS.</h1>
     <div class="informations">
-      <div class="informations__containerImg">
+      <div
+        class="informations__containerImg"
+        @dragenter.prevent
+        @dragover.prevent
+        @drop.stop.prevent="onDrop"
+      >
         <img class="informations__containerImg__img" :src="image" />
       </div>
       <v-col>
@@ -108,7 +113,7 @@ export default {
     series: 0,
     events: 0,
     favorie: false,
-    image: "../assets/test.jpeg",
+    image: require("../assets/test.jpeg"),
     rules: [
       (v) => !!v || "Name is required",
       (v) => (v && v.length <= 30) || "Name must be less than 30 characters",
@@ -129,7 +134,11 @@ export default {
     this.series = this.heroe.series;
     this.events = this.heroe.events;
     this.favorie = this.heroe.favorie;
-    this.image = this.heroe.image;
+    if (
+      this.heroe.image !=
+      "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    )
+      this.image = this.heroe.image;
   },
 
   methods: {
@@ -149,6 +158,7 @@ export default {
           alert("Modifications non enregistrées\nErreur : " + error);
         }
     },
+
     removeHeroe() {
       var id = this.id;
       if (confirm("Voulez-vous vraiment supprimer ce superhéro ?"))
@@ -159,6 +169,7 @@ export default {
           alert("Superhéro non supprimé \nErreur : " + error);
         }
     },
+
     resetHeroe() {
       this.name = this.heroe.name;
       this.description = this.heroe.description;
@@ -169,8 +180,31 @@ export default {
       this.favorie = this.heroe.favorie;
       this.image = this.heroe.image;
     },
+
     toggleFavorie() {
       this.favorie = !this.favorie;
+    },
+
+    onDrop: function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      var files = e.dataTransfer.files;
+      this.createFile(files[0]);
+    },
+
+    createFile(file) {
+      if (!file.type.match("image.*")) {
+        alert("Select an image");
+        return;
+      }
+      var img = new Image();
+      var reader = new FileReader();
+      var vm = this;
+
+      reader.onload = function (e) {
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
     },
   },
 };

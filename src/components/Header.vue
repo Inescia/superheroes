@@ -3,11 +3,11 @@
     <router-link to="/"
       ><img
         class="header__img"
-        :src="require('../assets/logo_header.png')"
         contain
         height="100"
+        :src="require('../assets/logo_header.png')"
     /></router-link>
-    <v-btn v-show="btn" to="/List">Voir tous les superhéros</v-btn>
+    <v-btn to="/List" v-show="btn">Voir tous les superhéros</v-btn>
   </div>
 </template>
 
@@ -25,9 +25,9 @@ export default {
 
 <style lang="scss">
 .header {
+  align-items: flex-end;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
   padding: 20px 20px 0px 20px;
 
   &__img {

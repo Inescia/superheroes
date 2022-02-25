@@ -23,10 +23,6 @@ export default class Heroe {
     this.favorie = favorie;
   }
 
-  toggleFavorie() {
-    this.favorie = !this.favorie;
-  }
-
   toString() {
     var ch = "ID : " + this.id;
     ch += "\nName : " + this.name;

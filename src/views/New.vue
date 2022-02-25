@@ -6,7 +6,10 @@
       <div class="new__containerImg">
         <img
           class="new__containerImg__img"
-          :src="require('../assets/test.jpeg')"
+          @dragenter.prevent
+          @dragover.prevent
+          @drop.stop.prevent="onDrop"
+          :src="image"
         />
       </div>
       <v-col>
@@ -102,6 +105,7 @@ export default {
     stories: 0,
     series: 0,
     events: 0,
+    image: require("../assets/test.jpeg"),
     favorie: false,
     nameRules: [
       (v) => !!v || "Name is required",
@@ -113,27 +117,49 @@ export default {
   },
   methods: {
     addHeroe() {
-      if (this.$refs.form.validate()) {
-        //try
-        var heroe = new Heroe(
-          this.id,
-          this.name,
-          this.description,
-          this.comics,
-          this.stories,
-          this.series,
-          this.events,
-          this.image,
-          this.favorie
-        );
-        this.$store.commit("addHeroe", { heroe });
-        alert("Superhéro créé");
-      } /*catch (error) {
+      if (this.$refs.form.validate())
+        try {
+          var heroe = new Heroe(
+            this.id,
+            this.name,
+            this.description,
+            this.comics,
+            this.stories,
+            this.series,
+            this.events,
+            this.image,
+            this.favorie
+          );
+          this.$store.commit("addHeroe", { heroe });
+          alert("Superhéro créé");
+        } catch (error) {
           alert("Superhéro non créé\nErreur : " + error);
-        }*/
+        }
     },
     toggleFavorie() {
       this.favorie = !this.favorie;
+    },
+
+    onDrop: function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      var files = e.dataTransfer.files;
+      this.createFile(files[0]);
+    },
+
+    createFile(file) {
+      if (!file.type.match("image.*")) {
+        alert("Select an image");
+        return;
+      }
+      var img = new Image();
+      var reader = new FileReader();
+      var vm = this;
+
+      reader.onload = function (e) {
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
     },
   },
 };

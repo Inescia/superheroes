@@ -1,10 +1,10 @@
 <template>
   <router-link
+    style="color: inherit; text-decoration: none"
     :to="'/Informations/' + heroe.id"
-    style="text-decoration: none; color: inherit"
   >
     <div class="card">
-      <img class="card__img" :src="heroe.image" />
+      <img class="card__img" :src="image" />
       <div class="card__infos">
         <v-row>
           <v-col cols="10"
@@ -12,7 +12,7 @@
               {{ setSize(heroe.name, 21) }}
             </h4></v-col
           >
-          <v-icon v-show="heroe.favorie" color="red"> mdi-heart </v-icon></v-row
+          <v-icon color="red" v-show="heroe.favorie"> mdi-heart </v-icon></v-row
         >
         <h5 class="card__infos__id">{{ heroe.id }}</h5>
         <p class="card__infos__description">
@@ -34,20 +34,20 @@ export default {
       else return text;
     },
   },
+  computed: {
+    image() {
+      if (
+        this.heroe.image !=
+        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+      )
+        return this.heroe.image;
+      else return require("../assets/test.jpeg");
+    },
+  },
   props: {
     heroe: {
       type: Heroe,
-      default: new Heroe(
-        "id",
-        "123456789123456789123456789123456789",
-        "1234567891234567 891234567 89123 45678912",
-        "a",
-        "a",
-        "a",
-        "a",
-        "a",
-        "../assets/test.jpeg"
-      ),
+      require,
     },
   },
 };
@@ -57,15 +57,15 @@ export default {
 $size: 220px;
 
 .card {
-  width: $size;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 5px #d4d4d4;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: white;
-  box-shadow: 0px 0px 10px 5px #d4d4d4;
-  border-radius: 10px;
   margin: 25px;
   transition: transform 1.2s ease-in-out;
+  width: $size;
 
   &:hover {
     transform: scale(-1, 1);
@@ -74,8 +74,8 @@ $size: 220px;
   &__img {
     border-radius: 10px 10px 0px 0px;
     height: $size;
-    width: $size;
     object-fit: cover;
+    width: $size;
   }
 
   &__infos {
@@ -83,9 +83,9 @@ $size: 220px;
 
     &__name {
       font-size: 15px;
-      word-wrap: break-word;
       height: 25px;
       overflow: hidden;
+      word-wrap: break-word;
     }
 
     &__id {
@@ -94,10 +94,10 @@ $size: 220px;
 
     &__description {
       font-size: 12px;
-      opacity: 0.8;
       height: 35px;
-      width: $size - 20;
+      opacity: 0.8;
       overflow: hidden;
+      width: $size - 20;
       word-wrap: break-word;
     }
   }

@@ -7,6 +7,7 @@ Vue.use(Vuex);
 
 const state = {
   heroes: [],
+  load: false,
 };
 
 const mutations = {
@@ -17,7 +18,7 @@ const mutations = {
   },
 
   addHeroe(state, { heroe }) {
-    state.heroes = state.heroes.concat(heroe);
+    state.heroes = [heroe].concat(state.heroes);
   },
 
   removeHeroe(state, { id }) {
@@ -55,13 +56,28 @@ const actions = {
       request++;
     } while (!isFinished);
     console.log("Chargement des héros terminé");
+    state.load = true;
   },
 };
 
 const getters = {
-  //Retourne tous les héros
-  heroes: (state) => (number, offset) => {
-    return state.heroes.slice(offset, number + offset);
+  //Retourne l'état de chargement des héros
+  load: (state) => {
+    return state.load;
+  },
+
+  //Retourne une page de héros selon les paramètres
+  heroes: (state) => (number, offset, byName) => {
+    var h = state.heroes;
+    byName
+      ? h.sort((a, b) => a.name.localeCompare(b.name))
+      : h.sort((a, b) => a.id - b.id);
+    return h.slice(offset, number + offset);
+  },
+
+  //Retourne le nombre d'héros
+  numberHeroes: (state) => {
+    return state.heroes.length;
   },
 
   //Retourne tous les héros qui ont "text" dans leur nom

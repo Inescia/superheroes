@@ -42,15 +42,43 @@
     <v-data-table
       v-if="!display"
       class="list__table"
+      @click:row="onClick"
       :headers="headers"
       :items="heroesDisplayed"
       :items-per-page="number"
       :hide-default-footer="true"
     >
+      <!-- <template v-slot:item.favorie={ ""}>
+        <div></div>
+        <v-icon color="red"> mdi-heart </v-icon> 
+      </template> -->
     </v-data-table>
     <div v-else class="list__heroes">
       <Card v-for="heroe in heroesDisplayed" :key="heroe.id" :heroe="heroe" />
     </div>
+    <ul class="list__pages">
+      <li>
+        <button class="list__page" v-show="page != 1" @click="page--">
+          <v-icon color="#607d8b"> mdi-arrow-left</v-icon>
+        </button>
+      </li>
+      <li>
+        <button
+          type="button"
+          class="list__page"
+          v-for="i in pages"
+          @click="page = i"
+          :key="i"
+        >
+          {{ i }}
+        </button>
+      </li>
+      <li>
+        <button @click="page++" v-show="page < pages" class="list__page">
+          <v-icon color="#607d8b">mdi-arrow-right</v-icon>
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -75,28 +103,35 @@ export default {
           text: "Comics",
           value: "comics",
           align: "center",
-          width: "12.5%",
+          width: "10%",
           sortable: false,
         },
         {
           text: "Stories",
           value: "stories",
           align: "center",
-          width: "12.5%",
+          width: "10%",
           sortable: false,
         },
         {
           text: "Series",
           value: "series",
           align: "center",
-          width: "12.5%",
+          width: "10%",
           sortable: false,
         },
         {
           text: "Events",
           value: "events",
           align: "center",
-          width: "12.5%",
+          width: "10%",
+          sortable: false,
+        },
+        {
+          text: "Favorie",
+          value: "favorie",
+          align: "center",
+          width: "10%",
           sortable: false,
         },
       ],
@@ -106,32 +141,33 @@ export default {
   computed: {
     heroesDisplayed() {
       var h;
+      //si recherche vide => affichage de tous les heros
       if (this.search == "") {
         h = this.$store.getters.heroes(
           this.number,
-          this.number * (this.page - 1)
+          this.number * (this.page - 1),
+          this.sort
         );
-        this.sort
-          ? h.sort((a, b) => a.name - b.name)
-          : h.sort((a, b) => a.id - b.id);
       } else h = this.$store.getters.heroeByName(this.search);
       return h;
     },
+
+    pages() {
+      var n = this.$store.getters.numberHeroes;
+      if (n % this.number == 0) return Math.floor(n / this.number);
+      else return Math.floor(n / this.number) + 1;
+    },
   },
-  methods: {},
+
+  methods: {
+    onClick: function (e) {
+      this.$router.push("/Informations/" + e.id);
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-@keyframes fadeInAnimation {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .list {
   &__bar {
     display: flex;
@@ -174,6 +210,22 @@ export default {
     animation: fadeInAnimation ease 2s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
+  }
+
+  &__pages {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 30px 0px;
+  }
+
+  &__page {
+    display: inline;
+    font-size: 20px;
+    padding: 5px;
+    height: auto;
+    width: auto;
+    color: #607d8b;
   }
 }
 </style>

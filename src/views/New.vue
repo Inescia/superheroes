@@ -120,7 +120,7 @@ export default {
       if (this.$refs.form.validate())
         try {
           var heroe = new Heroe(
-            this.id,
+            "0000002",
             this.name,
             this.description,
             this.comics,
@@ -132,10 +132,12 @@ export default {
           );
           this.$store.commit("addHeroe", { heroe });
           alert("Superhéro créé");
+          this.$router.push("/List");
         } catch (error) {
           alert("Superhéro non créé\nErreur : " + error);
         }
     },
+
     toggleFavorie() {
       this.favorie = !this.favorie;
     },

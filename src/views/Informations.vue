@@ -1,9 +1,6 @@
 <template>
   <List v-if="this.id == ''" />
   <div v-else class="page">
-    <!-- <v-alert class="alert" dismissible type="success">
-      Modifications enregistrées</v-alert
-    > -->
     <Header />
     <h1 class="title2">INFORMATIONS.</h1>
     <div class="informations">
@@ -125,7 +122,8 @@ export default {
       require,
     },
   },
-  beforeMount() {
+  created() {
+    console.log(this.id);
     this.heroe = this.$store.getters.heroeById(this.id);
     this.name = this.heroe.name;
     this.description = this.heroe.description;
@@ -154,6 +152,7 @@ export default {
           this.heroe.favorie = this.favorie;
           this.heroe.image = this.image;
           alert("Modifications enregistrées");
+          this.$router.push("/List");
         } catch (error) {
           alert("Modifications non enregistrées\nErreur : " + error);
         }
@@ -164,6 +163,7 @@ export default {
       if (confirm("Voulez-vous vraiment supprimer ce superhéro ?"))
         try {
           this.$store.commit("removeHeroe", { id });
+          this.$router.push("/List");
           alert("Superhéro supprimé");
         } catch (error) {
           alert("Superhéro non supprimé \nErreur : " + error);
@@ -197,7 +197,6 @@ export default {
         alert("Select an image");
         return;
       }
-      var img = new Image();
       var reader = new FileReader();
       var vm = this;
 
@@ -211,13 +210,6 @@ export default {
 </script>
 
 <style lang="scss">
-.alert {
-  position: fixed;
-  top: 0;
-  z-index: 2;
-  margin: 0px auto;
-}
-
 .informations {
   display: flex;
   flex-direction: row;

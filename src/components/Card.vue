@@ -12,7 +12,9 @@
               {{ setSize(heroe.name, 21) }}
             </h4></v-col
           >
-          <v-icon color="red" v-show="heroe.favorie"> mdi-heart </v-icon></v-row
+          <v-icon color="red">
+            {{ this.heroe.favorie ? "mdi-heart" : "mdi-heart-outline" }}
+          </v-icon></v-row
         >
         <h5 class="card__infos__id">{{ heroe.id }}</h5>
         <p class="card__infos__description">
@@ -57,6 +59,9 @@ export default {
 $size: 220px;
 
 .card {
+  animation: fadeInAnimation ease 2s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
   background: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 5px #d4d4d4;

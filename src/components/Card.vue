@@ -4,35 +4,40 @@
     :to="'/Informations/' + heroe.id"
   >
     <div class="card">
-      <img class="card__img" :src="image" />
-      <div class="card__infos">
-        <v-row>
-          <v-col cols="10"
-            ><h4 class="card__infos__name">
-              {{ setSize(heroe.name, 21) }}
-            </h4></v-col
+      <div class="card__recto">
+        <img class="card__img" :src="image" />
+        <div class="card__infos">
+          <v-row>
+            <v-col cols="10"
+              ><h4 class="card__infos__name">
+                {{ setSize(heroe.name, 21) }}
+              </h4></v-col
+            >
+            <v-icon color="red">
+              {{ this.heroe.favorie ? 'mdi-heart' : 'mdi-heart-outline' }}
+            </v-icon></v-row
           >
-          <v-icon color="red">
-            {{ this.heroe.favorie ? "mdi-heart" : "mdi-heart-outline" }}
-          </v-icon></v-row
-        >
-        <h5 class="card__infos__id">{{ heroe.id }}</h5>
-        <p class="card__infos__description">
-          {{ setSize(heroe.description, 75) }}
-        </p>
+          <h5 class="card__infos__id">{{ heroe.id }}</h5>
+          <p class="card__infos__description">
+            {{ setSize(heroe.description, 75) }}
+          </p>
+        </div>
+      </div>
+      <div class="card__verso">
+        <h6>VOIR PLUS</h6>
       </div>
     </div>
   </router-link>
 </template>
 
 <script>
-import Heroe from "../classes/Heroe.js";
+import Heroe from '../classes/Heroe.js';
 
 export default {
-  name: "Card",
+  name: 'Card',
   methods: {
     setSize(text, size) {
-      if (text.length > size + 1) return text.substring(0, size - 2) + "...";
+      if (text.length > size + 1) return text.substring(0, size - 2) + '...';
       else return text;
     },
   },
@@ -40,10 +45,10 @@ export default {
     image() {
       if (
         this.heroe.image !=
-        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
       )
         return this.heroe.image;
-      else return require("../assets/test.jpeg");
+      else return require('../assets/test.jpeg');
     },
   },
   props: {
@@ -56,31 +61,72 @@ export default {
 </script>
 
 <style lang="scss">
-$size: 220px;
+@keyframes move {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(0, 1);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+$w: 220px;
+$h: 322px;
 
 .card {
-  animation: fadeInAnimation ease 2s;
+  animation: fadeInAnimation ease 1.5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px 5px #d4d4d4;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   margin: 25px;
-  transition: transform 1.2s ease-in-out;
-  width: $size;
+  width: $w;
 
   &:hover {
-    transform: scale(-1, 1);
+    animation: move ease-in-out 1.2s;
+
+    & .card__recto {
+      display: none;
+      animation: fadeInAnimation ease 1s;
+      animation-iteration-count: 1;
+      animation-fill-mode: forwards;
+    }
+    & .card__verso {
+      display: flex;
+      animation: fadeInAnimation ease 1s;
+      animation-iteration-count: 1;
+      animation-fill-mode: forwards;
+    }
+  }
+
+  &__recto {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 5px #d4d4d4;
+    width: 100%;
+    height: $h;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__verso {
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 5px #d4d4d4;
+    display: none;
+    width: 100%;
+    height: $h;
+    background: #ff554fee;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   &__img {
     border-radius: 10px 10px 0px 0px;
-    height: $size;
+    height: $w;
     object-fit: cover;
-    width: $size;
+    width: $w;
   }
 
   &__infos {
@@ -102,7 +148,7 @@ $size: 220px;
       height: 35px;
       opacity: 0.8;
       overflow: hidden;
-      width: $size - 20;
+      width: $w - 20;
       word-wrap: break-word;
     }
   }

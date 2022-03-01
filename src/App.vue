@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
       load: false,
@@ -18,7 +18,7 @@ export default {
   created() {
     if (!this.load) {
       this.$store
-        .dispatch("fetchHeroes")
+        .dispatch('fetchHeroes')
         .then(() => (this.load = this.$store.getters.load));
     }
   },
@@ -27,6 +27,7 @@ export default {
 
 <style lang="scss">
 @import url(https://fonts.googleapis.com/css?family=Allerta+Stencil);
+
 @keyframes fadeInAnimation {
   from {
     opacity: 0;
@@ -66,7 +67,7 @@ export default {
 }
 
 h1 {
-  font-family: "Allerta Stencil";
+  font-family: 'Allerta Stencil';
   font-size: 4em;
   letter-spacing: 0.15em;
   padding-right: 20px;
@@ -74,13 +75,21 @@ h1 {
 
 h3 {
   align-self: flex-end;
-  font-family: "Allerta Stencil";
+  font-family: 'Allerta Stencil';
   font-size: 2em;
   letter-spacing: 0.05em;
   margin-top: -20px;
   margin-right: 20px;
   padding-right: 20px;
   text-align: right;
+}
+
+h6 {
+  color: white;
+  font-family: 'Allerta Stencil';
+  font-size: 1.8em;
+  letter-spacing: 1px;
+  margin-top: -50px;
 }
 
 .v-btn {
@@ -102,7 +111,7 @@ h3 {
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   background-attachment: fixed;
-  background-image: url("./assets/background.jpeg");
+  background-image: url('./assets/background.jpeg');
   background-size: cover;
   display: flex;
   flex-direction: column;

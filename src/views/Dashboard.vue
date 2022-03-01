@@ -1,11 +1,11 @@
 <script>
-import Header from "../components/Header.vue";
+import Header from '../components/Header.vue';
 
 export default {
   components: { Header },
-  name: "Dashboard",
+  name: 'Dashboard',
   data: () => ({
-    image: require("@/assets/test.jpeg"),
+    image: require('@/assets/test.jpeg'),
   }),
 };
 </script>

@@ -83,55 +83,55 @@
 </template>
 
 <script>
-import Header from "../components/Header.vue";
-import Card from "../components/Card.vue";
+import Header from '../components/Header.vue';
+import Card from '../components/Card.vue';
 
 export default {
   components: { Header, Card },
-  name: "List",
+  name: 'List',
   data() {
     return {
       display: true,
       sort: true,
       number: 50,
       page: 1,
-      search: "",
+      search: '',
       headers: [
-        { text: "ID", value: "id", width: "20%", sortable: false },
-        { text: "Nom", value: "name", width: "30%", sortable: false },
+        { text: 'ID', value: 'id', width: '20%', sortable: false },
+        { text: 'Nom', value: 'name', width: '30%', sortable: false },
         {
-          text: "Comics",
-          value: "comics",
-          align: "center",
-          width: "10%",
+          text: 'Comics',
+          value: 'comics',
+          align: 'center',
+          width: '10%',
           sortable: false,
         },
         {
-          text: "Stories",
-          value: "stories",
-          align: "center",
-          width: "10%",
+          text: 'Stories',
+          value: 'stories',
+          align: 'center',
+          width: '10%',
           sortable: false,
         },
         {
-          text: "Series",
-          value: "series",
-          align: "center",
-          width: "10%",
+          text: 'Series',
+          value: 'series',
+          align: 'center',
+          width: '10%',
           sortable: false,
         },
         {
-          text: "Events",
-          value: "events",
-          align: "center",
-          width: "10%",
+          text: 'Events',
+          value: 'events',
+          align: 'center',
+          width: '10%',
           sortable: false,
         },
         {
-          text: "Favorie",
-          value: "favorie",
-          align: "center",
-          width: "10%",
+          text: 'Favorie',
+          value: 'favorie',
+          align: 'center',
+          width: '10%',
           sortable: false,
         },
       ],
@@ -142,13 +142,13 @@ export default {
     heroesDisplayed() {
       var h;
       //si recherche vide => affichage de tous les heros
-      if (this.search == "") {
+      if (this.search == '') {
         h = this.$store.getters.heroes(
           this.number,
           this.number * (this.page - 1),
           this.sort
         );
-      } else h = this.$store.getters.heroeByName(this.search);
+      } else h = this.$store.getters.heroesByName(this.search);
       return h;
     },
 
@@ -161,7 +161,7 @@ export default {
 
   methods: {
     onClick: function (e) {
-      this.$router.push("/Informations/" + e.id);
+      this.$router.push('/Informations/' + e.id);
     },
   },
 };

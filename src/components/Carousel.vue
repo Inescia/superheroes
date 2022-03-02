@@ -11,6 +11,7 @@
           v-for="heroe in heroes"
           :style="{
             transform: 'translateX' + '(' + offset + 'px' + ')',
+            transition: 'transform 0.8s ease-in-out',
           }"
         >
           <Card :heroe="heroe" />

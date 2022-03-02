@@ -86,9 +86,6 @@ $w: 220px;
 $h: 322px;
 
 .card {
-  animation: fadeInAnimation ease 1.5s;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
   margin: 25px;
   width: $w;
 

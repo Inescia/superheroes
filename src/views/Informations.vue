@@ -152,7 +152,9 @@ export default {
           this.heroe.favorie = this.favorie;
           this.heroe.image = this.image;
           alert('Modifications enregistrées');
-          this.$router.push('/List');
+          window.history.length >= 2
+            ? this.$router.go(-1)
+            : this.$router.push('/List');
         } catch (error) {
           alert('Modifications non enregistrées\nErreur : ' + error);
         }
@@ -164,7 +166,9 @@ export default {
       if (confirm('Voulez-vous vraiment supprimer ce superhéro ?'))
         try {
           this.$store.commit('removeHeroe', { id });
-          this.$router.push('/List');
+          window.history.length >= 2
+            ? this.$router.go(-1)
+            : this.$router.push('/List');
           alert('Superhéro supprimé');
         } catch (error) {
           alert('Superhéro non supprimé \nErreur : ' + error);

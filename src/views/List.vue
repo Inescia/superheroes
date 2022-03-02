@@ -148,7 +148,7 @@ export default {
           this.number * (this.page - 1),
           this.sort
         );
-      } else h = this.$store.getters.heroeByName(this.search);
+      } else h = this.$store.getters.heroesByName(this.search);
       return h;
     },
 

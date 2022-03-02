@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <div class="loader" v-show="!load">
+    <div class="loader" v-if="!load">
       <img class="loader__img" :src="require('./assets/bouclier.png')" />
     </div>
-    <router-view />
+    <router-view v-else />
   </v-app>
 </template>
 

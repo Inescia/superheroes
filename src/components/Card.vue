@@ -31,31 +31,43 @@
 </template>
 
 <script>
-import Heroe from '../classes/Heroe.js'
+import Heroe from '../classes/Heroe.js';
 
 export default {
   name: 'Card',
   methods: {
-    setSize (text, size) {
-      if (text.length > size + 1) return text.substring(0, size - 2) + '...'
-      else return text
-    }
+    setSize(text, size) {
+      if (text.length > size + 1) return text.substring(0, size - 2) + '...';
+      else return text;
+    },
   },
   computed: {
-    image () {
+    image() {
       if (
         this.heroe.image !=
         'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
-      ) { return this.heroe.image } else return require('../assets/test.jpeg')
-    }
+      ) {
+        return this.heroe.image;
+      } else return require('../assets/test.jpeg');
+    },
   },
   props: {
     heroe: {
       type: Heroe,
-      require
-    }
-  }
-}
+      default: new Heroe(
+        'id',
+        '123456789123456789123456789123456789',
+        '1234567891234567 891234567 89123 45678912',
+        'a',
+        'a',
+        'a',
+        'a',
+        'a',
+        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+      ),
+    },
+  },
+};
 </script>
 
 <style lang="scss">

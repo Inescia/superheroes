@@ -119,8 +119,8 @@ export default {
 
   props: {
     id: {
-      require
-    }
+      require,
+    },
   },
 
   created() {
@@ -140,7 +140,7 @@ export default {
   },
 
   methods: {
-    updateHeroe () {
+    updateHeroe() {
       if (this.$refs.form.validate()) {
         try {
           this.heroe.name = this.name;
@@ -169,29 +169,28 @@ export default {
         } catch (error) {
           alert('Superhéro non supprimé \nErreur : ' + error);
         }
-      }
     },
 
-    resetHeroe () {
-      this.name = this.heroe.name
-      this.description = this.heroe.description
-      this.comics = this.heroe.comics
-      this.stories = this.heroe.stories
-      this.series = this.heroe.series
-      this.events = this.heroe.events
-      this.favorie = this.heroe.favorie
-      this.image = this.heroe.image
+    resetHeroe() {
+      this.name = this.heroe.name;
+      this.description = this.heroe.description;
+      this.comics = this.heroe.comics;
+      this.stories = this.heroe.stories;
+      this.series = this.heroe.series;
+      this.events = this.heroe.events;
+      this.favorie = this.heroe.favorie;
+      this.image = this.heroe.image;
     },
 
-    toggleFavorie () {
-      this.favorie = !this.favorie
+    toggleFavorie() {
+      this.favorie = !this.favorie;
     },
 
     onDrop: function (e) {
-      e.stopPropagation()
-      e.preventDefault()
-      var files = e.dataTransfer.files
-      this.createFile(files[0])
+      e.stopPropagation();
+      e.preventDefault();
+      var files = e.dataTransfer.files;
+      this.createFile(files[0]);
     },
 
     createFile(file) {
@@ -199,16 +198,16 @@ export default {
         alert('Select an image');
         return;
       }
-      var reader = new FileReader()
-      var vm = this
+      var reader = new FileReader();
+      var vm = this;
 
       reader.onload = function (e) {
-        vm.image = e.target.result
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+  },
+};
 </script>
 
 <style lang="scss">

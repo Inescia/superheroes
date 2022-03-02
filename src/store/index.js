@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import { fetchHeroesAPI, searchHeroe } from '../api/marvel.js'
-import Heroe from '../classes/Heroe.js'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { fetchHeroesAPI, searchHeroe } from '../api/marvel.js';
+import Heroe from '../classes/Heroe.js';
 
 Vue.use(Vuex)
 
@@ -35,9 +35,9 @@ const actions = {
       var result
       // Recupération des héros 100 par 100
       await fetchHeroesAPI(request).then(function (data) {
-        result = data
-      })
-      result.length == 0 ? (isFinished = true) : (isFinished = false)
+        result = data;
+      });
+      result.length == 0 ? (isFinished = true) : (isFinished = false);
       commit('receiveHeroes', {
         heroes: result.map((data) => {
           return new Heroe(
@@ -49,16 +49,16 @@ const actions = {
             data.series.available,
             data.events.available,
             `${data.thumbnail.path}.${data.thumbnail.extension}`
-          )
-        })
-      })
+          );
+        }),
+      });
 
-      request++
-    } while (!isFinished)
-    console.log('Chargement des héros terminé')
-    state.load = true
-  }
-}
+      request++;
+    } while (!isFinished);
+    console.log('Chargement des héros terminé');
+    state.load = true;
+  },
+};
 
 const getters = {
   // Retourne l'état de chargement des héros
@@ -75,14 +75,24 @@ const getters = {
     return h.slice(offset, number + offset)
   },
 
-  // Retourne le nombre d'héros
+  //Retourne tous les héros favoris
+  heroesFavories: (state) => {
+    var h = [];
+    state.heroes.forEach((heroe) => {
+      if (heroe.favorie) h.push(heroe);
+    });
+    console.log(h);
+    return h;
+  },
+
+  //Retourne le nombre d'héros
   numberHeroes: (state) => {
     return state.heroes.length
   },
 
-  // Retourne tous les héros qui ont "text" dans leur nom
-  heroeByName: (state) => (name) => {
-    var h = []
+  //Retourne tous les héros qui ont "text" dans leur nom
+  heroesByName: (state) => (name) => {
+    var h = [];
     state.heroes.forEach((heroe) => {
       if (heroe.name.includes(name)) h.push(heroe)
     })

@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^0.26.0",
     "core-js": "^3.6.5",
+    "swiper": "^8.0.6",
     "vue": "^2.6.11",
     "vue-i18n": "^8.26.3",
     "vue-i18n-bridge": "^9.2.0-beta.10",
@@ -39,5 +40,8 @@
     "vue-cli-plugin-vuetify": "~2.4.5",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }

@@ -28,7 +28,7 @@
             <v-col cols="2">
               <v-btn fab text color="red" @click="toggleFavorie"
                 ><v-icon color="red" x-large>{{
-                  this.favorie ? "mdi-heart" : "mdi-heart-outline"
+                  this.favorie ? 'mdi-heart' : 'mdi-heart-outline'
                 }}</v-icon></v-btn
               ></v-col
             >
@@ -95,8 +95,8 @@
 </template>
 
 <script>
-import List from '../views/List.vue'
-import Header from '../components/Header.vue'
+import List from '../views/List.vue';
+import Header from '../components/Header.vue';
 
 export default {
   components: { Header, List },
@@ -113,8 +113,8 @@ export default {
     image: require('../assets/test.jpeg'),
     rules: [
       (v) => !!v || 'Name is required',
-      (v) => (v && v.length <= 30) || 'Name must be less than 30 characters'
-    ]
+      (v) => (v && v.length <= 30) || 'Name must be less than 30 characters',
+    ],
   }),
 
   props: {
@@ -122,51 +122,52 @@ export default {
       require
     }
   },
-  created () {
-    console.log(this.id)
-    this.heroe = this.$store.getters.heroeById(this.id)
-    this.name = this.heroe.name
-    this.description = this.heroe.description
-    this.comics = this.heroe.comics
-    this.stories = this.heroe.stories
-    this.series = this.heroe.series
-    this.events = this.heroe.events
-    this.favorie = this.heroe.favorie
+
+  created() {
+    this.heroe = this.$store.getters.heroeById(this.id);
+    this.name = this.heroe.name;
+    this.description = this.heroe.description;
+    this.comics = this.heroe.comics;
+    this.stories = this.heroe.stories;
+    this.series = this.heroe.series;
+    this.events = this.heroe.events;
+    this.favorie = this.heroe.favorie;
     if (
       this.heroe.image !=
       'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
-    ) { this.image = this.heroe.image }
+    )
+      this.image = this.heroe.image;
   },
 
   methods: {
     updateHeroe () {
       if (this.$refs.form.validate()) {
         try {
-          this.heroe.name = this.name
-          this.heroe.description = this.description
-          this.heroe.comics = this.comics
-          this.heroe.stories = this.stories
-          this.heroe.series = this.series
-          this.heroe.events = this.events
-          this.heroe.favorie = this.favorie
-          this.heroe.image = this.image
-          alert('Modifications enregistrées')
-          this.$router.push('/List')
+          this.heroe.name = this.name;
+          this.heroe.description = this.description;
+          this.heroe.comics = this.comics;
+          this.heroe.stories = this.stories;
+          this.heroe.series = this.series;
+          this.heroe.events = this.events;
+          this.heroe.favorie = this.favorie;
+          this.heroe.image = this.image;
+          alert('Modifications enregistrées');
+          this.$router.push('/List');
         } catch (error) {
-          alert('Modifications non enregistrées\nErreur : ' + error)
+          alert('Modifications non enregistrées\nErreur : ' + error);
         }
       }
     },
 
-    removeHeroe () {
-      var id = this.id
-      if (confirm('Voulez-vous vraiment supprimer ce superhéro ?')) {
+    removeHeroe() {
+      var id = this.id;
+      if (confirm('Voulez-vous vraiment supprimer ce superhéro ?'))
         try {
-          this.$store.commit('removeHeroe', { id })
-          this.$router.push('/List')
-          alert('Superhéro supprimé')
+          this.$store.commit('removeHeroe', { id });
+          this.$router.push('/List');
+          alert('Superhéro supprimé');
         } catch (error) {
-          alert('Superhéro non supprimé \nErreur : ' + error)
+          alert('Superhéro non supprimé \nErreur : ' + error);
         }
       }
     },
@@ -193,10 +194,10 @@ export default {
       this.createFile(files[0])
     },
 
-    createFile (file) {
+    createFile(file) {
       if (!file.type.match('image.*')) {
-        alert('Select an image')
-        return
+        alert('Select an image');
+        return;
       }
       var reader = new FileReader()
       var vm = this
@@ -207,7 +208,7 @@ export default {
       reader.readAsDataURL(file)
     }
   }
-}
+
 </script>
 
 <style lang="scss">

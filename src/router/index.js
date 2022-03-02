@@ -1,38 +1,38 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Dashboard from "../views/Dashboard.vue";
-import List from "../views/List.vue";
-import Informations from "../views/Informations.vue";
-import New from "../views/New.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Dashboard from '../views/Dashboard.vue'
+import List from '../views/List.vue'
+import Informations from '../views/Informations.vue'
+import New from '../views/New.vue'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
-    path: "/",
-    name: "Dashboard",
-    component: Dashboard,
+    path: '/',
+    name: 'Dashboard',
+    component: Dashboard
   },
   {
-    path: "/List",
-    name: "List",
-    component: List,
+    path: '/List',
+    name: 'List',
+    component: List
   },
   {
-    path: "/Informations/:id",
-    name: "Informations",
+    path: '/Informations/:id',
+    name: 'Informations',
     props: true,
-    component: Informations,
+    component: Informations
   },
   {
-    path: "/New",
-    name: "New",
-    component: New,
-  },
-];
+    path: '/New',
+    name: 'New',
+    component: New
+  }
+]
 
 const router = new VueRouter({
-  routes,
-});
+  routes
+})
 
-export default router;
+export default router

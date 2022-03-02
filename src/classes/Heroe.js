@@ -1,5 +1,5 @@
 export default class Heroe {
-  constructor(
+  constructor (
     id,
     name,
     description,
@@ -10,23 +10,23 @@ export default class Heroe {
     image,
     favorie = false
   ) {
-    this.id = id;
-    this.name = name;
-    description == ""
-      ? (this.description = "No description for this character.")
-      : (this.description = description);
-    this.comics = comics;
-    this.stories = stories;
-    this.series = series;
-    this.events = events;
-    this.image = image;
-    this.favorie = favorie;
+    this.id = id
+    this.name = name
+    description == ''
+      ? (this.description = 'No description for this character.')
+      : (this.description = description)
+    this.comics = comics
+    this.stories = stories
+    this.series = series
+    this.events = events
+    this.image = image
+    this.favorie = favorie
   }
 
-  toString() {
-    var ch = "ID : " + this.id;
-    ch += "\nName : " + this.name;
+  toString () {
+    var ch = 'ID : ' + this.id
+    ch += '\nName : ' + this.name
 
-    return ch;
+    return ch
   }
 }

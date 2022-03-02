@@ -1,25 +1,25 @@
-import axios from "axios";
+import axios from 'axios'
 
-export async function fetchHeroesAPI(request) {
-  var results = null;
+export async function fetchHeroesAPI (request) {
+  var results = null
   await axios
-    .get("https://gateway.marvel.com:443/v1/public/characters", {
+    .get('https://gateway.marvel.com:443/v1/public/characters', {
       params: {
-        apikey: "63d88a90e7b60aab17a222dfb0cc1c2d",
-        hash: "903eb3762b126f0030eca4a24bd41ff0",
+        apikey: '63d88a90e7b60aab17a222dfb0cc1c2d',
+        hash: '903eb3762b126f0030eca4a24bd41ff0',
         limit: 100,
-        //name: "Jean Grey",
+        // name: "Jean Grey",
         offset: 100 * request,
-        ts: "1",
-      },
+        ts: '1'
+      }
     })
     .then((response) => {
-      results = response.data.data.results;
+      results = response.data.data.results
     })
     .catch((e) => {
-      console.log(e);
-    });
-  return results;
+      console.log(e)
+    })
+  return results
 }
 
 // export async function fetchHeroesAPI() {
@@ -55,21 +55,21 @@ export async function fetchHeroesAPI(request) {
 //   return results;
 // }
 
-//exemple
-export async function searchHeroeAPI({ commit }, name) {
+// exemple
+export async function searchHeroeAPI ({ commit }, name) {
   axios
-    .get("https://gateway.marvel.com:443/v1/public/characters", {
+    .get('https://gateway.marvel.com:443/v1/public/characters', {
       params: {
-        apikey: "63d88a90e7b60aab17a222dfb0cc1c2d",
-        hash: "903eb3762b126f0030eca4a24bd41ff0",
+        apikey: '63d88a90e7b60aab17a222dfb0cc1c2d',
+        hash: '903eb3762b126f0030eca4a24bd41ff0',
         name: name,
-        ts: "1",
-      },
+        ts: '1'
+      }
     })
     .then((response) => {
-      commit("receiveHeroes", { heroes: response.data.data.results });
+      commit('receiveHeroes', { heroes: response.data.data.results })
     })
     .catch((e) => {
-      console.log(e);
-    });
+      console.log(e)
+    })
 }

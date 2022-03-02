@@ -10,19 +10,19 @@
 <script>
 export default {
   name: 'App',
-  data() {
+  data () {
     return {
-      load: false,
-    };
+      load: false
+    }
   },
-  created() {
+  created () {
     if (!this.load) {
       this.$store
         .dispatch('fetchHeroes')
-        .then(() => (this.load = this.$store.getters.load));
+        .then(() => (this.load = this.$store.getters.load))
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss">

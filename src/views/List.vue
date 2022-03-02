@@ -50,7 +50,7 @@
     >
       <!-- <template v-slot:item.favorie={ ""}>
         <div></div>
-        <v-icon color="red"> mdi-heart </v-icon> 
+        <v-icon color="red"> mdi-heart </v-icon>
       </template> -->
     </v-data-table>
     <div v-else class="list__heroes">
@@ -83,13 +83,13 @@
 </template>
 
 <script>
-import Header from '../components/Header.vue';
-import Card from '../components/Card.vue';
+import Header from '../components/Header.vue'
+import Card from '../components/Card.vue'
 
 export default {
   components: { Header, Card },
   name: 'List',
-  data() {
+  data () {
     return {
       display: true,
       sort: true,
@@ -104,67 +104,67 @@ export default {
           value: 'comics',
           align: 'center',
           width: '10%',
-          sortable: false,
+          sortable: false
         },
         {
           text: 'Stories',
           value: 'stories',
           align: 'center',
           width: '10%',
-          sortable: false,
+          sortable: false
         },
         {
           text: 'Series',
           value: 'series',
           align: 'center',
           width: '10%',
-          sortable: false,
+          sortable: false
         },
         {
           text: 'Events',
           value: 'events',
           align: 'center',
           width: '10%',
-          sortable: false,
+          sortable: false
         },
         {
           text: 'Favorie',
           value: 'favorie',
           align: 'center',
           width: '10%',
-          sortable: false,
-        },
-      ],
-    };
+          sortable: false
+        }
+      ]
+    }
   },
 
   computed: {
-    heroesDisplayed() {
-      var h;
-      //si recherche vide => affichage de tous les heros
+    heroesDisplayed () {
+      var h
+      // si recherche vide => affichage de tous les heros
       if (this.search == '') {
         h = this.$store.getters.heroes(
           this.number,
           this.number * (this.page - 1),
           this.sort
-        );
-      } else h = this.$store.getters.heroeByName(this.search);
-      return h;
+        )
+      } else h = this.$store.getters.heroeByName(this.search)
+      return h
     },
 
-    pages() {
-      var n = this.$store.getters.numberHeroes;
-      if (n % this.number == 0) return Math.floor(n / this.number);
-      else return Math.floor(n / this.number) + 1;
-    },
+    pages () {
+      var n = this.$store.getters.numberHeroes
+      if (n % this.number == 0) return Math.floor(n / this.number)
+      else return Math.floor(n / this.number) + 1
+    }
   },
 
   methods: {
     onClick: function (e) {
-      this.$router.push('/Informations/' + e.id);
-    },
-  },
-};
+      this.$router.push('/Informations/' + e.id)
+    }
+  }
+}
 </script>
 
 <style lang="scss">

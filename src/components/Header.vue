@@ -13,14 +13,14 @@
 
 <script>
 export default {
-  name: "Header",
+  name: 'Header',
   props: {
     btn: {
       type: Boolean,
-      default: true,
-    },
-  },
-};
+      default: true
+    }
+  }
+}
 </script>
 
 <style lang="scss">

@@ -91,36 +91,36 @@
 </template>
 
 <script>
-import Heroe from "../classes/Heroe";
-import Header from "../components/Header.vue";
+import Heroe from '../classes/Heroe'
+import Header from '../components/Header.vue'
 
 export default {
   components: { Header },
-  name: "New",
+  name: 'New',
   data: () => ({
-    id: "",
-    name: "",
-    description: "",
+    id: '',
+    name: '',
+    description: '',
     comics: 0,
     stories: 0,
     series: 0,
     events: 0,
-    image: require("../assets/test.jpeg"),
+    image: require('../assets/test.jpeg'),
     favorie: false,
     nameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.length <= 30) || "Name must be less than 30 characters",
-    ],
+      (v) => !!v || 'Name is required',
+      (v) => (v && v.length <= 30) || 'Name must be less than 30 characters'
+    ]
   }),
-  beforeMount() {
-    this.id = this.$store.getters.newId;
+  beforeMount () {
+    this.id = this.$store.getters.newId
   },
   methods: {
-    addHeroe() {
-      if (this.$refs.form.validate())
+    addHeroe () {
+      if (this.$refs.form.validate()) {
         try {
           var heroe = new Heroe(
-            "0000002",
+            '0000002',
             this.name,
             this.description,
             this.comics,
@@ -129,42 +129,43 @@ export default {
             this.events,
             this.image,
             this.favorie
-          );
-          this.$store.commit("addHeroe", { heroe });
-          alert("Superhéro créé");
-          this.$router.push("/List");
+          )
+          this.$store.commit('addHeroe', { heroe })
+          alert('Superhéro créé')
+          this.$router.push('/List')
         } catch (error) {
-          alert("Superhéro non créé\nErreur : " + error);
+          alert('Superhéro non créé\nErreur : ' + error)
         }
+      }
     },
 
-    toggleFavorie() {
-      this.favorie = !this.favorie;
+    toggleFavorie () {
+      this.favorie = !this.favorie
     },
 
     onDrop: function (e) {
-      e.stopPropagation();
-      e.preventDefault();
-      var files = e.dataTransfer.files;
-      this.createFile(files[0]);
+      e.stopPropagation()
+      e.preventDefault()
+      var files = e.dataTransfer.files
+      this.createFile(files[0])
     },
 
-    createFile(file) {
-      if (!file.type.match("image.*")) {
-        alert("Select an image");
-        return;
+    createFile (file) {
+      if (!file.type.match('image.*')) {
+        alert('Select an image')
+        return
       }
-      var img = new Image();
-      var reader = new FileReader();
-      var vm = this;
+      var img = new Image()
+      var reader = new FileReader()
+      var vm = this
 
       reader.onload = function (e) {
-        vm.image = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    },
-  },
-};
+        vm.image = e.target.result
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+}
 </script>
 
 <style lang="scss">

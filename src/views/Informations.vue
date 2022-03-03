@@ -2,7 +2,7 @@
   <List v-if="this.id == ''" />
   <div v-else class="page">
     <Header />
-    <h1 class="title2">INFORMATIONS.</h1>
+    <h1 class="title2">{{ $t('views.informations.titre') }}</h1>
     <div class="informations">
       <div
         class="informations__containerImg"
@@ -13,7 +13,7 @@
         <img class="informations__containerImg__img" :src="image" />
       </div>
       <v-col>
-        <h3>Id : {{ this.id }}</h3>
+        <h3>{{ $t('heroe.id') }} : {{ this.id }}</h3>
         <v-form ref="form">
           <v-row justify="space-between" align="center">
             <v-col cols="5"
@@ -22,7 +22,7 @@
                 v-model="name"
                 :rules="rules"
                 counter="30"
-                label="Name"
+                :label="$t('heroe.nom')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
@@ -40,7 +40,7 @@
                 type="number"
                 background-color="rgb(255, 255, 255, 0.5)"
                 v-model="comics"
-                label="Comics"
+                :label="$t('heroe.comics')"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
@@ -49,7 +49,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 type="number"
                 v-model="stories"
-                label="Stories"
+                :label="$t('heroe.stories')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
@@ -58,7 +58,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 type="number"
                 v-model="series"
-                label="Series"
+                :label="$t('heroe.series')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
@@ -67,7 +67,7 @@
                 outlined
                 type="number"
                 v-model="events"
-                label="Events"
+                :label="$t('heroe.events')"
               ></v-text-field
             ></v-col>
           </v-row>
@@ -76,30 +76,38 @@
               outlined
               background-color="rgb(255, 255, 255, 0.5)"
               v-model="description"
-              label="Description"
+              :label="$t('heroe.description')"
               counter="600"
               rows="6"
             ></v-textarea>
           </v-col>
           <v-row class="informations__btns">
             <div>
-              <v-btn @click="removeHeroe">Supprimer</v-btn
-              ><v-btn @click="resetHeroe">Reinitialiser</v-btn>
+              <v-btn @click="removeHeroe">{{
+                $t('views.informations.supprimer')
+              }}</v-btn
+              ><v-btn @click="resetHeroe">{{
+                $t('views.informations.reinitialiser')
+              }}</v-btn>
             </div>
-            <v-btn @click="updateHeroe">Enregistrer</v-btn></v-row
+            <v-btn @click="updateHeroe">{{
+              $t('views.informations.enregistrer')
+            }}</v-btn></v-row
           >
         </v-form>
       </v-col>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import List from '../views/List.vue';
 import Header from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
-  components: { Header, List },
+  components: { Header, List, Footer },
   name: 'Informations',
   data: () => ({
     heroe: null,

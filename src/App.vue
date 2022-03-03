@@ -10,19 +10,20 @@
 <script>
 export default {
   name: 'App',
-  data () {
+  data() {
     return {
-      load: false
-    }
+      load: false,
+    };
   },
-  created () {
+
+  created() {
     if (!this.load) {
       this.$store
         .dispatch('fetchHeroes')
-        .then(() => (this.load = this.$store.getters.load))
+        .then(() => (this.load = this.$store.getters.load));
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">
@@ -117,5 +118,6 @@ h6 {
   flex-direction: column;
   height: 100%;
   width: 100%;
+  margin-bottom: 70px;
 }
 </style>

@@ -1,34 +1,34 @@
 <template>
   <div class="page list">
     <Header :btn="false" />
-    <h1 class="title1">SUPERHEROES.</h1>
+    <h1 class="title1">{{ $t('views.list.titre') }}</h1>
     <div class="list__bar">
       <v-col cols="1"></v-col
       ><v-col cols="7">
         <v-text-field
           prepend-icon="mdi-magnify"
-          label="Rechercher"
+          :label="$t('views.list.rechercher')"
           v-model="search"
           hide-details
         ></v-text-field></v-col
-      ><v-btn to="/New">Nouveau Superhéro</v-btn>
+      ><v-btn to="/New">{{ $t('views.list.nouveau') }}</v-btn>
     </div>
     <div class="list__bar">
       <v-col class="list__bar__switch" cols="3">
-        <p class="list__bar__text">Affichage :</p>
-        <p class="list__bar__textSwitch">Liste</p>
-        <v-switch v-model="display" label="Cartes"></v-switch>
+        <p class="list__bar__text">{{ $t('views.list.affichage') }}</p>
+        <p class="list__bar__textSwitch">{{ $t('views.list.liste') }}</p>
+        <v-switch v-model="display" :label="$t('views.list.cartes')"></v-switch>
       </v-col>
       <v-col class="list__bar__switch" cols="3">
-        <p class="list__bar__text">Tri :</p>
-        <p class="list__bar__textSwitch">ID</p>
-        <v-switch v-model="sort" label="Nom"></v-switch>
+        <p class="list__bar__text">{{ $t('views.list.tri') }}</p>
+        <p class="list__bar__textSwitch">{{ $t('heroe.id') }}</p>
+        <v-switch v-model="sort" :label="$t('heroe.nom')"></v-switch>
       </v-col>
       <v-col cols="2"></v-col>
       <v-col cols="4"
         ><v-slider
           v-model="number"
-          :label="number + ' héros/pages'"
+          :label="number + $t('views.list.nombre')"
           hide-details
           max="200"
           min="10"
@@ -79,17 +79,19 @@
         </button>
       </li>
     </ul>
+    <Footer />
   </div>
 </template>
 
 <script>
-import Header from '../components/Header.vue'
-import Card from '../components/Card.vue'
+import Header from '../components/Header.vue';
+import Card from '../components/Card.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
-  components: { Header, Card },
+  components: { Header, Card, Footer },
   name: 'List',
-  data () {
+  data() {
     return {
       display: true,
       sort: true,
@@ -104,43 +106,43 @@ export default {
           value: 'comics',
           align: 'center',
           width: '10%',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Stories',
           value: 'stories',
           align: 'center',
           width: '10%',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Series',
           value: 'series',
           align: 'center',
           width: '10%',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Events',
           value: 'events',
           align: 'center',
           width: '10%',
-          sortable: false
+          sortable: false,
         },
         {
           text: 'Favorie',
           value: 'favorie',
           align: 'center',
           width: '10%',
-          sortable: false
-        }
-      ]
-    }
+          sortable: false,
+        },
+      ],
+    };
   },
 
   computed: {
-    heroesDisplayed () {
-      var h
+    heroesDisplayed() {
+      var h;
       // si recherche vide => affichage de tous les heros
       if (this.search == '') {
         h = this.$store.getters.heroes(
@@ -152,19 +154,19 @@ export default {
       return h;
     },
 
-    pages () {
-      var n = this.$store.getters.numberHeroes
-      if (n % this.number == 0) return Math.floor(n / this.number)
-      else return Math.floor(n / this.number) + 1
-    }
+    pages() {
+      var n = this.$store.getters.numberHeroes;
+      if (n % this.number == 0) return Math.floor(n / this.number);
+      else return Math.floor(n / this.number) + 1;
+    },
   },
 
   methods: {
     onClick: function (e) {
-      this.$router.push('/Informations/' + e.id)
-    }
-  }
-}
+      this.$router.push('/Informations/' + e.id);
+    },
+  },
+};
 </script>
 
 <style lang="scss">

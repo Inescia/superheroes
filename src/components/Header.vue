@@ -7,20 +7,23 @@
         height="100"
         :src="require('../assets/logo_header.png')"
     /></router-link>
-    <v-btn to="/List" v-show="btn">Voir tous les superhéros</v-btn>
+    <v-btn to="/List" v-show="btn">{{ $t('components.header.btn') }}</v-btn>
   </div>
 </template>
 
 <script>
+/** HEADER COMPONENT */
 export default {
   name: 'Header',
+
   props: {
+    /** Button's status (displayed or not) */
     btn: {
       type: Boolean,
-      default: true
-    }
-  }
-}
+      default: true,
+    },
+  },
+};
 </script>
 
 <style lang="scss">

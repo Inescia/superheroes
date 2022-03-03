@@ -33,8 +33,10 @@
             :key="i"
             @click="moveTo(i)"
           >
-            <v-icon v-if="true" small color="#607d8b">mdi-circle</v-icon>
-            <v-icon v-else small color="red">mdi-circle</v-icon>
+            <v-icon v-if="i - 1 == index" small color="#ff554fee"
+              >mdi-circle</v-icon
+            >
+            <v-icon v-else small color="#00000055">mdi-circle</v-icon>
           </button>
         </li>
       </ul>
@@ -48,6 +50,7 @@ import Card from './Card.vue';
 export default {
   components: { Card },
   name: 'Carousel',
+
   data() {
     return {
       offset: 0,

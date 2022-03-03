@@ -1,3 +1,40 @@
 {
-  "message": "hello i18n !!"
+  "heroe": {
+    "id": "ID",
+    "nom": "Name",
+    "description": "Description",
+    "comics": "Comics",
+    "stories": "Stories",
+    "series": "Series",
+    "events": "Events",
+    "favori": "Favorite"
+  },
+  "components": {
+    "card": { "verso": "SEE MORE" },
+    "carousel": {},
+    "header": { "btn": "See all superheroes" }
+  },
+  "views": {
+    "dashboard": { "titre": "FAVORITES." },
+    "informations": {
+      "titre": "INFORMATIONS.",
+      "supprimer": "Delete",
+      "reinitialiser": "Reset",
+      "enregistrer": "Save"
+    },
+    "list": {
+      "titre": "SUPERHEROES.",
+      "nouveau": "New Superheroe",
+      "affichage": "Display :",
+      "liste": "List",
+      "cartes": "Cards",
+      "tri": "Sort :",
+      "nombre": " heroes/pages",
+      "rechercher": "Search"
+    },
+    "new": {
+      "titre": "NEW SUPERHEROE.",
+      "enregistrer": "Save"
+    }
+  }
 }

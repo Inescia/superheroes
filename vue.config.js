@@ -1,16 +1,14 @@
 module.exports = {
-  transpileDependencies: [
-    'vuetify'
-  ],
+  transpileDependencies: ['vuetify'],
 
   pluginOptions: {
     i18n: {
-      locale: 'en',
-      fallbackLocale: 'en',
+      locale: 'fr',
+      fallbackLocale: 'fr',
       localeDir: 'locales',
       enableInSFC: true,
       includeLocales: false,
-      enableBridge: true
-    }
-  }
-}
+      enableBridge: true,
+    },
+  },
+};

@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <Header :btn="true" />
-    <h1 class="title2">NEW SUPERHEROE.</h1>
+    <h1 class="title2">{{ $t('views.new.titre') }}</h1>
     <div class="new">
       <div class="new__containerImg">
         <img
@@ -13,7 +13,7 @@
         />
       </div>
       <v-col>
-        <h3>Id : {{ id }}</h3>
+        <h3>{{ $t('heroe.id') }} : {{ id }}</h3>
         <v-form ref="form">
           <v-row justify="space-between" align="center">
             <v-col cols="5"
@@ -22,13 +22,13 @@
                 v-model="name"
                 :rules="nameRules"
                 counter="30"
-                label="Name"
+                :label="$t('heroe.nom')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
               <v-btn fab text color="red" @click="toggleFavorie"
                 ><v-icon color="red" x-large>{{
-                  this.favorie ? "mdi-heart" : "mdi-heart-outline"
+                  this.favorie ? 'mdi-heart' : 'mdi-heart-outline'
                 }}</v-icon></v-btn
               ></v-col
             >
@@ -40,7 +40,7 @@
                 type="number"
                 background-color="rgb(255, 255, 255, 0.5)"
                 v-model="comics"
-                label="Comics"
+                :label="$t('heroe.comics')"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
@@ -49,7 +49,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 type="number"
                 v-model="stories"
-                label="Stories"
+                :label="$t('heroe.stories')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
@@ -58,7 +58,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 type="number"
                 v-model="series"
-                label="Series"
+                :label="$t('heroe.series')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
@@ -67,7 +67,7 @@
                 outlined
                 type="number"
                 v-model="events"
-                label="Events"
+                :label="$t('heroe.events')"
               ></v-text-field
             ></v-col>
           </v-row>
@@ -76,26 +76,30 @@
               outlined
               background-color="rgb(255, 255, 255, 0.5)"
               v-model="description"
-              label="Description"
+              :label="$t('heroe.description')"
               counter="600"
               rows="6"
             ></v-textarea>
           </v-col>
         </v-form>
         <v-row class="new__btn"
-          ><v-btn @click="addHeroe">Enregistrer</v-btn></v-row
+          ><v-btn @click="addHeroe">{{
+            $t('views.new.enregistrer')
+          }}</v-btn></v-row
         >
       </v-col>
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
-import Heroe from '../classes/Heroe'
-import Header from '../components/Header.vue'
+import Heroe from '../classes/Heroe';
+import Header from '../components/Header.vue';
+import Footer from '../components/Footer.vue';
 
 export default {
-  components: { Header },
+  components: { Header, Footer },
   name: 'New',
   data: () => ({
     id: '',
@@ -109,14 +113,14 @@ export default {
     favorie: false,
     nameRules: [
       (v) => !!v || 'Name is required',
-      (v) => (v && v.length <= 30) || 'Name must be less than 30 characters'
-    ]
+      (v) => (v && v.length <= 30) || 'Name must be less than 30 characters',
+    ],
   }),
-  beforeMount () {
-    this.id = this.$store.getters.newId
+  beforeMount() {
+    this.id = this.$store.getters.newId;
   },
   methods: {
-    addHeroe () {
+    addHeroe() {
       if (this.$refs.form.validate()) {
         try {
           var heroe = new Heroe(
@@ -129,43 +133,43 @@ export default {
             this.events,
             this.image,
             this.favorie
-          )
-          this.$store.commit('addHeroe', { heroe })
-          alert('Superhéro créé')
-          this.$router.push('/List')
+          );
+          this.$store.commit('addHeroe', { heroe });
+          alert('Superhéro créé');
+          this.$router.push('/List');
         } catch (error) {
-          alert('Superhéro non créé\nErreur : ' + error)
+          alert('Superhéro non créé\nErreur : ' + error);
         }
       }
     },
 
-    toggleFavorie () {
-      this.favorie = !this.favorie
+    toggleFavorie() {
+      this.favorie = !this.favorie;
     },
 
     onDrop: function (e) {
-      e.stopPropagation()
-      e.preventDefault()
-      var files = e.dataTransfer.files
-      this.createFile(files[0])
+      e.stopPropagation();
+      e.preventDefault();
+      var files = e.dataTransfer.files;
+      this.createFile(files[0]);
     },
 
-    createFile (file) {
+    createFile(file) {
       if (!file.type.match('image.*')) {
-        alert('Select an image')
-        return
+        alert('Select an image');
+        return;
       }
-      var img = new Image()
-      var reader = new FileReader()
-      var vm = this
+      var img = new Image();
+      var reader = new FileReader();
+      var vm = this;
 
       reader.onload = function (e) {
-        vm.image = e.target.result
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-}
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+  },
+};
 </script>
 
 <style lang="scss">

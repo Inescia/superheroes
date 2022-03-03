@@ -1,0 +1,40 @@
+{
+  "heroe": {
+    "id": "ID",
+    "nom": "Nombre",
+    "description": "Descripción",
+    "comics": "Comics",
+    "stories": "Stories",
+    "series": "Series",
+    "events": "Events",
+    "favori": "Favoritos"
+  },
+  "components": {
+    "card": { "verso": "VER MAS" },
+    "carousel": {},
+    "header": { "btn": "Ver a todos los superheroes" }
+  },
+  "views": {
+    "dashboard": { "titre": "FAVORITOS." },
+    "informations": {
+      "titre": "INFORMACIONES.",
+      "supprimer": "Borrar",
+      "reinitialiser": "Reiniciar",
+      "enregistrer": "Registrar"
+    },
+    "list": {
+      "titre": "SUPERHEROES.",
+      "nouveau": "Nuevo Superheroe",
+      "affichage": "Visualización :",
+      "liste": "Lista",
+      "cartes": "Cartas",
+      "tri": "Ordenación :",
+      "nombre": " heroes/paginas",
+      "rechercher": "Buscar"
+    },
+    "new": {
+      "titre": "NUEVO SUPERHEROE.",
+      "enregistrer": "Registrar"
+    }
+  }
+}

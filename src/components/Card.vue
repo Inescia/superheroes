@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="card__verso">
-        <h6>VOIR PLUS</h6>
+        <h6>{{ $t('components.card.verso') }}</h6>
       </div>
     </div>
   </router-link>
@@ -33,14 +33,10 @@
 <script>
 import Heroe from '../classes/Heroe.js';
 
+/** CARD COMPONENT */
 export default {
   name: 'Card',
-  methods: {
-    setSize(text, size) {
-      if (text.length > size + 1) return text.substring(0, size - 2) + '...';
-      else return text;
-    },
-  },
+
   computed: {
     image() {
       if (
@@ -51,20 +47,26 @@ export default {
       } else return require('../assets/test.jpeg');
     },
   },
+
   props: {
+    /** Heroe involved */
     heroe: {
       type: Heroe,
-      default: new Heroe(
-        'id',
-        '123456789123456789123456789123456789',
-        '1234567891234567 891234567 89123 45678912',
-        'a',
-        'a',
-        'a',
-        'a',
-        'a',
-        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
-      ),
+      require,
+    },
+  },
+
+  methods: {
+    /**
+     * Set text's size, to avoid overflow
+     *
+     * @param {string} text The original text
+     * @param {number} size The size required
+     * @return {string} The resized text
+     */
+    setSize(text, size) {
+      if (text.length > size + 1) return text.substring(0, size - 2) + '...';
+      else return text;
     },
   },
 };
@@ -94,15 +96,9 @@ $h: 322px;
 
     & .card__recto {
       display: none;
-      animation: fadeInAnimation ease 1s;
-      animation-iteration-count: 1;
-      animation-fill-mode: forwards;
     }
     & .card__verso {
       display: flex;
-      animation: fadeInAnimation ease 1s;
-      animation-iteration-count: 1;
-      animation-fill-mode: forwards;
     }
   }
 

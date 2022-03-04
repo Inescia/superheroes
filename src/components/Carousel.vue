@@ -113,7 +113,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5% 0 30px;
+  margin: 30px 0px;
 
   &__left,
   &__right {

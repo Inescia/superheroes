@@ -38,7 +38,7 @@ export default {
 
   methods: {
     changeLangage(lang) {
-      i18n.locale = lang;
+      this.$root.$i18n.locale = lang;
     },
   },
 };

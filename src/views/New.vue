@@ -78,7 +78,7 @@
               v-model="description"
               :label="$t('heroe.description')"
               counter="600"
-              rows="6"
+              rows="5"
             ></v-textarea>
           </v-col>
         </v-form>
@@ -188,8 +188,8 @@ export default {
       background: white;
       padding: 30px;
       height: auto;
-      max-height: 500px;
-      max-width: 500px;
+      max-height: 470px;
+      max-width: 470px;
       object-fit: cover;
       transform: scale(1);
       transition: transform 0.5s;
@@ -206,16 +206,16 @@ export default {
 
   &__groupNumber {
     justify-content: space-around;
-    margin: 0px 20px -10px 10px;
+    margin: 0px 20px -20px 10px;
   }
 
   &__description {
-    margin: 0px 10px 20px 20px;
+    margin: 0px 10px 0px 20px;
   }
 
   &__btn {
     justify-content: end;
-    align-items: flex-end;
+    align-items: center;
     margin: 0px 15px 0px 25px;
   }
 }

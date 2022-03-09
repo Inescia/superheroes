@@ -1,5 +1,5 @@
 {
-  "heroe": {
+  "hero": {
     "id": "ID",
     "nom": "Nom",
     "description": "Description",
@@ -12,7 +12,7 @@
   "components": {
     "card": { "verso": "VOIR PLUS" },
     "carousel": {},
-    "header": { "btn": "Voir tous les superhéros" }
+    "header": { "tab1": "Les Favoris", "tab2": "Les Superhéros" }
   },
   "views": {
     "dashboard": { "titre": "FAVORIS." },
@@ -30,7 +30,7 @@
       "cartes": "Cartes",
       "tri": "Tri :",
       "nombre": " héros/pages",
-      "rechercher": "Rechercher"
+      "rechercher": "Rechercher (nom, id, description)"
     },
     "new": {
       "titre": "NOUVEAU SUPERHERO.",

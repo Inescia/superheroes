@@ -1,20 +1,20 @@
 /**
- * Class representing a heroe.
+ * Class representing a hero.
  * @class
  * @constructor
  * @public
  *
- * @param {number} id The heroe's ID
- * @param {string} name The heroe's name
- * @param {string} description The heroe's description
+ * @param {number} id The hero's ID
+ * @param {string} name The hero's name
+ * @param {string} description The hero's description
  * @param {number} comics The number of comics where the hero is involved
  * @param {number} stories The number of stories where the hero is involved
  * @param {number} series The number of series where the hero is involved
  * @param {number} events The number of events where the hero is involved
- * @param {string} image The link of the heroe's illustration
- * @param {boolean} favorie The favorie status of the heroe
+ * @param {string} image The link of the hero's illustration
+ * @param {boolean} favorite The favorite status of the hero
  */
-export default class Heroe {
+export default class Hero {
   constructor(
     id,
     name,
@@ -24,7 +24,7 @@ export default class Heroe {
     series,
     events,
     image,
-    favorie = false
+    favorite = false
   ) {
     this.id = id;
     this.name = name;
@@ -36,16 +36,16 @@ export default class Heroe {
     this.series = series;
     this.events = events;
     this.image = image;
-    this.favorie = favorie;
+    this.favorite = favorite;
   }
 
   /**
-   * Make a short presentation of the heroe.
+   * Make a short presentation of the hero.
    *
    * @return {string} A string of this presentation
    */
   toString() {
-    var ch = 'ID : ' + this.id;
+    let ch = 'ID : ' + this.id;
     ch += '\nName : ' + this.name;
     return ch;
   }

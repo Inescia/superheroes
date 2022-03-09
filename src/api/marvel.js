@@ -8,7 +8,7 @@ import axios from 'axios';
  * @returns {Promise<array>} the array of heroes resulting from the query
  */
 export async function fetchHeroesAPI(request) {
-  var results = null;
+  let results = null;
   await axios
     .get('https://gateway.marvel.com:443/v1/public/characters', {
       params: {
@@ -34,8 +34,8 @@ export async function fetchHeroesAPI(request) {
  * @param {number} id the ID of the hero researched
  * @returns {Promise<array>} a array with the corresponding hero or an empty array
  */
-export async function fetchHeroeByIdAPI(id) {
-  var results = null;
+export async function fetchHeroByIdAPI(id) {
+  let results = null;
   axios
     .get('https://gateway.marvel.com:443/v1/public/characters', {
       params: {

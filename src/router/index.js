@@ -4,7 +4,6 @@ import Dashboard from '../views/Dashboard.vue';
 import List from '../views/List.vue';
 import Informations from '../views/Informations.vue';
 import New from '../views/New.vue';
-import i18n from '../i18n';
 
 Vue.use(VueRouter);
 

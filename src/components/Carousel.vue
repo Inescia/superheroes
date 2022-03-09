@@ -8,13 +8,13 @@
       ></div>
       <div class="carousel__cards">
         <div
-          v-for="heroe in heroes"
+          v-for="hero in heroes"
           :style="{
             transform: 'translateX' + '(' + offset + 'px' + ')',
             transition: 'transform 0.8s ease-in-out',
           }"
         >
-          <Card :heroe="heroe" />
+          <Card :hero="hero" />
         </div>
       </div>
       <div
@@ -54,7 +54,6 @@ export default {
   data() {
     return {
       offset: 0,
-      offsetMax: 0,
       step: 270,
     };
   },
@@ -64,11 +63,6 @@ export default {
       type: Array,
       default: [],
     },
-  },
-
-  beforeMount() {
-    this.offsetMax = Math.floor(this.heroes.length / 2) * this.step;
-    if (this.heroes.length % 2 == 0) this.offsetMax -= this.step;
   },
 
   computed: {
@@ -81,10 +75,13 @@ export default {
     },
 
     index() {
-      //index de heroes correspondant à la card centrale
-      var nbrStep = this.offset / this.step;
-      var indexStep0 = Math.floor(this.heroes.length / 2);
+      const nbrStep = this.offset / this.step;
+      const indexStep0 = Math.floor(this.heroes.length / 2);
       return indexStep0 - nbrStep;
+    },
+
+    offsetMax() {
+      return Math.floor(this.heroes.length / 2) * this.step;
     },
   },
 
@@ -98,10 +95,8 @@ export default {
     moveTo(i) {
       i--;
       if (this.heroes.length > 2) {
-        var i2 = this.index;
-        this.heroes.length % 2 == 0
-          ? (this.offset += (i2 - i - 1) * this.step)
-          : (this.offset += (i2 - i) * this.step);
+        const i2 = this.index;
+        this.offset += (i2 - i) * this.step;
       }
     },
   },

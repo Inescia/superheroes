@@ -1,46 +1,45 @@
 <template>
-  <List v-if="this.id == ''" />
-  <div v-else class="page">
-    <Header />
-    <h1 class="title2">{{ $t('views.informations.titre') }}</h1>
-    <div class="informations">
-      <div
-        class="informations__containerImg"
+  <div class="informations page d-flex flex-column">
+    <Header :modal="true" />
+    <h1 style="text-align: right">{{ $t('views.informations.titre') }}</h1>
+    <div class="d-flex">
+      <v-col
+        cols="6"
+        class="d-flex flex justify-center"
         @dragenter.prevent
         @dragover.prevent
         @drop.stop.prevent="onDrop"
       >
-        <img class="informations__containerImg__img" :src="image" />
-      </div>
-      <v-col>
-        <h3>{{ $t('heroe.id') }} : {{ this.id }}</h3>
+        <img class="informations__img pa-8" cover :src="image" />
+      </v-col>
+      <v-col cols="6" class="px-6">
+        <h3>{{ $t('hero.id') }} : {{ id }}</h3>
         <v-form ref="form">
-          <v-row justify="space-between" align="center">
-            <v-col cols="5"
+          <v-row no-gutters justify="space-between">
+            <v-col cols="6"
               ><v-text-field
-                class="informations__name"
                 v-model="name"
                 :rules="rules"
                 counter="30"
-                :label="$t('heroe.nom')"
+                :label="$t('hero.nom')"
               ></v-text-field
             ></v-col>
-            <v-col cols="2">
-              <v-btn fab text color="red" @click="toggleFavorie"
+            <v-col cols="1">
+              <v-btn fab text color="red" @click="toggleFavorite"
                 ><v-icon color="red" x-large>{{
-                  this.favorie ? 'mdi-heart' : 'mdi-heart-outline'
+                  favorite ? 'mdi-heart' : 'mdi-heart-outline'
                 }}</v-icon></v-btn
               ></v-col
             >
           </v-row>
-          <v-row class="informations__groupNumber">
+          <v-row no-gutters class="pt-5" justify="space-between">
             <v-col cols="2">
               <v-text-field
                 outlined
                 type="number"
                 background-color="rgb(255, 255, 255, 0.5)"
                 v-model="comics"
-                :label="$t('heroe.comics')"
+                :label="$t('hero.comics')"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
@@ -49,7 +48,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 type="number"
                 v-model="stories"
-                :label="$t('heroe.stories')"
+                :label="$t('hero.stories')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
@@ -58,7 +57,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 type="number"
                 v-model="series"
-                :label="$t('heroe.series')"
+                :label="$t('hero.series')"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
@@ -67,57 +66,51 @@
                 outlined
                 type="number"
                 v-model="events"
-                :label="$t('heroe.events')"
+                :label="$t('hero.events')"
               ></v-text-field
             ></v-col>
           </v-row>
-          <v-col cols="auto" class="informations__description">
-            <v-textarea
-              outlined
-              background-color="rgb(255, 255, 255, 0.5)"
-              v-model="description"
-              :label="$t('heroe.description')"
-              counter="600"
-              rows="5"
-            ></v-textarea>
-          </v-col>
-          <v-row class="informations__btns">
-            <div>
-              <v-btn @click="removeHeroe">{{
-                $t('views.informations.supprimer')
-              }}</v-btn
-              ><v-btn @click="resetHeroe">{{
-                $t('views.informations.reinitialiser')
-              }}</v-btn>
-            </div>
-            <v-btn @click="updateHeroe">{{
+          <v-textarea
+            outlined
+            background-color="rgb(255, 255, 255, 0.5)"
+            v-model="description"
+            :label="$t('hero.description')"
+            counter="600"
+            rows="6"
+          ></v-textarea>
+          <v-row no-gutters class="my-4">
+            <v-btn @click="removeHero">{{
+              $t('views.informations.supprimer')
+            }}</v-btn
+            ><v-btn class="mx-5" @click="resetHero">{{
+              $t('views.informations.reinitialiser')
+            }}</v-btn>
+            <v-btn class="ml-auto" @click="updateHero">{{
               $t('views.informations.enregistrer')
-            }}</v-btn></v-row
-          >
+            }}</v-btn>
+          </v-row>
         </v-form>
       </v-col>
     </div>
-    <Footer />
   </div>
 </template>
 
 <script>
 import List from '../views/List.vue';
 import Header from '../components/Header.vue';
-import Footer from '../components/Footer.vue';
 
 export default {
-  components: { Header, List, Footer },
+  components: { Header, List },
   name: 'Informations',
   data: () => ({
-    heroe: null,
+    hero: null,
     name: '',
     description: '',
     comics: 0,
     stories: 0,
     series: 0,
     events: 0,
-    favorie: false,
+    favorite: false,
     image: require('../assets/test.jpeg'),
     rules: [
       (v) => !!v || 'Name is required',
@@ -132,33 +125,49 @@ export default {
   },
 
   created() {
-    this.heroe = this.$store.getters.heroeById(this.id);
-    this.name = this.heroe.name;
-    this.description = this.heroe.description;
-    this.comics = this.heroe.comics;
-    this.stories = this.heroe.stories;
-    this.series = this.heroe.series;
-    this.events = this.heroe.events;
-    this.favorie = this.heroe.favorie;
+    this.hero = this.$store.getters.heroById(this.id);
+    this.name = this.hero.name;
+    this.description = this.hero.description;
+    this.comics = this.hero.comics;
+    this.stories = this.hero.stories;
+    this.series = this.hero.series;
+    this.events = this.hero.events;
+    this.favorite = this.hero.favorite;
     if (
-      this.heroe.image !=
+      this.hero.image !=
       'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
     )
-      this.image = this.heroe.image;
+      this.image = this.hero.image;
   },
 
   methods: {
-    updateHeroe() {
+    updateHero() {
       if (this.$refs.form.validate()) {
         try {
-          this.heroe.name = this.name;
-          this.heroe.description = this.description;
-          this.heroe.comics = this.comics;
-          this.heroe.stories = this.stories;
-          this.heroe.series = this.series;
-          this.heroe.events = this.events;
-          this.heroe.favorie = this.favorie;
-          this.heroe.image = this.image;
+          const {
+            name,
+            description,
+            comics,
+            stories,
+            series,
+            events,
+            favorite,
+            image,
+          } = this.hero;
+          const values = [
+            'name',
+            'description',
+            'comics',
+            'stories',
+            'series',
+            'events',
+            'favorite',
+            'image',
+          ];
+          values.forEach((value) => {
+            this.hero[value] = this[value];
+          });
+
           alert('Modifications enregistrées');
           window.history.length >= 2
             ? this.$router.go(-1)
@@ -169,11 +178,11 @@ export default {
       }
     },
 
-    removeHeroe() {
-      var id = this.id;
+    removeHero() {
+      let id = this.id;
       if (confirm('Voulez-vous vraiment supprimer ce superhéro ?'))
         try {
-          this.$store.commit('removeHeroe', { id });
+          this.$store.commit('removeHero', { id });
           window.history.length >= 2
             ? this.$router.go(-1)
             : this.$router.push('/List');
@@ -183,25 +192,40 @@ export default {
         }
     },
 
-    resetHeroe() {
-      this.name = this.heroe.name;
-      this.description = this.heroe.description;
-      this.comics = this.heroe.comics;
-      this.stories = this.heroe.stories;
-      this.series = this.heroe.series;
-      this.events = this.heroe.events;
-      this.favorie = this.heroe.favorie;
-      this.image = this.heroe.image;
+    resetHero() {
+      const {
+        name,
+        description,
+        comics,
+        stories,
+        series,
+        events,
+        favorite,
+        image,
+      } = this.hero;
+      const values = [
+        'name',
+        'description',
+        'comics',
+        'stories',
+        'series',
+        'events',
+        'favorite',
+        'image',
+      ];
+      values.forEach((value) => {
+        this[value] = this.hero[value];
+      });
     },
 
-    toggleFavorie() {
-      this.favorie = !this.favorie;
+    toggleFavorite() {
+      this.favorite = !this.favorite;
     },
 
     onDrop: function (e) {
       e.stopPropagation();
       e.preventDefault();
-      var files = e.dataTransfer.files;
+      let files = e.dataTransfer.files;
       this.createFile(files[0]);
     },
 
@@ -210,8 +234,8 @@ export default {
         alert('Select an image');
         return;
       }
-      var reader = new FileReader();
-      var vm = this;
+      let reader = new FileReader();
+      let vm = this;
 
       reader.onload = function (e) {
         vm.image = e.target.result;
@@ -224,49 +248,18 @@ export default {
 
 <style lang="scss">
 .informations {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
+  &__img {
+    background: white;
+    box-shadow: 0px 0px 10px 5px #d4d4d4;
+    height: auto;
+    max-height: 470px;
+    max-width: 470px;
+    transform: scale(1);
+    transition: transform 0.5s;
 
-  &__containerImg {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-
-    &__img {
-      box-shadow: 0px 0px 10px 5px #d4d4d4;
-      background: white;
-      padding: 30px;
-      height: auto;
-      max-height: 470px;
-      max-width: 470px;
-      object-fit: cover;
-      transform: scale(1);
-      transition: transform 0.5s;
-
-      &:hover {
-        transform: scale(1.15);
-      }
+    &:hover {
+      transform: scale(1.15);
     }
-  }
-
-  &__name {
-    margin-left: 40px;
-  }
-
-  &__groupNumber {
-    justify-content: space-around;
-    margin: 0px 20px -20px 10px;
-  }
-
-  &__description {
-    margin: 0px 10px 0px 20px;
-  }
-
-  &__btns {
-    justify-content: space-between;
-    align-items: center;
-    margin: 0px 15px 0px 25px;
   }
 }
 </style>

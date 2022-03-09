@@ -1,39 +1,50 @@
 <template>
-  <div class="page list">
-    <Header :btn="false" />
-    <h1 class="title1">{{ $t('views.list.titre') }}</h1>
-    <div class="list__bar">
-      <v-col cols="1"></v-col
-      ><v-col cols="7">
+  <div class="list page d-flex flex-column">
+    <Header />
+    <h1>{{ $t('views.list.titre') }}</h1>
+    <div class="d-flex align-center justify-space-around my-n3 mx-12">
+      <v-col cols="4" align-self="start">
         <v-text-field
           prepend-icon="mdi-magnify"
           :label="$t('views.list.rechercher')"
           v-model="search"
-          hide-details
-        ></v-text-field></v-col
-      ><v-btn to="/New">{{ $t('views.list.nouveau') }}</v-btn>
-    </div>
-    <div class="list__bar">
-      <v-col class="list__bar__switch" cols="3">
-        <p class="list__bar__text">{{ $t('views.list.affichage') }}</p>
-        <p class="list__bar__textSwitch">{{ $t('views.list.liste') }}</p>
-        <v-switch v-model="display" :label="$t('views.list.cartes')"></v-switch>
+        ></v-text-field
+      ></v-col>
+      <v-col class="d-flex" cols="auto">
+        <v-btn
+          fab
+          text
+          :color="display ? 'grey' : 'red'"
+          @click="toggleDisplay(false)"
+          ><v-icon :color="display ? 'grey' : 'red'" large
+            >mdi-format-list-bulleted</v-icon
+          ></v-btn
+        ><v-btn
+          fab
+          text
+          :color="display ? 'red' : 'grey'"
+          @click="toggleDisplay(true)"
+          ><v-icon :color="display ? 'red' : 'grey'" large
+            >mdi-dots-grid</v-icon
+          ></v-btn
+        >
       </v-col>
-      <v-col class="list__bar__switch" cols="3">
-        <p class="list__bar__text">{{ $t('views.list.tri') }}</p>
-        <p class="list__bar__textSwitch">{{ $t('heroe.id') }}</p>
-        <v-switch v-model="sort" :label="$t('heroe.nom')"></v-switch>
+      <v-col class="" cols="2">
+        <v-select
+          v-model="sort"
+          :items="itemsSort"
+          placeholder="Tri"
+        ></v-select>
       </v-col>
-      <v-col cols="2"></v-col>
-      <v-col cols="4"
+      <v-col cols="3"
         ><v-slider
           v-model="number"
           :label="number + $t('views.list.nombre')"
           hide-details
-          max="200"
+          max="100"
           min="10"
           persistent-hint
-          step="20"
+          step="15"
           thumb-label
           track-color="grey"
         ></v-slider
@@ -41,31 +52,38 @@
     </div>
     <v-data-table
       v-if="!display"
-      class="list__table"
+      class="list__table mx-14"
       @click:row="onClick"
       :headers="headers"
       :items="heroesDisplayed"
       :items-per-page="number"
       :hide-default-footer="true"
     >
-      <!-- <template v-slot:item.favorie={ ""}>
-        <div></div>
-        <v-icon color="red"> mdi-heart </v-icon>
-      </template> -->
+      <template #item.favorite="{ item }">
+        <v-icon @click.stop="toggleFavorite(item)" color="red">{{
+          item.favorite ? 'mdi-heart' : 'mdi-heart-outline'
+        }}</v-icon>
+      </template>
     </v-data-table>
-    <div v-else class="list__heroes">
-      <Card v-for="heroe in heroesDisplayed" :key="heroe.id" :heroe="heroe" />
+    <div v-else class="list__heroes d-flex flex-wrap justify-center">
+      <Card v-for="hero in heroesDisplayed" :key="hero.id" :hero="hero" />
     </div>
-    <ul class="list__pages">
+    <ul class="d-flex justify-center my-7" style="list-style: none">
       <li>
-        <button class="list__page" v-show="page != 1" @click="page--">
+        <button
+          class="list__page"
+          v-show="page != 1 && search == ''"
+          @click="page--"
+        >
           <v-icon color="#607d8b"> mdi-arrow-left</v-icon>
         </button>
       </li>
       <li>
         <button
+          v-show="search == ''"
           type="button"
-          class="list__page"
+          :style="page == i ? 'color: #ff554fee' : 'color:  #607d8b'"
+          class="list__page pa-1"
           v-for="i in pages"
           @click="page = i"
           :key="i"
@@ -74,27 +92,30 @@
         </button>
       </li>
       <li>
-        <button @click="page++" v-show="page < pages" class="list__page">
+        <button
+          @click="page++"
+          v-show="page < pages && search == ''"
+          class="list__page"
+        >
           <v-icon color="#607d8b">mdi-arrow-right</v-icon>
         </button>
       </li>
     </ul>
-    <Footer />
   </div>
 </template>
 
 <script>
-import Header from '../components/Header.vue';
 import Card from '../components/Card.vue';
-import Footer from '../components/Footer.vue';
+import Header from '../components/Header.vue';
 
 export default {
-  components: { Header, Card, Footer },
+  components: { Card, Header },
   name: 'List',
   data() {
     return {
       display: true,
-      sort: true,
+      sort: 'Name ↑',
+      itemsSort: ['ID ↑', 'ID ↓', 'Name ↑', 'Name ↓'],
       number: 50,
       page: 1,
       search: '',
@@ -130,8 +151,8 @@ export default {
           sortable: false,
         },
         {
-          text: 'Favorie',
-          value: 'favorie',
+          text: 'Favorite',
+          value: 'favorite',
           align: 'center',
           width: '10%',
           sortable: false,
@@ -142,28 +163,41 @@ export default {
 
   computed: {
     heroesDisplayed() {
-      var h;
-      // si recherche vide => affichage de tous les heros
+      let crescent, byName, index, h;
+      index = this.itemsSort.indexOf(this.sort);
+      index % 2 == 0 ? (crescent = true) : (crescent = false);
+      index > 1 ? (byName = true) : (byName = false);
+
+      // if search bar is empty
       if (this.search == '') {
         h = this.$store.getters.heroes(
           this.number,
           this.number * (this.page - 1),
-          this.sort
+          byName
         );
-      } else h = this.$store.getters.heroesByName(this.search);
+      } else h = this.$store.getters.heroesByText(this.search);
+      if (!crescent) h.reverse();
       return h;
     },
 
     pages() {
-      var n = this.$store.getters.numberHeroes;
+      let n = this.$store.getters.numberHeroes;
       if (n % this.number == 0) return Math.floor(n / this.number);
       else return Math.floor(n / this.number) + 1;
     },
   },
 
   methods: {
-    onClick: function (e) {
+    onClick(e) {
       this.$router.push('/Informations/' + e.id);
+    },
+
+    toggleDisplay(value) {
+      this.display = value;
+    },
+
+    toggleFavorite(hero) {
+      hero.favorite = !hero.favorite;
     },
   },
 };
@@ -171,34 +205,7 @@ export default {
 
 <style lang="scss">
 .list {
-  &__bar {
-    display: flex;
-    align-items: center;
-    margin: -10px 20px;
-    justify-content: space-around;
-
-    &__switch {
-      display: flex;
-      align-items: flex-start;
-    }
-
-    &__text {
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.6);
-      padding-top: 22px;
-      padding-right: 8px;
-    }
-
-    &__textSwitch {
-      font-size: 16px;
-      color: rgba(0, 0, 0, 0.6);
-      padding-top: 20px;
-      padding-right: 8px;
-    }
-  }
-
   &__table {
-    margin: 0px 30px;
     opacity: 0.8;
     animation: fadeInAnimation ease 2s;
     animation-iteration-count: 1;
@@ -206,28 +213,14 @@ export default {
   }
 
   &__heroes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     animation: fadeInAnimation ease 2s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
   }
 
-  &__pages {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    margin: 30px 0px;
-  }
-
   &__page {
     display: inline;
     font-size: 20px;
-    padding: 5px;
-    height: auto;
-    width: auto;
-    color: #607d8b;
   }
 }
 </style>

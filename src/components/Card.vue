@@ -1,57 +1,50 @@
 <template>
-  <router-link
-    style="color: inherit; text-decoration: none"
-    :to="'/Informations/' + heroe.id"
-  >
-    <div class="card">
-      <div class="card__recto">
-        <img class="card__img" :src="image" />
-        <div class="card__infos">
-          <v-row>
-            <v-col cols="10"
-              ><h4 class="card__infos__name">
-                {{ setSize(heroe.name, 21) }}
-              </h4></v-col
-            >
-            <v-icon color="red">
-              {{ this.heroe.favorie ? 'mdi-heart' : 'mdi-heart-outline' }}
-            </v-icon></v-row
-          >
-          <h5 class="card__infos__id">{{ heroe.id }}</h5>
-          <p class="card__infos__description">
-            {{ setSize(heroe.description, 75) }}
-          </p>
-        </div>
+  <div class="card ma-5 d-flex flex-column justify-space-between">
+    <router-link :to="'/Informations/' + hero.id"
+      ><div style="position: relative">
+        <img class="card__img1" :src="image" />
+        <div class="card__img2"><h6>Voir plus</h6></div>
       </div>
-      <div class="card__verso">
-        <h6>{{ $t('components.card.verso') }}</h6>
-      </div>
+    </router-link>
+    <div class="mx-3 mt-1">
+      <v-row>
+        <v-col cols="10"
+          ><h4 class="card__name">
+            {{ setSize(hero.name, 21) }}
+          </h4></v-col
+        >
+        <v-icon @click="toggleFavorite(hero.favorite)" color="red">
+          {{ hero.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}
+        </v-icon></v-row
+      >
+      <h5 class="card__id">{{ hero.id }}</h5>
+      <p class="card__description">
+        {{ setSize(hero.description, 75) }}
+      </p>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
-import Heroe from '../classes/Heroe.js';
+import Hero from '../classes/Hero.js';
 
-/** CARD COMPONENT */
 export default {
   name: 'Card',
 
   computed: {
     image() {
       if (
-        this.heroe.image !=
+        this.hero.image !=
         'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
       ) {
-        return this.heroe.image;
+        return this.hero.image;
       } else return require('../assets/test.jpeg');
     },
   },
 
   props: {
-    /** Heroe involved */
-    heroe: {
-      type: Heroe,
+    hero: {
+      type: Hero,
       require,
     },
   },
@@ -68,92 +61,78 @@ export default {
       if (text.length > size + 1) return text.substring(0, size - 2) + '...';
       else return text;
     },
+
+    toggleFavorite(fav) {
+      this.hero.favorite = !fav;
+    },
   },
 };
 </script>
 
 <style lang="scss">
-@keyframes move {
+@keyframes appear {
   0% {
-    transform: scale(1, 1);
-  }
-  50% {
-    transform: scale(0, 1);
+    opacity: 0;
+    height: 0%;
   }
   100% {
-    transform: scale(1, 1);
+    opacity: 1;
+    height: 98%;
   }
 }
 $w: 220px;
 $h: 322px;
 
 .card {
-  margin: 25px;
   width: $w;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 5px #d4d4d4;
+  height: $h;
 
   &:hover {
-    animation: move ease-in-out 1.2s;
-
-    & .card__recto {
-      display: none;
-    }
-    & .card__verso {
-      display: flex;
+    & .card__img2 {
+      animation: appear ease-in-out 0.8s;
+      animation-fill-mode: forwards;
     }
   }
 
-  &__recto {
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px 5px #d4d4d4;
-    width: 100%;
-    height: $h;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  &__verso {
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px 5px #d4d4d4;
-    display: none;
-    width: 100%;
-    height: $h;
-    background: #ff554fee;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  &__img {
+  &__img1 {
     border-radius: 10px 10px 0px 0px;
     height: $w;
     object-fit: cover;
     width: $w;
   }
+  &__img2 {
+    border-radius: 10px 10px 0px 0px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: $w;
+    height: $w;
+    background: #ff554fee;
+    opacity: 0;
+    margin-bottom: 6px;
+  }
 
-  &__infos {
-    margin: 5px 10px 0px 10px;
+  &__name {
+    font-size: 15px;
+    height: 25px;
+    overflow: hidden;
+    word-wrap: break-word;
+  }
 
-    &__name {
-      font-size: 15px;
-      height: 25px;
-      overflow: hidden;
-      word-wrap: break-word;
-    }
+  &__id {
+    font-weight: 200;
+  }
 
-    &__id {
-      font-weight: 200;
-    }
-
-    &__description {
-      font-size: 12px;
-      height: 35px;
-      opacity: 0.8;
-      overflow: hidden;
-      width: $w - 20;
-      word-wrap: break-word;
-    }
+  &__description {
+    font-size: 12px;
+    height: 35px;
+    opacity: 0.8;
+    overflow: hidden;
+    width: $w - 20;
+    word-wrap: break-word;
   }
 }
 </style>

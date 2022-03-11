@@ -36,7 +36,7 @@ export async function fetchHeroesAPI(request) {
  */
 export async function fetchHeroByIdAPI(id) {
   let results = null;
-  axios
+  await axios
     .get('https://gateway.marvel.com:443/v1/public/characters', {
       params: {
         apikey: '63d88a90e7b60aab17a222dfb0cc1c2d',

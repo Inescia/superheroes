@@ -4,101 +4,106 @@
     <h1 style="text-align: right">{{ $t('views.new.titre') }}</h1>
     <div class="d-flex">
       <v-col
-        cols="6"
         class="d-flex flex justify-center"
+        cols="6"
         @dragenter.prevent
         @dragover.prevent
         @drop.stop.prevent="onDrop"
       >
         <img class="new__img pa-8" cover :src="image" />
       </v-col>
-      <v-col cols="6" class="px-6">
+      <v-col class="px-6" cols="6">
         <h3>{{ $t('hero.id') }} : {{ id }}</h3>
         <v-form ref="form">
-          <v-row no-gutters justify="space-between">
+          <v-row justify="space-between" no-gutters>
             <v-col cols="6"
               ><v-text-field
                 v-model="name"
+                :label="$t('hero.nom')"
                 :rules="nameRules"
                 counter="30"
-                :label="$t('hero.nom')"
               ></v-text-field
             ></v-col>
             <v-col cols="1">
-              <v-btn fab text color="red" @click="toggleFavorite"
+              <v-btn color="red" fab text @click="toggleFavorite"
                 ><v-icon color="red" x-large>{{
                   this.favorite ? 'mdi-heart' : 'mdi-heart-outline'
                 }}</v-icon></v-btn
               ></v-col
             >
           </v-row>
-          <v-row no-gutters class="pt-5" justify="space-between">
+          <v-row class="pt-5" justify="space-between" no-gutters>
             <v-col cols="2">
               <v-text-field
-                outlined
-                type="number"
-                background-color="rgb(255, 255, 255, 0.5)"
                 v-model="comics"
                 :label="$t('hero.comics')"
+                background-color="rgb(255, 255, 255, 0.5)"
+                outlined
+                type="number"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
               <v-text-field
-                outlined
-                background-color="rgb(255, 255, 255, 0.5)"
-                type="number"
                 v-model="stories"
                 :label="$t('hero.stories')"
+                background-color="rgb(255, 255, 255, 0.5)"
+                outlined
+                type="number"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
               <v-text-field
-                outlined
-                background-color="rgb(255, 255, 255, 0.5)"
-                type="number"
                 v-model="series"
                 :label="$t('hero.series')"
+                background-color="rgb(255, 255, 255, 0.5)"
+                outlined
+                type="number"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
               <v-text-field
+                v-model="events"
+                :label="$t('hero.events')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
-                v-model="events"
-                :label="$t('hero.events')"
               ></v-text-field
             ></v-col>
           </v-row>
           <v-textarea
-            outlined
-            background-color="rgb(255, 255, 255, 0.5)"
             v-model="description"
             :label="$t('hero.description')"
+            background-color="rgb(255, 255, 255, 0.5)"
             counter="600"
+            outlined
             rows="6"
           ></v-textarea>
-          <v-row no-gutters class="my-4"
-            ><v-btn class="ml-auto" @click="addHero">{{
+          <v-row class="my-4" no-gutters
+            ><v-btn class="ml-auto" color="#ff554fee" dark @click="addHero">{{
               $t('views.new.enregistrer')
             }}</v-btn></v-row
           >
         </v-form>
       </v-col>
     </div>
-    <Footer />
+    <Alert v-if="alertDisplay" :success="false" :text="alertText" />
   </div>
 </template>
 
 <script>
 import Hero from '../classes/Hero';
+import Alert from '../components/Alert.vue';
+import Dialog from '../components/Dialog.vue';
 import Header from '../components/Header.vue';
 
 export default {
-  components: { Header },
+  components: { Header, Dialog, Alert },
   name: 'New',
+
   data: () => ({
-    id: '',
+    alertDisplay: false,
+    alertText: '',
+
     name: '',
     description: '',
     comics: 0,
@@ -112,15 +117,23 @@ export default {
       (v) => (v && v.length <= 30) || 'Name must be less than 30 characters',
     ],
   }),
-  beforeMount() {
-    this.id = this.$store.getters.newId;
+
+  computed: {
+    id() {
+      return this.$store.getters.newId;
+    },
   },
+
   methods: {
+    /** Add the hero in the database. */
     addHero() {
-      if (this.$refs.form.validate()) {
+      if (!this.$store.getters.load) {
+        this.alertText = 'Veuillez attendre la fin du chargement des héros';
+        this.alertDisplay = true;
+      } else if (this.$refs.form.validate()) {
         try {
           let hero = new Hero(
-            '0000002',
+            this.id,
             this.name,
             this.description,
             this.comics,
@@ -131,25 +144,36 @@ export default {
             this.favorite
           );
           this.$store.commit('addHero', { hero });
-          alert('Superhéro créé');
           this.$router.push('/List');
         } catch (error) {
-          alert('Superhéro non créé\nErreur : ' + error);
+          this.alertText = 'Superhéro non créé, erreur : ' + error.toString();
+          this.alertDisplay = true;
         }
       }
     },
 
+    /** Toggle the favorite status of the hero. */
     toggleFavorite() {
       this.favorite = !this.favorite;
     },
 
-    onDrop: function (e) {
+    /**
+     * Retrieve the file dropped.
+     *
+     * @param {event} e The event associated
+     */
+    onDrop(e) {
       e.stopPropagation();
       e.preventDefault();
       let files = e.dataTransfer.files;
       this.createFile(files[0]);
     },
 
+    /**
+     * Create the file for the new image.
+     *
+     * @param {file} file The i dropped
+     */
     createFile(file) {
       if (!file.type.match('image.*')) {
         alert('Select an image');

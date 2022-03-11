@@ -59,6 +59,20 @@
       :items-per-page="number"
       :hide-default-footer="true"
     >
+      <template #item.image="{ item: { image } }">
+        <img
+          class=""
+          height="50"
+          width="50"
+          contain
+          :src="
+            image ==
+            'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+              ? require('../assets/test.jpeg')
+              : image
+          "
+        />
+      </template>
       <template #item.favorite="{ item }">
         <v-icon @click.stop="toggleFavorite(item)" color="red">{{
           item.favorite ? 'mdi-heart' : 'mdi-heart-outline'
@@ -101,6 +115,11 @@
         </button>
       </li>
     </ul>
+    <router-link to="/New">
+      <v-btn class="list__new" color="red" elevation="2" fab x-large
+        ><v-icon color="white" x-large>mdi-plus</v-icon></v-btn
+      ></router-link
+    >
   </div>
 </template>
 
@@ -111,6 +130,7 @@ import Header from '../components/Header.vue';
 export default {
   components: { Card, Header },
   name: 'List',
+
   data() {
     return {
       display: true,
@@ -120,8 +140,9 @@ export default {
       page: 1,
       search: '',
       headers: [
-        { text: 'ID', value: 'id', width: '20%', sortable: false },
-        { text: 'Nom', value: 'name', width: '30%', sortable: false },
+        { text: 'Avatar', value: 'image', sortable: false },
+        { text: 'ID', value: 'id', width: '17%', sortable: false },
+        { text: 'Nom', value: 'name', width: '28%', sortable: false },
         {
           text: 'Comics',
           value: 'comics',
@@ -210,6 +231,7 @@ export default {
     animation: fadeInAnimation ease 2s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
+    cursor: pointer;
   }
 
   &__heroes {
@@ -221,6 +243,12 @@ export default {
   &__page {
     display: inline;
     font-size: 20px;
+  }
+
+  &__new {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
   }
 }
 </style>

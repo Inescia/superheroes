@@ -1,19 +1,19 @@
 <template>
-  <div class="card ma-5 d-flex flex-column justify-space-between">
+  <div class="card d-flex flex-column justify-space-between ma-5">
     <router-link :to="'/Informations/' + hero.id"
       ><div style="position: relative">
-        <img class="card__img1" :src="image" />
+        <img :src="image" class="card__img1" />
         <div class="card__img2"><h6>Voir plus</h6></div>
       </div>
     </router-link>
-    <div class="mx-3 mt-1">
+    <div class="mt-1 mx-3">
       <v-row>
         <v-col cols="10"
           ><h4 class="card__name">
             {{ setSize(hero.name, 21) }}
           </h4></v-col
         >
-        <v-icon @click="toggleFavorite(hero.favorite)" color="red">
+        <v-icon color="red" @click="toggleFavorite">
           {{ hero.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}
         </v-icon></v-row
       >
@@ -51,7 +51,7 @@ export default {
 
   methods: {
     /**
-     * Set text's size, to avoid overflow
+     * Set text's size, to avoid overflow.
      *
      * @param {string} text The original text
      * @param {number} size The size required
@@ -62,8 +62,9 @@ export default {
       else return text;
     },
 
-    toggleFavorite(fav) {
-      this.hero.favorite = !fav;
+    /** Toggle the favorite status of the hero. */
+    toggleFavorite() {
+      this.hero.favorite = !this.hero.favorite;
     },
   },
 };
@@ -84,11 +85,11 @@ $w: 220px;
 $h: 322px;
 
 .card {
-  width: $w;
   background: white;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 5px #d4d4d4;
   height: $h;
+  width: $w;
 
   &:hover {
     & .card__img2 {
@@ -103,16 +104,17 @@ $h: 322px;
     object-fit: cover;
     width: $w;
   }
+
   &__img2 {
-    border-radius: 10px 10px 0px 0px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: $w;
-    height: $w;
     background: #ff554fee;
-    opacity: 0;
+    border-radius: 10px 10px 0px 0px;
+    bottom: 0;
+    height: $w;
+    left: 0;
     margin-bottom: 6px;
+    opacity: 0;
+    position: absolute;
+    width: $w;
   }
 
   &__name {

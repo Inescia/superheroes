@@ -24,8 +24,8 @@
         @click="changeLangage(lang)"
       />
     </v-col>
-    <v-col v-else cols="1">
-      <v-btn fab icon x-large @click="close"
+    <v-col v-else class="d-flex" justify-end cols="1">
+      <v-btn class="ml-auto" fab icon x-large @click="close"
         ><v-icon x-large> mdi-close </v-icon></v-btn
       >
     </v-col>
@@ -63,6 +63,7 @@ export default {
       this.$root.$i18n.locale = this.lang;
     },
 
+    /** Close the page (new or information). */
     close() {
       window.history.length >= 2
         ? this.$router.go(-1)

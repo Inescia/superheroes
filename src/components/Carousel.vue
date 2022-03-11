@@ -1,12 +1,16 @@
 <template>
   <div>
-    <div class="carousel">
-      <div
+    <v-row no-gutters justify="center" align="center" class="carousel my-8">
+      <v-col
+        cols="auto"
+        :disabled="borderLeft"
         class="carousel__left"
         @click="move('left')"
-        :disabled="borderLeft"
-      ></div>
-      <div class="carousel__cards">
+      ></v-col>
+      <v-col
+        class="carousel__cards d-flex justify-center mx-5 pa-3"
+        cols="auto"
+      >
         <div
           v-for="hero in heroes"
           :style="{
@@ -16,27 +20,28 @@
         >
           <Card :hero="hero" />
         </div>
-      </div>
-      <div
+      </v-col>
+      <v-col
+        cols="auto"
+        :disabled="borderRight"
         class="carousel__right"
         @click="move('right')"
-        :disabled="borderRight"
-      ></div>
-    </div>
+      ></v-col>
+    </v-row>
     <div>
-      <ul class="carousel__pages">
+      <ul class="carousel__pages d-flex justify-center my-8">
         <li>
           <button
-            type="button"
-            class="carousel__page"
             v-for="i in heroes.length"
             :key="i"
+            class="carousel__page pa-1"
+            type="button"
             @click="moveTo(i)"
           >
-            <v-icon v-if="i - 1 == index" small color="#ff554fee"
+            <v-icon v-if="i - 1 == index" color="#ff554fee" small
               >mdi-circle</v-icon
             >
-            <v-icon v-else small color="#00000055">mdi-circle</v-icon>
+            <v-icon v-else color="#00000055" small>mdi-circle</v-icon>
           </button>
         </li>
       </ul>
@@ -86,17 +91,27 @@ export default {
   },
 
   methods: {
+    /**
+     * Moves the carousel one step to the right or left if movement is allowed
+     *
+     * @param {string} direction The desired direction (left or right)
+     */
     move(direction) {
       if ((direction == 'left') & !this.borderLeft) this.offset -= this.step;
       else if ((direction == 'right') & !this.borderRight)
         this.offset += this.step;
     },
 
-    moveTo(i) {
-      i--;
+    /**
+     * Moves the carousel to a given index
+     *
+     * @param {number} index The desired index
+     */
+    moveTo(index) {
+      index--;
       if (this.heroes.length > 2) {
-        const i2 = this.index;
-        this.offset += (i2 - i) * this.step;
+        const index2 = this.index;
+        this.offset += (index2 - index) * this.step;
       }
     },
   },
@@ -105,22 +120,15 @@ export default {
 
 <style lang="scss">
 .carousel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 30px 0px;
-
   &__left,
   &__right {
     display: inline-block;
     width: 25px;
     height: 25px;
-    padding: 10px;
     box-sizing: border-box;
     border-top: 3px solid #ff554fee;
     border-right: 3px solid #ff554fee;
     cursor: pointer;
-    margin: 0 20px;
     transition: transform 150ms linear;
     &[disabled] {
       opacity: 0.3;
@@ -131,35 +139,23 @@ export default {
 
   &__left {
     transform: rotate(-135deg);
-    &:active {
-      transform: rotate(-135deg) scale(0.9);
-    }
   }
 
   &__right {
     transform: rotate(45deg);
-    &:active {
-      transform: rotate(45deg) scale(0.9);
-    }
   }
 
   &__cards {
-    display: flex;
-    justify-content: center;
     width: 90%;
   }
 
   &__pages {
-    display: flex;
-    justify-content: center;
     list-style: none;
-    margin: 30px 0px;
   }
 
   &__page {
     display: inline;
     font-size: 20px;
-    padding: 5px;
     height: auto;
     width: auto;
     color: #607d8b;

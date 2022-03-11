@@ -8,7 +8,7 @@
           :src="require('./assets/bouclier.png')"
       /></v-col>
       <v-col v-show="!load" cols="auto"
-        ><h3 style="text-align: left; opacity: 0.8">Chargement</h3></v-col
+        ><h3 style="text-align: left; opacity: 0.8">Chargement héros</h3></v-col
       >
     </v-row>
     <router-view />
@@ -18,15 +18,10 @@
 <script>
 export default {
   name: 'App',
+
   data: () => ({
     load: false,
   }),
-
-  // computed: {
-  //   load() {
-  //     return this.$store.getters.load
-  //   },
-  // },
 
   created() {
     if (!this.load) {

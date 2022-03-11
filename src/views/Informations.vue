@@ -1,91 +1,91 @@
 <template>
-  <div class="informations page d-flex flex-column">
+  <div class="informations d-flex flex-column page">
     <Header :modal="true" />
     <h1 style="text-align: right">{{ $t('views.informations.titre') }}</h1>
-    <div class="d-flex">
+    <div v-if="hero != null" class="d-flex">
       <v-col
-        cols="6"
         class="d-flex flex justify-center"
+        cols="6"
         @dragenter.prevent
         @dragover.prevent
         @drop.stop.prevent="onDrop"
       >
-        <img class="informations__img pa-8" cover :src="image" />
+        <img :src="image" class="informations__img pa-8" cover />
       </v-col>
-      <v-col cols="6" class="px-6">
+      <v-col class="px-6" cols="6">
         <h3>{{ $t('hero.id') }} : {{ id }}</h3>
         <v-form ref="form">
-          <v-row no-gutters justify="space-between">
+          <v-row justify="space-between" no-gutters>
             <v-col cols="6"
               ><v-text-field
                 v-model="name"
+                :label="$t('hero.nom')"
                 :rules="rules"
                 counter="30"
-                :label="$t('hero.nom')"
               ></v-text-field
             ></v-col>
             <v-col cols="1">
-              <v-btn fab text color="red" @click="toggleFavorite"
+              <v-btn color="red" fab text @click="toggleFavorite"
                 ><v-icon color="red" x-large>{{
                   favorite ? 'mdi-heart' : 'mdi-heart-outline'
                 }}</v-icon></v-btn
               ></v-col
             >
           </v-row>
-          <v-row no-gutters class="pt-5" justify="space-between">
+          <v-row class="pt-5" justify="space-between" no-gutters>
             <v-col cols="2">
               <v-text-field
-                outlined
-                type="number"
-                background-color="rgb(255, 255, 255, 0.5)"
                 v-model="comics"
                 :label="$t('hero.comics')"
+                background-color="rgb(255, 255, 255, 0.5)"
+                outlined
+                type="number"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
               <v-text-field
-                outlined
-                background-color="rgb(255, 255, 255, 0.5)"
-                type="number"
                 v-model="stories"
                 :label="$t('hero.stories')"
+                background-color="rgb(255, 255, 255, 0.5)"
+                outlined
+                type="number"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
               <v-text-field
-                outlined
-                background-color="rgb(255, 255, 255, 0.5)"
-                type="number"
                 v-model="series"
                 :label="$t('hero.series')"
+                background-color="rgb(255, 255, 255, 0.5)"
+                outlined
+                type="number"
               ></v-text-field
             ></v-col>
             <v-col cols="2">
               <v-text-field
+                v-model="events"
+                :label="$t('hero.events')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
-                v-model="events"
-                :label="$t('hero.events')"
               ></v-text-field
             ></v-col>
           </v-row>
           <v-textarea
-            outlined
-            background-color="rgb(255, 255, 255, 0.5)"
             v-model="description"
             :label="$t('hero.description')"
+            background-color="rgb(255, 255, 255, 0.5)"
             counter="600"
+            outlined
             rows="6"
           ></v-textarea>
-          <v-row no-gutters class="my-4">
-            <v-btn @click="removeHero">{{
+          <v-row class="my-4" no-gutters>
+            <v-btn color="#ff554fee" dark @click="removeHero">{{
               $t('views.informations.supprimer')
             }}</v-btn
-            ><v-btn class="mx-5" @click="resetHero">{{
+            ><v-btn class="mx-5" color="#ff554fee" dark @click="resetHero">{{
               $t('views.informations.reinitialiser')
             }}</v-btn>
-            <v-btn class="ml-auto" @click="updateHero">{{
+            <v-btn class="ml-auto" color="#ff554fee" dark @click="updateHero">{{
               $t('views.informations.enregistrer')
             }}</v-btn>
           </v-row>
@@ -98,12 +98,15 @@
 <script>
 import List from '../views/List.vue';
 import Header from '../components/Header.vue';
+import { fetchHeroByIdAPI } from '../api/Marvel.js';
+import Hero from '../classes/Hero';
 
 export default {
   components: { Header, List },
   name: 'Informations',
+
   data: () => ({
-    hero: null,
+    hero: new Hero('', '...', '...', '...', '...', '...', '...', '...', '...'),
     name: '',
     description: '',
     comics: 0,
@@ -124,49 +127,69 @@ export default {
     },
   },
 
-  created() {
-    this.hero = this.$store.getters.heroById(this.id);
-    this.name = this.hero.name;
-    this.description = this.hero.description;
-    this.comics = this.hero.comics;
-    this.stories = this.hero.stories;
-    this.series = this.hero.series;
-    this.events = this.hero.events;
-    this.favorite = this.hero.favorite;
-    if (
-      this.hero.image !=
-      'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
-    )
-      this.image = this.hero.image;
+  async created() {
+    if (this.$store.getters.heroById(this.id) == null) {
+      let result = [];
+
+      await fetchHeroByIdAPI(this.id).then(function (value) {
+        result = value;
+      });
+
+      this.hero = result.map((data) => {
+        return new Hero(
+          data.id,
+          data.name,
+          data.description,
+          data.comics.available,
+          data.stories.available,
+          data.series.available,
+          data.events.available,
+          `${data.thumbnail.path}.${data.thumbnail.extension}`
+        );
+      })[0];
+    } else this.hero = this.$store.getters.heroById(this.id);
+    this.synchronizeInformations(true);
   },
 
   methods: {
+    /**
+     * Synchronize the heroe's informations (get informations from the database or push informations to the database).
+     *
+     * @param {boolean} getInfo The type of synchronisation (true = get / false = push)
+     */
+    synchronizeInformations(getInfo) {
+      const { name, description, comics, stories, series, events, favorite } =
+        this.hero;
+      const values = [
+        'name',
+        'description',
+        'comics',
+        'stories',
+        'series',
+        'events',
+        'favorite',
+      ];
+      values.forEach((value) => {
+        getInfo
+          ? (this[value] = this.hero[value])
+          : (this.hero[value] = this[value]);
+      });
+      if (!getInfo) this.hero.image = this.image;
+      else if (
+        this.hero.image !=
+        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+      )
+        this.image = this.hero.image;
+    },
+
+    /** Save the modifications in the database. */
     updateHero() {
-      if (this.$refs.form.validate()) {
+      if (!this.$store.getters.load)
+        alert('Attendez la fin du chargement de la bdd');
+      else if (this.$refs.form.validate()) {
+        this.hero = this.$store.getters.heroById(this.id);
         try {
-          const {
-            name,
-            description,
-            comics,
-            stories,
-            series,
-            events,
-            favorite,
-            image,
-          } = this.hero;
-          const values = [
-            'name',
-            'description',
-            'comics',
-            'stories',
-            'series',
-            'events',
-            'favorite',
-            'image',
-          ];
-          values.forEach((value) => {
-            this.hero[value] = this[value];
-          });
+          this.synchronizeInformations(false);
 
           alert('Modifications enregistrées');
           window.history.length >= 2
@@ -178,9 +201,12 @@ export default {
       }
     },
 
+    /** Remove the hero in the database. */
     removeHero() {
       let id = this.id;
-      if (confirm('Voulez-vous vraiment supprimer ce superhéro ?'))
+      if (!this.$store.getters.load)
+        alert('Attendez la fin du chargement de la bdd');
+      else if (confirm('Voulez-vous vraiment supprimer ce superhéro ?'))
         try {
           this.$store.commit('removeHero', { id });
           window.history.length >= 2
@@ -192,43 +218,33 @@ export default {
         }
     },
 
+    /** Reset the hero's information. */
     resetHero() {
-      const {
-        name,
-        description,
-        comics,
-        stories,
-        series,
-        events,
-        favorite,
-        image,
-      } = this.hero;
-      const values = [
-        'name',
-        'description',
-        'comics',
-        'stories',
-        'series',
-        'events',
-        'favorite',
-        'image',
-      ];
-      values.forEach((value) => {
-        this[value] = this.hero[value];
-      });
+      this.synchronizeInformations(true);
     },
 
+    /** Toggle the favorite status of the hero. */
     toggleFavorite() {
       this.favorite = !this.favorite;
     },
 
-    onDrop: function (e) {
+    /**
+     * Retrieve the file dropped.
+     *
+     * @param {event} e The event associated
+     */
+    onDrop(e) {
       e.stopPropagation();
       e.preventDefault();
       let files = e.dataTransfer.files;
       this.createFile(files[0]);
     },
 
+    /**
+     * Create the file for the new image.
+     *
+     * @param {file} file The i dropped
+     */
     createFile(file) {
       if (!file.type.match('image.*')) {
         alert('Select an image');
@@ -236,7 +252,6 @@ export default {
       }
       let reader = new FileReader();
       let vm = this;
-
       reader.onload = function (e) {
         vm.image = e.target.result;
       };

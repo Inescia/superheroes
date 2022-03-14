@@ -24,7 +24,9 @@
       "modification": "Cambios registrados",
       "suppression": "Superhéroe borrado"
     },
-    "confirmation": "¿ Quiere realmente borrar a este superhéroe ?"
+    "confirmation": "¿ Quiere realmente borrar a este superhéroe ?",
+    "oui": "Sí",
+    "non": "No"
   },
   "components": {
     "card": { "verso": "VER MAS" },

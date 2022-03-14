@@ -3,7 +3,7 @@
     class="pa-5"
     justify="space-between"
     no-gutters
-    style="max-height: 100px"
+    style="max-height: 120px"
   >
     <v-col cols="auto"
       ><router-link to="/"

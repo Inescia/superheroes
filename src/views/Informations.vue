@@ -88,7 +88,7 @@
             rows="6"
           ></v-textarea>
           <v-row class="my-4" no-gutters>
-            <v-btn color="#ff554fee" dark @click="removeHero">{{
+            <v-btn color="#ff554fee" dark @click="dialog = true">{{
               $t('views.informations.supprimer')
             }}</v-btn
             ><v-btn
@@ -105,6 +105,22 @@
         </v-form>
       </v-col>
     </div>
+    <v-dialog v-model="dialog" persistent width="auto">
+      <v-card>
+        <v-card-title>
+          {{ $t('notification.confirmation') }}
+        </v-card-title>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="dialog = false">
+            {{ $t('notification.non') }}
+          </v-btn>
+          <v-btn color="#ff554fee" text @click="removeHero">
+            {{ $t('notification.oui') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -120,7 +136,8 @@ export default {
   name: 'Informations',
 
   data: () => ({
-    hero: new Hero('', '...', '...', '...', '...', '...', '...', '...', '...'),
+    dialog: false,
+    hero: null,
     name: '',
     description: '',
     comics: 0,
@@ -199,10 +216,11 @@ export default {
 
     /** Remove the hero in the database. */
     removeHero() {
+      this.dialog = false;
       let id = this.id;
       if (!this.load)
         this.showAlert(this.$t('notification.erreur.chargement'), false);
-      else if (confirm(this.$t('notification.confirmation')))
+      else
         try {
           this.$store.commit('removeHero', { id });
           this.showAlert(this.$t('notification.succes.suppression'), true);

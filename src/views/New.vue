@@ -12,9 +12,8 @@
             @dragover.prevent
             @drop.stop.prevent="onDrop"
           >
-            <img v-on="on" :src="image class="new__img pa-8" cover" />
-          </v-col></template
-        >
+            <img v-on="on" :src="image" class="new__img pa-8" cover /> </v-col
+        ></template>
         <span>{{ $t('hero.tooltip') }}</span>
       </v-tooltip>
       <v-col class="px-6" cols="6">

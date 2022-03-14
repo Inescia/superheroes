@@ -24,7 +24,9 @@
       "modification": "Changes saved",
       "suppression": "Superhero deleted"
     },
-    "confirmation": "Do you really want to delete this superhero ?"
+    "confirmation": "Do you really want to delete this superhero ?",
+    "oui": "Yes",
+    "non": "No"
   },
   "components": {
     "card": { "verso": "SEE MORE" },

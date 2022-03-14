@@ -3,26 +3,26 @@
     <Header />
     <h1>{{ $t('views.list.titre') }}</h1>
     <div class="d-flex align-center justify-space-around my-n3 mx-12">
-      <v-col cols="4" align-self="start">
+      <v-col align-self="start" cols="4">
         <v-text-field
-          prepend-icon="mdi-magnify"
-          :label="$t('views.list.rechercher')"
           v-model="search"
+          :label="$t('views.list.rechercher')"
+          prepend-icon="mdi-magnify"
         ></v-text-field
       ></v-col>
       <v-col class="d-flex" cols="auto">
         <v-btn
+          :color="display ? 'grey' : 'red'"
           fab
           text
-          :color="display ? 'grey' : 'red'"
           @click="toggleDisplay(false)"
           ><v-icon :color="display ? 'grey' : 'red'" large
             >mdi-format-list-bulleted</v-icon
           ></v-btn
         ><v-btn
+          :color="display ? 'red' : 'grey'"
           fab
           text
-          :color="display ? 'red' : 'grey'"
           @click="toggleDisplay(true)"
           ><v-icon :color="display ? 'red' : 'grey'" large
             >mdi-dots-grid</v-icon
@@ -52,29 +52,28 @@
     </div>
     <v-data-table
       v-if="!display"
-      class="list__table mx-14"
-      @click:row="onClick"
       :headers="headers"
       :items="heroesDisplayed"
       :items-per-page="number"
       :hide-default-footer="true"
+      class="list__table mx-14"
+      @dblclick:row="onClick"
     >
       <template #item.image="{ item: { image } }">
         <img
-          class=""
-          height="50"
-          width="50"
-          contain
           :src="
             image ==
             'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
               ? require('../assets/test.jpeg')
               : image
           "
+          contain
+          height="50"
+          width="50"
         />
       </template>
       <template #item.favorite="{ item }">
-        <v-icon @click.stop="toggleFavorite(item)" color="red">{{
+        <v-icon color="red" @click.stop="toggleFavorite(item)">{{
           item.favorite ? 'mdi-heart' : 'mdi-heart-outline'
         }}</v-icon>
       </template>
@@ -85,8 +84,8 @@
     <ul class="d-flex justify-center my-7" style="list-style: none">
       <li>
         <button
-          class="list__page"
           v-show="page != 1 && search == ''"
+          class="list__page"
           @click="page--"
         >
           <v-icon color="#607d8b"> mdi-arrow-left</v-icon>
@@ -95,30 +94,41 @@
       <li>
         <button
           v-show="search == ''"
-          type="button"
+          v-for="i in pages"
+          :key="i"
           :style="page == i ? 'color: #ff554fee' : 'color:  #607d8b'"
           class="list__page pa-1"
-          v-for="i in pages"
+          type="button"
           @click="page = i"
-          :key="i"
         >
           {{ i }}
         </button>
       </li>
       <li>
         <button
-          @click="page++"
           v-show="page < pages && search == ''"
           class="list__page"
+          @click="page++"
         >
           <v-icon color="#607d8b">mdi-arrow-right</v-icon>
         </button>
       </li>
     </ul>
-    <router-link to="/New">
-      <v-btn class="list__new" color="red" elevation="2" fab x-large
-        ><v-icon color="white" x-large>mdi-plus</v-icon></v-btn
-      ></router-link
+    <router-link to="/New"
+      ><v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-on="on"
+            class="list__new"
+            color="red"
+            elevation="2"
+            fab
+            x-large
+            ><v-icon v-on="on" color="white" x-large>mdi-plus</v-icon></v-btn
+          ></template
+        >
+        <span>{{ $t('views.list.nouveau') }}</span>
+      </v-tooltip></router-link
     >
   </div>
 </template>
@@ -126,6 +136,7 @@
 <script>
 import Card from '../components/Card.vue';
 import Header from '../components/Header.vue';
+import { mapGetters } from 'vuex';
 
 export default {
   components: { Card, Header },
@@ -134,45 +145,59 @@ export default {
   data() {
     return {
       display: true,
-      sort: 'Name ↑',
-      itemsSort: ['ID ↑', 'ID ↓', 'Name ↑', 'Name ↓'],
+      sort: this.$t('views.list.itemsTri[2]'),
+      itemsSort: this.$t('views.list.itemsTri'),
       number: 50,
       page: 1,
       search: '',
       headers: [
-        { text: 'Avatar', value: 'image', sortable: false },
-        { text: 'ID', value: 'id', width: '17%', sortable: false },
-        { text: 'Nom', value: 'name', width: '28%', sortable: false },
         {
-          text: 'Comics',
+          text: this.$t('views.list.header[0]'),
+          value: 'image',
+          sortable: false,
+        },
+        {
+          text: this.$t('views.list.header[1]'),
+          value: 'id',
+          width: '17%',
+          sortable: false,
+        },
+        {
+          text: this.$t('views.list.header[2]'),
+          value: 'name',
+          width: '28%',
+          sortable: false,
+        },
+        {
+          text: this.$t('views.list.header[3]'),
           value: 'comics',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: 'Stories',
+          text: this.$t('views.list.header[4]'),
           value: 'stories',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: 'Series',
+          text: this.$t('views.list.header[5]'),
           value: 'series',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: 'Events',
+          text: this.$t('views.list.header[6]'),
           value: 'events',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: 'Favorite',
+          text: this.$t('views.list.header[7]'),
           value: 'favorite',
           align: 'center',
           width: '10%',
@@ -183,6 +208,8 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['heroes', 'heroesByText', 'numberHeroes']),
+
     heroesDisplayed() {
       let crescent, byName, index, h;
       index = this.itemsSort.indexOf(this.sort);
@@ -191,18 +218,14 @@ export default {
 
       // if search bar is empty
       if (this.search == '') {
-        h = this.$store.getters.heroes(
-          this.number,
-          this.number * (this.page - 1),
-          byName
-        );
-      } else h = this.$store.getters.heroesByText(this.search);
+        h = this.heroes(this.number, this.number * (this.page - 1), byName);
+      } else h = this.heroesByText(this.search);
       if (!crescent) h.reverse();
       return h;
     },
 
     pages() {
-      let n = this.$store.getters.numberHeroes;
+      let n = this.numberHeroes;
       if (n % this.number == 0) return Math.floor(n / this.number);
       else return Math.floor(n / this.number) + 1;
     },
@@ -247,7 +270,7 @@ export default {
 
   &__new {
     position: fixed;
-    bottom: 5%;
+    bottom: 6%;
     right: 5%;
   }
 }

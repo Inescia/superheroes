@@ -36,9 +36,9 @@ export default {
       if (
         this.hero.image !=
         'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
-      ) {
+      )
         return this.hero.image;
-      } else return require('../assets/test.jpeg');
+      else return require('../assets/test.jpeg');
     },
   },
 

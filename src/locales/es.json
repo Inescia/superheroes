@@ -3,11 +3,28 @@
     "id": "ID",
     "nom": "Nombre",
     "description": "Descripción",
-    "comics": "Comics",
-    "stories": "Stories",
+    "comics": "Cómics",
+    "stories": "Historias",
     "series": "Series",
-    "events": "Events",
-    "favori": "Favoritos"
+    "events": "Eventos",
+    "favori": "Favoritos",
+    "regle": "Se requiere el nombre",
+    "tooltip": "Arrastre y suelte una imagen para cambiarla"
+  },
+  "loader": "Cargando héroes",
+  "notification": {
+    "erreur": {
+      "chargement": "Por favor, espere a que termine la carga de los héroes",
+      "creation": "Superhéroe no creado, error : ",
+      "modification": "Cambios no registrados, error : ",
+      "suppression": "Superhéroe no borrado, error : "
+    },
+    "succes": {
+      "creation": "Superhéroe creado",
+      "modification": "Cambios registrados",
+      "suppression": "Superhéroe borrado"
+    },
+    "confirmation": "¿ Quiere realmente borrar a este superhéroe ?"
   },
   "components": {
     "card": { "verso": "VER MAS" },
@@ -15,7 +32,10 @@
     "header": { "tab1": "Los Favoritos", "tab2": "Los Superheroes" }
   },
   "views": {
-    "dashboard": { "titre": "FAVORITOS." },
+    "dashboard": {
+      "titre": "FAVORITOS.",
+      "vide": "Todavía no tiene un favorito."
+    },
     "informations": {
       "titre": "INFORMACIONES.",
       "supprimer": "Borrar",
@@ -30,7 +50,18 @@
       "cartes": "Cartas",
       "tri": "Ordenación :",
       "nombre": " heroes/paginas",
-      "rechercher": "Buscar (nombre, id, descripción)"
+      "rechercher": "Buscar (nombre, id, descripción)",
+      "header": [
+        "Avatar",
+        "ID",
+        "Nombre",
+        "Cómics",
+        "Historias",
+        "Series",
+        "Eventos",
+        "Favorito"
+      ],
+      "itemsTri": ["ID ↑", "ID ↓", "Nombre ↑", "Nombre ↓"]
     },
     "new": {
       "titre": "NUEVO SUPERHEROE.",

@@ -32,7 +32,7 @@ export async function fetchHeroesAPI(request) {
  * This function retrieves a hero according to its ID.
  *
  * @param {number} id the ID of the hero researched
- * @returns {Promise<array>} a array with the corresponding hero or an empty array
+ * @returns {Promise<array>} an array with the corresponding hero or an empty array
  */
 export async function fetchHeroByIdAPI(id) {
   let results = null;

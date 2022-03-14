@@ -3,15 +3,20 @@
     <Header :modal="true" />
     <h1 style="text-align: right">{{ $t('views.new.titre') }}</h1>
     <div class="d-flex">
-      <v-col
-        class="d-flex flex justify-center"
-        cols="6"
-        @dragenter.prevent
-        @dragover.prevent
-        @drop.stop.prevent="onDrop"
-      >
-        <img class="new__img pa-8" cover :src="image" />
-      </v-col>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }"
+          ><v-col
+            class="d-flex flex justify-center"
+            cols="6"
+            @dragenter.prevent
+            @dragover.prevent
+            @drop.stop.prevent="onDrop"
+          >
+            <img v-on="on" :src="image class="new__img pa-8" cover" />
+          </v-col></template
+        >
+        <span>{{ $t('hero.tooltip') }}</span>
+      </v-tooltip>
       <v-col class="px-6" cols="6">
         <h3>{{ $t('hero.id') }} : {{ id }}</h3>
         <v-form ref="form">
@@ -86,24 +91,20 @@
         </v-form>
       </v-col>
     </div>
-    <Alert v-if="alertDisplay" :success="false" :text="alertText" />
   </div>
 </template>
 
 <script>
 import Hero from '../classes/Hero';
-import Alert from '../components/Alert.vue';
 import Dialog from '../components/Dialog.vue';
 import Header from '../components/Header.vue';
+import { mapGetters } from 'vuex';
 
 export default {
-  components: { Header, Dialog, Alert },
+  components: { Header, Dialog },
   name: 'New',
 
   data: () => ({
-    alertDisplay: false,
-    alertText: '',
-
     name: '',
     description: '',
     comics: 0,
@@ -119,18 +120,15 @@ export default {
   }),
 
   computed: {
-    id() {
-      return this.$store.getters.newId;
-    },
+    ...mapGetters({ id: 'newId', load: 'load' }),
   },
 
   methods: {
     /** Add the hero in the database. */
     addHero() {
-      if (!this.$store.getters.load) {
-        this.alertText = 'Veuillez attendre la fin du chargement des héros';
-        this.alertDisplay = true;
-      } else if (this.$refs.form.validate()) {
+      if (!this.load)
+        this.showAlert(this.$t('notification.erreur.chargement'), false);
+      else if (this.$refs.form.validate()) {
         try {
           let hero = new Hero(
             this.id,
@@ -145,28 +143,14 @@ export default {
           );
           this.$store.commit('addHero', { hero });
           this.$router.push('/List');
+          this.showAlert(this.$t('notification.succes.creation'), true);
         } catch (error) {
-          this.alertText = 'Superhéro non créé, erreur : ' + error.toString();
-          this.alertDisplay = true;
+          this.showAlert(
+            this.$t('notification.erreur.creation') + error.toString(),
+            false
+          );
         }
       }
-    },
-
-    /** Toggle the favorite status of the hero. */
-    toggleFavorite() {
-      this.favorite = !this.favorite;
-    },
-
-    /**
-     * Retrieve the file dropped.
-     *
-     * @param {event} e The event associated
-     */
-    onDrop(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      let files = e.dataTransfer.files;
-      this.createFile(files[0]);
     },
 
     /**
@@ -187,6 +171,43 @@ export default {
         vm.image = e.target.result;
       };
       reader.readAsDataURL(file);
+    },
+
+    /**
+     * Retrieve the file dropped.
+     *
+     * @param {event} e The event associated
+     */
+    onDrop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      let files = e.dataTransfer.files;
+      this.createFile(files[0]);
+    },
+
+    /**
+     * Show an alert during 4s.
+     *
+     * @param {string} text The alert's text
+     */
+    showAlert(text, success) {
+      this.$store.commit('changeNotification', {
+        display: true,
+        success: success,
+        text: text,
+      });
+      setTimeout(() => {
+        this.$store.commit('changeNotification', {
+          display: false,
+          success: true,
+          text: '',
+        });
+      }, 5000);
+    },
+
+    /** Toggle the favorite status of the hero. */
+    toggleFavorite() {
+      this.favorite = !this.favorite;
     },
   },
 };

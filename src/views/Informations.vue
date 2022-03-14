@@ -3,15 +3,24 @@
     <Header :modal="true" />
     <h1 style="text-align: right">{{ $t('views.informations.titre') }}</h1>
     <div v-if="hero != null" class="d-flex">
-      <v-col
-        class="d-flex flex justify-center"
-        cols="6"
-        @dragenter.prevent
-        @dragover.prevent
-        @drop.stop.prevent="onDrop"
-      >
-        <img :src="image" class="informations__img pa-8" cover />
-      </v-col>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }"
+          ><v-col
+            class="d-flex flex justify-center"
+            cols="6"
+            @dragenter.prevent
+            @dragover.prevent
+            @drop.stop.prevent="onDrop"
+          >
+            <img
+              v-on="on"
+              :src="image"
+              class="informations__img pa-8"
+              cover
+            /> </v-col
+        ></template>
+        <span>{{ $t('hero.tooltip') }}</span>
+      </v-tooltip>
       <v-col class="px-6" cols="6">
         <h3>{{ $t('hero.id') }} : {{ id }}</h3>
         <v-form ref="form">
@@ -82,9 +91,13 @@
             <v-btn color="#ff554fee" dark @click="removeHero">{{
               $t('views.informations.supprimer')
             }}</v-btn
-            ><v-btn class="mx-5" color="#ff554fee" dark @click="resetHero">{{
-              $t('views.informations.reinitialiser')
-            }}</v-btn>
+            ><v-btn
+              class="mx-5"
+              color="#ff554fee"
+              dark
+              @click="synchronizeInformations(true)"
+              >{{ $t('views.informations.reinitialiser') }}</v-btn
+            >
             <v-btn class="ml-auto" color="#ff554fee" dark @click="updateHero">{{
               $t('views.informations.enregistrer')
             }}</v-btn>
@@ -98,8 +111,9 @@
 <script>
 import List from '../views/List.vue';
 import Header from '../components/Header.vue';
-import { fetchHeroByIdAPI } from '../api/Marvel.js';
 import Hero from '../classes/Hero';
+import { fetchHeroByIdAPI } from '../api/Marvel.js';
+import { mapGetters } from 'vuex';
 
 export default {
   components: { Header, List },
@@ -115,11 +129,12 @@ export default {
     events: 0,
     favorite: false,
     image: require('../assets/test.jpeg'),
-    rules: [
-      (v) => !!v || 'Name is required',
-      (v) => (v && v.length <= 30) || 'Name must be less than 30 characters',
-    ],
+    rules: [(v) => !!v || 'Name is required'],
   }),
+
+  computed: {
+    ...mapGetters(['load', 'heroById']),
+  },
 
   props: {
     id: {
@@ -128,7 +143,7 @@ export default {
   },
 
   async created() {
-    if (this.$store.getters.heroById(this.id) == null) {
+    if (this.heroById(this.id) == null) {
       let result = [];
 
       await fetchHeroByIdAPI(this.id).then(function (value) {
@@ -147,11 +162,82 @@ export default {
           `${data.thumbnail.path}.${data.thumbnail.extension}`
         );
       })[0];
-    } else this.hero = this.$store.getters.heroById(this.id);
+    } else this.hero = this.heroById(this.id);
     this.synchronizeInformations(true);
   },
 
   methods: {
+    /**
+     * Create the file for the new image.
+     *
+     * @param {file} file The i dropped
+     */
+    createFile(file) {
+      if (!file.type.match('image.*')) {
+        alert('Select an image');
+        return;
+      }
+      let reader = new FileReader();
+      let vm = this;
+      reader.onload = function (e) {
+        vm.image = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    },
+
+    /**
+     * Retrieve the file dropped.
+     *
+     * @param {event} e The event associated
+     */
+    onDrop(e) {
+      e.stopPropagation();
+      e.preventDefault();
+      let files = e.dataTransfer.files;
+      this.createFile(files[0]);
+    },
+
+    /** Remove the hero in the database. */
+    removeHero() {
+      let id = this.id;
+      if (!this.load)
+        this.showAlert(this.$t('notification.erreur.chargement'), false);
+      else if (confirm(this.$t('notification.confirmation')))
+        try {
+          this.$store.commit('removeHero', { id });
+          this.showAlert(this.$t('notification.succes.suppression'), true);
+          window.history.length >= 2
+            ? this.$router.go(-1)
+            : this.$router.push('/List');
+        } catch (error) {
+          this.showAlert(
+            this.$t('notification.erreur.suppression') + error,
+            false
+          );
+        }
+    },
+
+    /**
+     * Show an alert during 4s.
+     *
+     * @param {string} text The alert's text
+     * @param {string} success The alert's type (true = success/ false = error)
+     */
+    showAlert(text, success) {
+      this.$store.commit('changeNotification', {
+        display: true,
+        success: success,
+        text: text,
+      });
+      setTimeout(() => {
+        this.$store.commit('changeNotification', {
+          display: false,
+          success: true,
+          text: '',
+        });
+      }, 5000);
+    },
+
     /**
      * Synchronize the heroe's informations (get informations from the database or push informations to the database).
      *
@@ -182,80 +268,30 @@ export default {
         this.image = this.hero.image;
     },
 
-    /** Save the modifications in the database. */
-    updateHero() {
-      if (!this.$store.getters.load)
-        alert('Attendez la fin du chargement de la bdd');
-      else if (this.$refs.form.validate()) {
-        this.hero = this.$store.getters.heroById(this.id);
-        try {
-          this.synchronizeInformations(false);
-
-          alert('Modifications enregistrées');
-          window.history.length >= 2
-            ? this.$router.go(-1)
-            : this.$router.push('/List');
-        } catch (error) {
-          alert('Modifications non enregistrées\nErreur : ' + error);
-        }
-      }
-    },
-
-    /** Remove the hero in the database. */
-    removeHero() {
-      let id = this.id;
-      if (!this.$store.getters.load)
-        alert('Attendez la fin du chargement de la bdd');
-      else if (confirm('Voulez-vous vraiment supprimer ce superhéro ?'))
-        try {
-          this.$store.commit('removeHero', { id });
-          window.history.length >= 2
-            ? this.$router.go(-1)
-            : this.$router.push('/List');
-          alert('Superhéro supprimé');
-        } catch (error) {
-          alert('Superhéro non supprimé \nErreur : ' + error);
-        }
-    },
-
-    /** Reset the hero's information. */
-    resetHero() {
-      this.synchronizeInformations(true);
-    },
-
     /** Toggle the favorite status of the hero. */
     toggleFavorite() {
       this.favorite = !this.favorite;
     },
 
-    /**
-     * Retrieve the file dropped.
-     *
-     * @param {event} e The event associated
-     */
-    onDrop(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      let files = e.dataTransfer.files;
-      this.createFile(files[0]);
-    },
-
-    /**
-     * Create the file for the new image.
-     *
-     * @param {file} file The i dropped
-     */
-    createFile(file) {
-      if (!file.type.match('image.*')) {
-        alert('Select an image');
-        return;
+    /** Save the modifications in the database. */
+    updateHero() {
+      if (!this.load)
+        this.showAlert(this.$t('notification.erreur.chargement'), false);
+      else if (this.$refs.form.validate()) {
+        this.hero = this.heroById(this.id);
+        try {
+          this.synchronizeInformations(false);
+          this.showAlert(this.$t('notification.succes.modification'), true);
+          window.history.length >= 2
+            ? this.$router.go(-1)
+            : this.$router.push('/List');
+        } catch (error) {
+          this.showAlert(
+            this.$t('notification.erreur.modification') + error,
+            false
+          );
+        }
       }
-      let reader = new FileReader();
-      let vm = this;
-      reader.onload = function (e) {
-        vm.image = e.target.result;
-      };
-      reader.readAsDataURL(file);
     },
   },
 };

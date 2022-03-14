@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import i18n from '../i18n';
+
 export default {
   name: 'Header',
 
@@ -48,6 +50,11 @@ export default {
     },
   },
 
+  beforeMount() {
+    this.lang = i18n.locale;
+    this.dismissible = this.modal;
+  },
+
   methods: {
     /**
      * Change the langage used.
@@ -60,7 +67,7 @@ export default {
         : lang == 'en'
         ? (this.lang = 'es')
         : (this.lang = 'fr');
-      this.$root.$i18n.locale = this.lang;
+      i18n.locale = this.lang;
     },
 
     /** Close the page (new or information). */
@@ -70,11 +77,6 @@ export default {
         : this.$router.push('/List');
       this.dismissible = false;
     },
-  },
-
-  beforeMount() {
-    this.lang = this.$root.$i18n.locale;
-    this.dismissible = this.modal;
   },
 };
 </script>

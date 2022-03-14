@@ -1,10 +1,10 @@
 <template>
   <div>
-    <v-row no-gutters justify="center" align="center" class="carousel my-8">
+    <v-row align="center" class="carousel my-8" justify="center" no-gutters>
       <v-col
+        class="carousel__left"
         cols="auto"
         :disabled="borderLeft"
-        class="carousel__left"
         @click="move('left')"
       ></v-col>
       <v-col
@@ -22,9 +22,9 @@
         </div>
       </v-col>
       <v-col
+        class="carousel__right"
         cols="auto"
         :disabled="borderRight"
-        class="carousel__right"
         @click="move('right')"
       ></v-col>
     </v-row>
@@ -33,9 +33,9 @@
         <li>
           <button
             v-for="i in heroes.length"
-            :key="i"
             class="carousel__page pa-1"
             type="button"
+            :key="i"
             @click="moveTo(i)"
           >
             <v-icon v-if="i - 1 == index" color="#ff554fee" small

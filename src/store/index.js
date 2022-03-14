@@ -8,21 +8,26 @@ Vue.use(Vuex);
 const state = {
   heroes: [],
   load: false,
+  notification: { display: false, success: true, text: '' },
 };
 
 const mutations = {
-  receiveHeroes(state, { heroes }) {
-    state.heroes.length == 0
-      ? (state.heroes = heroes)
-      : (state.heroes = state.heroes.concat(heroes));
-  },
-
   addHero(state, { hero }) {
     state.heroes = [hero].concat(state.heroes);
   },
 
+  changeNotification(state, { display, success, text }) {
+    state.notification = { display, success, text };
+  },
+
   removeHero(state, { id }) {
     state.heroes = state.heroes.filter((h) => h.id != id);
+  },
+
+  retrieveHeroes(state, { heroes }) {
+    state.heroes.length == 0
+      ? (state.heroes = heroes)
+      : (state.heroes = state.heroes.concat(heroes));
   },
 };
 
@@ -30,15 +35,14 @@ const actions = {
   async fetchHeroes({ commit }) {
     let request = 0;
     let isFinished = true;
-
     do {
       let result;
-      // Recupération des héros 100 par 100
+      // Get heroes 100 by 100
       await fetchHeroesAPI(request).then(function (data) {
         result = data;
       });
       result.length == 0 ? (isFinished = true) : (isFinished = false);
-      commit('receiveHeroes', {
+      commit('retrieveHeroes', {
         heroes: result.map((data) => {
           return new Hero(
             data.id,
@@ -52,7 +56,6 @@ const actions = {
           );
         }),
       });
-
       request++;
     } while (!isFinished);
     console.log('Chargement des héros terminé');
@@ -61,12 +64,6 @@ const actions = {
 };
 
 const getters = {
-  // Retourne l'état de chargement des héros
-  load: (state) => {
-    return state.load;
-  },
-
-  // Retourne une page de héros selon les paramètres
   heroes: (state) => (number, offset, byName) => {
     let h = state.heroes;
     byName
@@ -75,21 +72,10 @@ const getters = {
     return h.slice(offset, number + offset);
   },
 
-  //Retourne tous les héros favoris
-  heroesFavorites: (state) => {
-    let h = [];
-    state.heroes.forEach((hero) => {
-      if (hero.favorite) h.push(hero);
-    });
-    return h;
+  heroById: (state) => (id) => {
+    return state.heroes.find((h) => h.id == id);
   },
 
-  //Retourne le nombre d'héros
-  numberHeroes: (state) => {
-    return state.heroes.length;
-  },
-
-  //Retourne tous les héros qui ont "text" dans leur nom, id ou description
   heroesByText: (state) => (text) => {
     let h = [];
     state.heroes.forEach((hero) => {
@@ -103,18 +89,32 @@ const getters = {
     return h;
   },
 
-  // Retourne le héro associé à l'id
-  heroById: (state) => (id) => {
-    return state.heroes.find((h) => h.id == id);
+  heroesFavorites: (state) => {
+    let h = [];
+    state.heroes.forEach((hero) => {
+      if (hero.favorite) h.push(hero);
+    });
+    return h;
   },
 
-  // Retourne un nouvel id non utilisé
+  load: (state) => {
+    return state.load;
+  },
+
   newId() {
     let id = 0;
     state.heroes.forEach((h) => {
       if (h.id > id) id = h.id;
     });
     return id++;
+  },
+
+  notification: (state) => {
+    return state.notification;
+  },
+
+  numberHeroes: (state) => {
+    return state.heroes.length;
   },
 };
 

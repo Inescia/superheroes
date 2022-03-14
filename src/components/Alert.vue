@@ -1,19 +1,19 @@
 <template>
-  <div class="alert pt-5">
-    <v-alert v-if="success" dismissible type="success">{{ text }}</v-alert>
-    <v-alert v-else dismissible type="error">{{ text }}</v-alert>
+  <div v-if="display" class="alert pt-5">
+    <v-alert v-if="success" type="success">{{ text }}</v-alert>
+    <v-alert v-else type="error">{{ text }}</v-alert>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      display: true,
-    };
-  },
+  name: 'Alert',
 
   props: {
+    display: {
+      type: Boolean,
+      default: true,
+    },
     success: {
       type: Boolean,
       default: true,
@@ -43,12 +43,12 @@ export default {
 }
 
 .alert {
-  animation: show ease-in-out 4s;
+  animation: show ease-in-out 5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
   position: absolute;
-  width: 25%;
-  right: -25%;
+  right: -30%;
   z-index: 2;
+  width: 30%;
 }
 </style>

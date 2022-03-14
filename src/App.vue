@@ -8,26 +8,40 @@
           :src="require('./assets/bouclier.png')"
       /></v-col>
       <v-col v-show="!load" cols="auto"
-        ><h3 style="text-align: left; opacity: 0.8">Chargement héros</h3></v-col
+        ><h3 style="text-align: left; opacity: 0.8">
+          {{ $t('loader') }}
+        </h3></v-col
       >
     </v-row>
+    <Alert
+      :display="notification.display"
+      :success="notification.success"
+      :text="notification.text"
+    />
     <router-view />
   </v-app>
 </template>
 
 <script>
+import Alert from './components/Alert.vue';
+import { mapGetters } from 'vuex';
+
 export default {
+  components: { Alert },
   name: 'App',
 
-  data: () => ({
-    load: false,
-  }),
+  // data: () => ({
+  //   load: false,
+  // }),
+
+  computed: {
+    ...mapGetters(['notification', 'load']),
+  },
 
   created() {
     if (!this.load) {
-      this.$store
-        .dispatch('fetchHeroes')
-        .then(() => (this.load = this.$store.getters.load));
+      this.$store.dispatch('fetchHeroes');
+      //.then(() => (this.load = this.$store.getters.load));
     }
   },
 };

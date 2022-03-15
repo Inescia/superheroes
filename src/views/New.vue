@@ -94,12 +94,11 @@
 
 <script>
 import Hero from '../classes/Hero';
-import Dialog from '../components/Dialog.vue';
 import Header from '../components/Header.vue';
 import { mapGetters } from 'vuex';
 
 export default {
-  components: { Header, Dialog },
+  components: { Header },
   name: 'New',
 
   data: () => ({

@@ -8,6 +8,7 @@ Vue.use(Vuex);
 const state = {
   heroes: [],
   load: false,
+  modal: false,
   notification: { display: false, success: true, text: '' },
 };
 
@@ -28,6 +29,10 @@ const mutations = {
     state.heroes.length == 0
       ? (state.heroes = heroes)
       : (state.heroes = state.heroes.concat(heroes));
+  },
+
+  setModal(state, { modal }) {
+    state.modal = modal;
   },
 };
 
@@ -99,6 +104,10 @@ const getters = {
 
   load: (state) => {
     return state.load;
+  },
+
+  modal: (state) => {
+    return state.modal;
   },
 
   newId() {

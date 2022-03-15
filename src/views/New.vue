@@ -1,6 +1,5 @@
 <template>
-  <div class="new page d-flex flex-column">
-    <Header :modal="true" />
+  <div class="new d-flex flex-column">
     <h1 style="text-align: right">{{ $t('views.new.titre') }}</h1>
     <div class="d-flex">
       <v-tooltip bottom>
@@ -120,6 +119,10 @@ export default {
 
   computed: {
     ...mapGetters({ id: 'newId', load: 'load' }),
+  },
+
+  beforeMount() {
+    this.$store.commit('setModal', { modal: true });
   },
 
   methods: {

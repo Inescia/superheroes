@@ -1,38 +1,38 @@
 <template>
   <v-app>
-    <v-row no-gutters justify="center" align="center" class="loader d-flex">
-      <v-col v-show="!load" cols="auto"
-        ><img
-          class="loader__img px-3"
-          height="70"
-          :src="require('./assets/bouclier.png')"
-      /></v-col>
-      <v-col v-show="!load" cols="auto"
-        ><h3 style="text-align: left; opacity: 0.8">
-          {{ $t('loader') }}
-        </h3></v-col
-      >
-    </v-row>
-    <Alert
-      :display="notification.display"
-      :success="notification.success"
-      :text="notification.text"
-    />
-    <router-view />
+    <div class="page">
+      <v-row align="center" class="loader d-flex" justify="center" no-gutters>
+        <v-col v-show="!load" cols="auto"
+          ><img
+            class="loader__img px-3"
+            height="70"
+            :src="require('./assets/bouclier.png')"
+        /></v-col>
+        <v-col v-show="!load" cols="auto"
+          ><h3 style="text-align: left; opacity: 0.8">
+            {{ $t('loader') }}
+          </h3></v-col
+        >
+      </v-row>
+      <Header />
+      <Alert
+        :display="notification.display"
+        :success="notification.success"
+        :text="notification.text"
+      />
+      <router-view />
+    </div>
   </v-app>
 </template>
 
 <script>
+import Header from './components/Header.vue';
 import Alert from './components/Alert.vue';
 import { mapGetters } from 'vuex';
 
 export default {
-  components: { Alert },
+  components: { Alert, Header },
   name: 'App',
-
-  // data: () => ({
-  //   load: false,
-  // }),
 
   computed: {
     ...mapGetters(['notification', 'load']),
@@ -41,7 +41,6 @@ export default {
   created() {
     if (!this.load) {
       this.$store.dispatch('fetchHeroes');
-      //.then(() => (this.load = this.$store.getters.load));
     }
   },
 };

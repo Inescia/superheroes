@@ -1,6 +1,5 @@
 <template>
-  <div class="page d-flex flex-column">
-    <Header />
+  <div class="d-flex flex-column">
     <h1>{{ $t('views.dashboard.titre') }}</h1>
     <Carousel v-if="heroes.length" :heroes="heroes" />
     <div v-else class="ma-auto pb-16" no-gutters>
@@ -22,6 +21,10 @@ export default {
     ...mapGetters({
       heroes: 'heroesFavorites',
     }),
+  },
+
+  beforeMount() {
+    this.$store.commit('setModal', { modal: false });
   },
 };
 </script>

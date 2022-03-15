@@ -12,7 +12,7 @@
           contain
           height="100" /></router-link
     ></v-col>
-    <v-col v-if="!dismissible" align-self="end" class="d-flex" cols="auto">
+    <v-col v-if="!modal" align-self="end" class="d-flex" cols="auto">
       <v-tabs background-color="transparent" centered>
         <v-tab to="/">{{ $t('components.header.tab1') }}</v-tab>
         <v-tab to="/List">{{ $t('components.header.tab2') }}</v-tab> </v-tabs
@@ -34,25 +34,21 @@
 
 <script>
 import i18n from '../i18n';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Header',
 
   data: () => ({
     lang: 'fr',
-    dismissible: false,
   }),
 
-  props: {
-    modal: {
-      type: Boolean,
-      default: false,
-    },
+  computed: {
+    ...mapGetters(['modal']),
   },
 
   beforeMount() {
     this.lang = i18n.locale;
-    this.dismissible = this.modal;
   },
 
   methods: {
@@ -75,7 +71,6 @@ export default {
       window.history.length >= 2
         ? this.$router.go(-1)
         : this.$router.push('/List');
-      this.dismissible = false;
     },
   },
 };

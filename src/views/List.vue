@@ -1,6 +1,5 @@
 <template>
-  <div class="list page d-flex flex-column">
-    <Header />
+  <div class="list d-flex flex-column">
     <h1>{{ $t('views.list.titre') }}</h1>
     <div class="d-flex align-center justify-space-around my-n3 mx-12">
       <v-col align-self="start" cols="4">
@@ -229,6 +228,10 @@ export default {
       if (n % this.number == 0) return Math.floor(n / this.number);
       else return Math.floor(n / this.number) + 1;
     },
+  },
+
+  beforeMount() {
+    this.$store.commit('setModal', { modal: false });
   },
 
   methods: {

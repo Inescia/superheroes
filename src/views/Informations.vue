@@ -1,6 +1,5 @@
 <template>
-  <div class="informations d-flex flex-column page">
-    <Header :modal="true" />
+  <div class="informations d-flex flex-column">
     <h1 style="text-align: right">{{ $t('views.informations.titre') }}</h1>
     <div v-if="hero != null" class="d-flex">
       <v-tooltip bottom>
@@ -181,6 +180,10 @@ export default {
       })[0];
     } else this.hero = this.heroById(this.id);
     this.synchronizeInformations(true);
+  },
+
+  beforeMount() {
+    this.$store.commit('setModal', { modal: true });
   },
 
   methods: {

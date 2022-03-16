@@ -13,7 +13,7 @@
           height="100" /></router-link
     ></v-col>
     <v-col v-if="!modal" align-self="end" class="d-flex" cols="auto">
-      <v-tabs background-color="transparent" centered>
+      <v-tabs background-color="transparent" centered ref="tabs">
         <v-tab to="/">{{ $t('components.header.tab1') }}</v-tab>
         <v-tab to="/List">{{ $t('components.header.tab2') }}</v-tab> </v-tabs
       ><img
@@ -21,11 +21,11 @@
         class="mx-4"
         height="45"
         style="cursor: pointer"
-        @click="changeLangage(lang)"
+        @click="changeCurrentLangage(lang)"
       />
     </v-col>
     <v-col v-else class="d-flex" justify-end cols="1">
-      <v-btn class="ml-auto" fab icon x-large @click="close"
+      <v-btn class="ml-auto" fab icon x-large @click="returnPreviousPage"
         ><v-icon x-large> mdi-close </v-icon></v-btn
       >
     </v-col>
@@ -33,8 +33,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import i18n from '../i18n';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'Header',
@@ -44,7 +44,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['modal']),
+    ...mapState(['modal']),
   },
 
   beforeMount() {
@@ -53,21 +53,28 @@ export default {
 
   methods: {
     /**
-     * Change the langage used.
+     * Change the langage used (according to this order : fr => en => es => ...)
      *
      * @param {string} lang the current langage
      */
-    changeLangage(lang) {
-      lang == 'fr'
-        ? (this.lang = 'en')
-        : lang == 'en'
-        ? (this.lang = 'es')
-        : (this.lang = 'fr');
+    changeCurrentLangage(lang) {
+      switch (lang) {
+        case 'fr':
+          this.lang = 'en';
+          break;
+        case 'en':
+          this.lang = 'es';
+          break;
+        default:
+          this.lang = 'fr';
+          break;
+      }
       i18n.locale = this.lang;
+      // recalculer slider ici
     },
 
-    /** Close the page (new or information). */
-    close() {
+    /** Return to the previous page if it exists, otherwise goes to List */
+    returnPreviousPage() {
       window.history.length >= 2
         ? this.$router.go(-1)
         : this.$router.push('/List');

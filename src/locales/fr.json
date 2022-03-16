@@ -8,7 +8,6 @@
     "series": "Séries",
     "events": "Evénements",
     "favori": "Favori",
-    "regle": "Le nom est requis",
     "tooltip": "Glissez et déposez une image pour la modifier"
   },
   "loader": "Chargement héros",
@@ -17,7 +16,8 @@
       "chargement": "Veuillez attendre la fin du chargement des héros",
       "creation": "Superhéro non créé, erreur : ",
       "modification": "Modifications non enregistrées, erreur : ",
-      "suppression": "Superhéro non supprimé, erreur : "
+      "suppression": "Superhéro non supprimé, erreur : ",
+      "nom": "Le nom est requis"
     },
     "succes": {
       "creation": "Superhéro créé",
@@ -31,7 +31,7 @@
   "components": {
     "card": { "verso": "VOIR PLUS" },
     "carousel": {},
-    "header": { "tab1": "Les Favoris", "tab2": "Les Superhéros" }
+    "header": { "tab1": "Vos Favoris", "tab2": "Les Superhéros" }
   },
   "views": {
     "dashboard": {
@@ -51,7 +51,7 @@
       "liste": "Liste",
       "cartes": "Cartes",
       "tri": "Tri :",
-      "nombre": " héros/pages",
+      "nombre": "{amount} héros/page",
       "rechercher": "Rechercher (nom, id, description)",
       "header": [
         "Avatar",

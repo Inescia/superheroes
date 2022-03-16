@@ -23,7 +23,6 @@
               ><v-text-field
                 v-model="name"
                 :label="$t('hero.nom')"
-                :rules="nameRules"
                 counter="30"
               ></v-text-field
             ></v-col>
@@ -93,9 +92,9 @@
 </template>
 
 <script>
-import Hero from '../classes/Hero';
+import { mapGetters, mapState } from 'vuex';
+import Hero from '../classes/hero';
 import Header from '../components/Header.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   components: { Header },
@@ -110,14 +109,11 @@ export default {
     events: 0,
     image: require('../assets/test.jpeg'),
     favorite: false,
-    nameRules: [
-      (v) => !!v || 'Name is required',
-      (v) => (v && v.length <= 30) || 'Name must be less than 30 characters',
-    ],
   }),
 
   computed: {
-    ...mapGetters({ id: 'newId', load: 'load' }),
+    ...mapState(['load']),
+    ...mapGetters({ id: 'newId' }),
   },
 
   beforeMount() {
@@ -129,9 +125,11 @@ export default {
     addHero() {
       if (!this.load)
         this.showAlert(this.$t('notification.erreur.chargement'), false);
+      else if (this.name.split() == '')
+        this.showAlert(this.$t('notification.erreur.nom'), false);
       else if (this.$refs.form.validate()) {
         try {
-          let hero = new Hero(
+          const hero = new Hero(
             this.id,
             this.name,
             this.description,
@@ -159,14 +157,13 @@ export default {
      *
      * @param {file} file The i dropped
      */
-    createFile(file) {
+    createImageFile(file) {
       if (!file.type.match('image.*')) {
         alert('Select an image');
         return;
       }
-      let img = new Image();
-      let reader = new FileReader();
-      let vm = this;
+      const reader = new FileReader();
+      const vm = this;
 
       reader.onload = function (e) {
         vm.image = e.target.result;
@@ -182,8 +179,8 @@ export default {
     onDrop(e) {
       e.stopPropagation();
       e.preventDefault();
-      let files = e.dataTransfer.files;
-      this.createFile(files[0]);
+      const files = e.dataTransfer.files;
+      this.createImageFile(files[0]);
     },
 
     /**
@@ -192,13 +189,13 @@ export default {
      * @param {string} text The alert's text
      */
     showAlert(text, success) {
-      this.$store.commit('changeNotification', {
+      this.$store.commit('setNotification', {
         display: true,
         success: success,
         text: text,
       });
       setTimeout(() => {
-        this.$store.commit('changeNotification', {
+        this.$store.commit('setNotification', {
           display: false,
           success: true,
           text: '',

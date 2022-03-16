@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { fetchHeroesAPI } from '../api/Marvel.js';
-import Hero from '../classes/Hero.js';
+import { fetchHeroesAPI } from '../api/marvel.js';
+import Hero from '../classes/hero.js';
 
 Vue.use(Vuex);
 
@@ -17,7 +17,7 @@ const mutations = {
     state.heroes = [hero].concat(state.heroes);
   },
 
-  changeNotification(state, { display, success, text }) {
+  setNotification(state, { display, success, text }) {
     state.notification = { display, success, text };
   },
 
@@ -26,9 +26,7 @@ const mutations = {
   },
 
   retrieveHeroes(state, { heroes }) {
-    state.heroes.length == 0
-      ? (state.heroes = heroes)
-      : (state.heroes = state.heroes.concat(heroes));
+    state.heroes = state.heroes.concat(heroes);
   },
 
   setModal(state, { modal }) {
@@ -39,14 +37,14 @@ const mutations = {
 const actions = {
   async fetchHeroes({ commit }) {
     let request = 0;
-    let isFinished = true;
+    let isFinished = false;
     do {
       let result;
       // Get heroes 100 by 100
       await fetchHeroesAPI(request).then(function (data) {
         result = data;
       });
-      result.length == 0 ? (isFinished = true) : (isFinished = false);
+      if (result.length == 0) isFinished = true;
       commit('retrieveHeroes', {
         heroes: result.map((data) => {
           return new Hero(
@@ -69,7 +67,7 @@ const actions = {
 };
 
 const getters = {
-  heroes: (state) => (number, offset, byName) => {
+  paginatedHeroes: (state) => (number, offset, byName) => {
     let h = state.heroes;
     byName
       ? h.sort((a, b) => a.name.localeCompare(b.name))
@@ -77,37 +75,21 @@ const getters = {
     return h.slice(offset, number + offset);
   },
 
-  heroById: (state) => (id) => {
+  getHeroById: (state) => (id) => {
     return state.heroes.find((h) => h.id == id);
   },
 
-  heroesByText: (state) => (text) => {
-    let h = [];
-    state.heroes.forEach((hero) => {
-      if (
-        hero.name.includes(text) ||
+  getFilteredHeroes: (state) => (text) => {
+    return state.heroes.filter(
+      (hero) =>
+        hero.name.toLowerCase().includes(text.toLowerCase()) ||
         hero.id.toString().includes(text) ||
-        hero.description.includes(text)
-      )
-        h.push(hero);
-    });
-    return h;
+        hero.description.toLowerCase().includes(text.toLowerCase())
+    );
   },
 
-  heroesFavorites: (state) => {
-    let h = [];
-    state.heroes.forEach((hero) => {
-      if (hero.favorite) h.push(hero);
-    });
-    return h;
-  },
-
-  load: (state) => {
-    return state.load;
-  },
-
-  modal: (state) => {
-    return state.modal;
+  favoriteHeroes: (state) => {
+    return state.heroes.filter((hero) => hero.favorite);
   },
 
   newId() {
@@ -116,14 +98,6 @@ const getters = {
       if (h.id > id) id = h.id;
     });
     return id++;
-  },
-
-  notification: (state) => {
-    return state.notification;
-  },
-
-  numberHeroes: (state) => {
-    return state.heroes.length;
   },
 };
 

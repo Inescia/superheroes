@@ -45,8 +45,6 @@ export default class Hero {
    * @return {string} A string of this presentation
    */
   toString() {
-    let ch = 'ID : ' + this.id;
-    ch += '\nName : ' + this.name;
-    return ch;
+    return 'ID : ' + this.id + '\nName : ' + this.name;
   }
 }

@@ -4,59 +4,59 @@
     <div class="d-flex align-center justify-space-around my-n3 mx-12">
       <v-col align-self="start" cols="4">
         <v-text-field
-          v-model="search"
+          v-model="searchInput"
           :label="$t('views.list.rechercher')"
           prepend-icon="mdi-magnify"
         ></v-text-field
       ></v-col>
       <v-col class="d-flex" cols="auto">
         <v-btn
-          :color="display ? 'grey' : 'red'"
+          :color="cardsDisplay ? 'grey' : 'red'"
           fab
           text
           @click="toggleDisplay(false)"
-          ><v-icon :color="display ? 'grey' : 'red'" large
+          ><v-icon :color="cardsDisplay ? 'grey' : 'red'" large
             >mdi-format-list-bulleted</v-icon
           ></v-btn
         ><v-btn
-          :color="display ? 'red' : 'grey'"
+          :color="cardsDisplay ? 'red' : 'grey'"
           fab
           text
           @click="toggleDisplay(true)"
-          ><v-icon :color="display ? 'red' : 'grey'" large
+          ><v-icon :color="cardsDisplay ? 'red' : 'grey'" large
             >mdi-dots-grid</v-icon
           ></v-btn
         >
       </v-col>
       <v-col class="" cols="2">
         <v-select
-          v-model="sort"
-          :items="itemsSort"
+          v-model="currentSortType"
+          :items="sortTypes"
           placeholder="Tri"
         ></v-select>
       </v-col>
       <v-col cols="3"
         ><v-slider
-          v-model="number"
-          :label="number + $t('views.list.nombre')"
+          v-model="sliderValue"
+          :label="$t('views.list.nombre', { amount: heroAmount })"
           hide-details
-          max="100"
-          min="10"
-          persistent-hint
-          step="15"
+          max="4"
           thumb-label
           track-color="grey"
-        ></v-slider
-      ></v-col>
+          ><template v-slot:thumb-label="{ value }">
+            {{ amountMap[value] }}
+          </template></v-slider
+        ></v-col
+      >
     </div>
     <v-data-table
-      v-if="!display"
+      v-if="!cardsDisplay"
       :headers="headers"
-      :items="heroesDisplayed"
-      :items-per-page="number"
+      :items="displayedHeroes"
+      :items-per-page="heroAmount"
       :hide-default-footer="true"
       class="list__table mx-14"
-      @dblclick:row="onClick"
+      @dblclick:row="clickOnCard"
     >
       <template #item.image="{ item: { image } }">
         <img
@@ -78,36 +78,36 @@
       </template>
     </v-data-table>
     <div v-else class="list__heroes d-flex flex-wrap justify-center">
-      <Card v-for="hero in heroesDisplayed" :key="hero.id" :hero="hero" />
+      <Card v-for="hero in displayedHeroes" :key="hero.id" :hero="hero" />
     </div>
     <ul class="d-flex justify-center my-7" style="list-style: none">
       <li>
         <button
-          v-show="page != 1 && search == ''"
+          v-show="currentPage != 1 && searchInput == ''"
           class="list__page"
-          @click="page--"
+          @click="currentPage--"
         >
           <v-icon color="#607d8b"> mdi-arrow-left</v-icon>
         </button>
       </li>
       <li>
         <button
-          v-show="search == ''"
-          v-for="i in pages"
+          v-show="searchInput == ''"
+          v-for="i in totalPages"
           :key="i"
-          :style="page == i ? 'color: #ff554fee' : 'color:  #607d8b'"
+          :style="currentPage == i ? 'color: #ff554fee' : 'color:  #607d8b'"
           class="list__page pa-1"
           type="button"
-          @click="page = i"
+          @click="currentPage = i"
         >
           {{ i }}
         </button>
       </li>
       <li>
         <button
-          v-show="page < pages && search == ''"
+          v-show="currentPage < totalPages && searchInput == ''"
           class="list__page"
-          @click="page++"
+          @click="currentPage++"
         >
           <v-icon color="#607d8b">mdi-arrow-right</v-icon>
         </button>
@@ -133,9 +133,9 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
 import Card from '../components/Card.vue';
 import Header from '../components/Header.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   components: { Card, Header },
@@ -143,12 +143,13 @@ export default {
 
   data() {
     return {
-      display: true,
-      sort: this.$t('views.list.itemsTri[2]'),
-      itemsSort: this.$t('views.list.itemsTri'),
-      number: 50,
-      page: 1,
-      search: '',
+      amountMap: [10, 25, 50, 75, 100],
+      cardsDisplay: true,
+      currentSortType: this.$t('views.list.itemsTri[2]'),
+      sortTypes: this.$t('views.list.itemsTri'),
+      sliderValue: 3,
+      currentPage: 1,
+      searchInput: '',
       headers: [
         {
           text: this.$t('views.list.header[0]'),
@@ -207,26 +208,35 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['heroes', 'heroesByText', 'numberHeroes']),
+    ...mapState(['heroes']),
+    ...mapGetters(['paginatedHeroes', 'getFilteredHeroes']),
 
-    heroesDisplayed() {
-      let crescent, byName, index, h;
-      index = this.itemsSort.indexOf(this.sort);
-      index % 2 == 0 ? (crescent = true) : (crescent = false);
-      index > 1 ? (byName = true) : (byName = false);
+    heroAmount() {
+      return this.amountMap[this.sliderValue];
+    },
+
+    displayedHeroes() {
+      let crescent, byName, sortIndex, h;
+      sortIndex = this.sortTypes.indexOf(this.currentSortType);
+      sortIndex % 2 == 0 ? (crescent = true) : (crescent = false);
+      sortIndex > 1 ? (byName = true) : (byName = false);
 
       // if search bar is empty
-      if (this.search == '') {
-        h = this.heroes(this.number, this.number * (this.page - 1), byName);
-      } else h = this.heroesByText(this.search);
+      if (this.searchInput == '') {
+        h = this.paginatedHeroes(
+          this.heroAmount,
+          this.heroAmount * (this.currentPage - 1),
+          byName
+        );
+      } else h = this.getFilteredHeroes(this.searchInput);
       if (!crescent) h.reverse();
       return h;
     },
 
-    pages() {
-      let n = this.numberHeroes;
-      if (n % this.number == 0) return Math.floor(n / this.number);
-      else return Math.floor(n / this.number) + 1;
+    totalPages() {
+      if (this.heroes.length % this.heroAmount == 0)
+        return Math.floor(this.heroes.length / this.heroAmount);
+      else return Math.floor(this.heroes.length / this.heroAmount) + 1;
     },
   },
 
@@ -235,12 +245,12 @@ export default {
   },
 
   methods: {
-    onClick(e) {
+    clickOnCard(e) {
       this.$router.push('/Informations/' + e.id);
     },
 
     toggleDisplay(value) {
-      this.display = value;
+      this.cardsDisplay = value;
     },
 
     toggleFavorite(hero) {

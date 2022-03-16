@@ -8,7 +8,6 @@
     "series": "Series",
     "events": "Events",
     "favori": "Favorite",
-    "regle": "Name is required",
     "tooltip": "Drag and drop an image to change it"
   },
   "loader": "Loading heroes",
@@ -17,7 +16,8 @@
       "chargement": "Please wait until the heroes have finished loading",
       "creation": "Superhero not created, error : ",
       "modification": "Changes not saved, error : ",
-      "suppression": "Superhero not deleted, error : "
+      "suppression": "Superhero not deleted, error : ",
+      "nom": "Name is required"
     },
     "succes": {
       "creation": "Superhero created",
@@ -31,7 +31,7 @@
   "components": {
     "card": { "verso": "SEE MORE" },
     "carousel": {},
-    "header": { "tab1": "The Favorites", "tab2": "The Superheroes" }
+    "header": { "tab1": "Your Favorites", "tab2": "The Superheroes" }
   },
   "views": {
     "dashboard": {
@@ -51,7 +51,7 @@
       "liste": "List",
       "cartes": "Cards",
       "tri": "Sort :",
-      "nombre": " heroes/pages",
+      "nombre": "{amount}  heroes/pages",
       "rechercher": "Search (name, id, description)",
       "header": [
         "Avatar",

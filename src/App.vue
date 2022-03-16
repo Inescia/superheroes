@@ -14,28 +14,28 @@
           </h3></v-col
         >
       </v-row>
-      <Header />
       <Alert
         :display="notification.display"
         :success="notification.success"
         :text="notification.text"
       />
+      <Header />
       <router-view />
     </div>
   </v-app>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Header from './components/Header.vue';
 import Alert from './components/Alert.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   components: { Alert, Header },
   name: 'App',
 
   computed: {
-    ...mapGetters(['notification', 'load']),
+    ...mapState(['notification', 'load']),
   },
 
   created() {

@@ -28,7 +28,6 @@
               ><v-text-field
                 v-model="name"
                 :label="$t('hero.nom')"
-                :rules="rules"
                 counter="30"
               ></v-text-field
             ></v-col>
@@ -124,11 +123,11 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from 'vuex';
+import { fetchHeroByIdAPI } from '../api/marvel.js';
 import List from '../views/List.vue';
 import Header from '../components/Header.vue';
-import Hero from '../classes/Hero';
-import { fetchHeroByIdAPI } from '../api/Marvel.js';
-import { mapGetters } from 'vuex';
+import Hero from '../classes/hero';
 
 export default {
   components: { Header, List },
@@ -145,11 +144,11 @@ export default {
     events: 0,
     favorite: false,
     image: require('../assets/test.jpeg'),
-    rules: [(v) => !!v || 'Name is required'],
   }),
 
   computed: {
-    ...mapGetters(['load', 'heroById']),
+    ...mapState(['load']),
+    ...mapGetters(['getHeroById']),
   },
 
   props: {
@@ -159,12 +158,10 @@ export default {
   },
 
   async created() {
-    if (this.heroById(this.id) == null) {
+    if (this.getHeroById(this.id) == null) {
       let result = [];
 
-      await fetchHeroByIdAPI(this.id).then(function (value) {
-        result = value;
-      });
+      await fetchHeroByIdAPI(this.id).then((value) => (result = value));
 
       this.hero = result.map((data) => {
         return new Hero(
@@ -178,7 +175,7 @@ export default {
           `${data.thumbnail.path}.${data.thumbnail.extension}`
         );
       })[0];
-    } else this.hero = this.heroById(this.id);
+    } else this.hero = this.getHeroById(this.id);
     this.synchronizeInformations(true);
   },
 
@@ -192,13 +189,13 @@ export default {
      *
      * @param {file} file The i dropped
      */
-    createFile(file) {
+    createImageFile(file) {
       if (!file.type.match('image.*')) {
         alert('Select an image');
         return;
       }
-      let reader = new FileReader();
-      let vm = this;
+      const reader = new FileReader();
+      const vm = this;
       reader.onload = function (e) {
         vm.image = e.target.result;
       };
@@ -213,14 +210,14 @@ export default {
     onDrop(e) {
       e.stopPropagation();
       e.preventDefault();
-      let files = e.dataTransfer.files;
-      this.createFile(files[0]);
+      const files = e.dataTransfer.files;
+      this.createImageFile(files[0]);
     },
 
     /** Remove the hero in the database. */
     removeHero() {
       this.dialog = false;
-      let id = this.id;
+      const id = this.id;
       if (!this.load)
         this.showAlert(this.$t('notification.erreur.chargement'), false);
       else
@@ -245,13 +242,13 @@ export default {
      * @param {string} success The alert's type (true = success/ false = error)
      */
     showAlert(text, success) {
-      this.$store.commit('changeNotification', {
+      this.$store.commit('setNotification', {
         display: true,
         success: success,
         text: text,
       });
       setTimeout(() => {
-        this.$store.commit('changeNotification', {
+        this.$store.commit('setNotification', {
           display: false,
           success: true,
           text: '',
@@ -298,8 +295,10 @@ export default {
     updateHero() {
       if (!this.load)
         this.showAlert(this.$t('notification.erreur.chargement'), false);
+      else if (this.name.split() == '')
+        this.showAlert(this.$t('notification.erreur.nom'), false);
       else if (this.$refs.form.validate()) {
-        this.hero = this.heroById(this.id);
+        this.hero = this.getHeroById(this.id);
         try {
           this.synchronizeInformations(false);
           this.showAlert(this.$t('notification.succes.modification'), true);

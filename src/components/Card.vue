@@ -3,7 +3,9 @@
     <router-link :to="'/Informations/' + hero.id"
       ><div style="position: relative">
         <img :src="image" class="card__img1" />
-        <div class="card__img2"><h6>Voir plus</h6></div>
+        <div class="card__img2">
+          <h6>{{ $t('components.card.verso') }}</h6>
+        </div>
       </div>
     </router-link>
     <div class="mt-1 mx-3">
@@ -26,7 +28,7 @@
 </template>
 
 <script>
-import Hero from '../classes/Hero.js';
+import Hero from '../classes/hero.js';
 
 export default {
   name: 'Card',

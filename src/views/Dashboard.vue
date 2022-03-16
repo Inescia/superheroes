@@ -9,9 +9,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import Carousel from '../components/Carousel.vue';
 import Header from '../components/Header.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   components: { Carousel, Header },
@@ -19,7 +19,7 @@ export default {
 
   computed: {
     ...mapGetters({
-      heroes: 'heroesFavorites',
+      heroes: 'favoriteHeroes',
     }),
   },
 

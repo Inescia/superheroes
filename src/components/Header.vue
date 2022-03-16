@@ -39,16 +39,12 @@ import i18n from '../i18n';
 export default {
   name: 'Header',
 
-  data: () => ({
-    lang: 'fr',
-  }),
-
   computed: {
     ...mapState(['modal']),
-  },
 
-  beforeMount() {
-    this.lang = i18n.locale;
+    lang() {
+      return i18n.locale;
+    },
   },
 
   methods: {
@@ -60,17 +56,16 @@ export default {
     changeCurrentLangage(lang) {
       switch (lang) {
         case 'fr':
-          this.lang = 'en';
+          i18n.locale = 'en';
           break;
         case 'en':
-          this.lang = 'es';
+          i18n.locale = 'es';
           break;
         default:
-          this.lang = 'fr';
+          i18n.locale = 'fr';
           break;
       }
-      i18n.locale = this.lang;
-      // recalculer slider ici
+      this.$refs.tabs.callSlider();
     },
 
     /** Return to the previous page if it exists, otherwise goes to List */

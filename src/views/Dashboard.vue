@@ -1,9 +1,9 @@
 <template>
   <div class="d-flex flex-column">
-    <h1>{{ $t('views.dashboard.titre') }}</h1>
+    <h1>{{ $t('VIEWS.DASHBOARD.TITLE') }}</h1>
     <Carousel v-if="heroes.length" :heroes="heroes" />
     <div v-else class="ma-auto mt-16 d-flex flex-column" no-gutters>
-      <h3>{{ $t('views.dashboard.vide') }}</h3>
+      <h3>{{ $t('VIEWS.DASHBOARD.EMPTY') }}</h3>
     </div>
   </div>
 </template>
@@ -14,8 +14,8 @@ import Carousel from '../components/Carousel.vue';
 import Header from '../components/Header.vue';
 
 export default {
-  components: { Carousel, Header },
   name: 'Dashboard',
+  components: { Carousel, Header },
 
   computed: {
     ...mapGetters({
@@ -24,7 +24,7 @@ export default {
   },
 
   beforeMount() {
-    this.$store.commit('setModal', { modal: false });
+    this.$store.commit('SET_MODAL', { modal: false });
   },
 };
 </script>

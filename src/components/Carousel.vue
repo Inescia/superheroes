@@ -5,7 +5,7 @@
         class="carousel__left"
         cols="auto"
         :disabled="borderLeft"
-        @click="move('left')"
+        @click="moveCarousel('left')"
       ></v-col>
       <v-col
         class="carousel__cards d-flex justify-center mx-5 pa-3"
@@ -25,7 +25,7 @@
         class="carousel__right"
         cols="auto"
         :disabled="borderRight"
-        @click="move('right')"
+        @click="moveCarousel('right')"
       ></v-col>
     </v-row>
     <div>
@@ -36,7 +36,7 @@
             class="carousel__page pa-1"
             type="button"
             :key="i"
-            @click="moveTo(i)"
+            @click="moveCarouselTo(i)"
           >
             <v-icon v-if="i - 1 == index" color="#ff554fee" small
               >mdi-circle</v-icon
@@ -53,21 +53,21 @@
 import Card from './Card.vue';
 
 export default {
-  components: { Card },
   name: 'Carousel',
-
-  data() {
-    return {
-      offset: 0,
-      step: 270,
-    };
-  },
+  components: { Card },
 
   props: {
     heroes: {
       type: Array,
       default: [],
     },
+  },
+
+  data() {
+    return {
+      offset: 0,
+      step: 270,
+    };
   },
 
   computed: {
@@ -96,7 +96,7 @@ export default {
      *
      * @param {string} direction The desired direction (left or right)
      */
-    move(direction) {
+    moveCarousel(direction) {
       if ((direction == 'left') & !this.borderLeft) this.offset -= this.step;
       else if ((direction == 'right') & !this.borderRight)
         this.offset += this.step;
@@ -107,7 +107,7 @@ export default {
      *
      * @param {number} index The desired index
      */
-    moveTo(index) {
+    moveCarouselTo(index) {
       index--;
       if (this.heroes.length > 2) {
         const index2 = this.index;

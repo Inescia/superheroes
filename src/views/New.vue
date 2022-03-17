@@ -1,6 +1,6 @@
 <template>
   <div class="new d-flex flex-column">
-    <h1 style="text-align: right">{{ $t('views.new.titre') }}</h1>
+    <h1 style="text-align: right">{{ $t('VIEWS.NEW.TITLE') }}</h1>
     <div class="d-flex">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }"
@@ -9,25 +9,25 @@
             cols="6"
             @dragenter.prevent
             @dragover.prevent
-            @drop.stop.prevent="onDrop"
+            @drop.stop.prevent="onDropImage"
           >
             <img v-on="on" :src="image" class="new__img pa-8" cover /> </v-col
         ></template>
-        <span>{{ $t('hero.tooltip') }}</span>
+        <span>{{ $t('HERO.TOOLTIP') }}</span>
       </v-tooltip>
       <v-col class="px-6" cols="6">
-        <h3>{{ $t('hero.id') }} : {{ id }}</h3>
+        <h3>{{ $t('HERO.ID') }} : {{ id }}</h3>
         <v-form ref="form">
           <v-row justify="space-between" no-gutters>
             <v-col cols="6"
               ><v-text-field
                 v-model="name"
-                :label="$t('hero.nom')"
+                :label="$t('HERO.NAME')"
                 counter="30"
               ></v-text-field
             ></v-col>
             <v-col cols="1">
-              <v-btn color="red" fab text @click="toggleFavorite"
+              <v-btn color="red" fab text @click="favorite = !favorite"
                 ><v-icon color="red" x-large>{{
                   this.favorite ? 'mdi-heart' : 'mdi-heart-outline'
                 }}</v-icon></v-btn
@@ -38,7 +38,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="comics"
-                :label="$t('hero.comics')"
+                :label="$t('HERO.COMICS')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -47,7 +47,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="stories"
-                :label="$t('hero.stories')"
+                :label="$t('HERO.STORIES')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -56,7 +56,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="series"
-                :label="$t('hero.series')"
+                :label="$t('HERO.SERIES')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -65,7 +65,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="events"
-                :label="$t('hero.events')"
+                :label="$t('HERO.EVENTS')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -74,7 +74,7 @@
           </v-row>
           <v-textarea
             v-model="description"
-            :label="$t('hero.description')"
+            :label="$t('HERO.DESCRIPTION')"
             background-color="rgb(255, 255, 255, 0.5)"
             counter="600"
             outlined
@@ -82,7 +82,7 @@
           ></v-textarea>
           <v-row class="my-4" no-gutters
             ><v-btn class="ml-auto" color="#ff554fee" dark @click="addHero">{{
-              $t('views.new.enregistrer')
+              $t('VIEWS.NEW.SAVE')
             }}</v-btn></v-row
           >
         </v-form>
@@ -97,8 +97,8 @@ import Hero from '../classes/hero';
 import Header from '../components/Header.vue';
 
 export default {
-  components: { Header },
   name: 'New',
+  components: { Header },
 
   data: () => ({
     name: '',
@@ -117,16 +117,16 @@ export default {
   },
 
   beforeMount() {
-    this.$store.commit('setModal', { modal: true });
+    this.$store.commit('SET_MODAL', { modal: true });
   },
 
   methods: {
     /** Add the hero in the database. */
     addHero() {
       if (!this.load)
-        this.showAlert(this.$t('notification.erreur.chargement'), false);
+        this.showAlert(this.$t('NOTIFICATION.ERROR.LOADING'), false);
       else if (this.name.split() == '')
-        this.showAlert(this.$t('notification.erreur.nom'), false);
+        this.showAlert(this.$t('NOTIFICATION.ERROR.NAME'), false);
       else if (this.$refs.form.validate()) {
         try {
           const hero = new Hero(
@@ -140,12 +140,12 @@ export default {
             this.image,
             this.favorite
           );
-          this.$store.commit('addHero', { hero });
+          this.$store.commit('ADD_HERO', { hero });
           this.$router.push('/List');
-          this.showAlert(this.$t('notification.succes.creation'), true);
+          this.showAlert(this.$t('NOTIFICATION.SUCCESS.CREATION'), true);
         } catch (error) {
           this.showAlert(
-            this.$t('notification.erreur.creation') + error.toString(),
+            this.$t('NOTIFICATION.ERROR.CREATION') + error.toString(),
             false
           );
         }
@@ -176,7 +176,7 @@ export default {
      *
      * @param {event} e The event associated
      */
-    onDrop(e) {
+    onDropImage(e) {
       e.stopPropagation();
       e.preventDefault();
       const files = e.dataTransfer.files;
@@ -189,23 +189,18 @@ export default {
      * @param {string} text The alert's text
      */
     showAlert(text, success) {
-      this.$store.commit('setNotification', {
+      this.$store.commit('SET_NOTIFICATION', {
         display: true,
         success: success,
         text: text,
       });
       setTimeout(() => {
-        this.$store.commit('setNotification', {
+        this.$store.commit('SET_NOTIFICATION', {
           display: false,
           success: true,
           text: '',
         });
       }, 5000);
-    },
-
-    /** Toggle the favorite status of the hero. */
-    toggleFavorite() {
-      this.favorite = !this.favorite;
     },
   },
 };

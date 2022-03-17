@@ -1,6 +1,6 @@
 <template>
   <div class="informations d-flex flex-column">
-    <h1 style="text-align: right">{{ $t('views.informations.titre') }}</h1>
+    <h1 style="text-align: right">{{ $t('VIEWS.INFORMATIONS.TITLE') }}</h1>
     <div v-if="hero != null" class="d-flex">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }"
@@ -9,7 +9,7 @@
             cols="6"
             @dragenter.prevent
             @dragover.prevent
-            @drop.stop.prevent="onDrop"
+            @drop.stop.prevent="onDropImage"
           >
             <img
               v-on="on"
@@ -18,21 +18,21 @@
               cover
             /> </v-col
         ></template>
-        <span>{{ $t('hero.tooltip') }}</span>
+        <span>{{ $t('HERO.TOOLTIP') }}</span>
       </v-tooltip>
       <v-col class="px-6" cols="6">
-        <h3>{{ $t('hero.id') }} : {{ id }}</h3>
+        <h3>{{ $t('HERO.ID') }} : {{ id }}</h3>
         <v-form ref="form">
           <v-row justify="space-between" no-gutters>
             <v-col cols="6"
               ><v-text-field
                 v-model="name"
-                :label="$t('hero.nom')"
+                :label="$t('HERO.NAME')"
                 counter="30"
               ></v-text-field
             ></v-col>
             <v-col cols="1">
-              <v-btn color="red" fab text @click="toggleFavorite"
+              <v-btn color="red" fab text @click="favorite = !favorite"
                 ><v-icon color="red" x-large>{{
                   favorite ? 'mdi-heart' : 'mdi-heart-outline'
                 }}</v-icon></v-btn
@@ -43,7 +43,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="comics"
-                :label="$t('hero.comics')"
+                :label="$t('HERO.COMICS')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -52,7 +52,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="stories"
-                :label="$t('hero.stories')"
+                :label="$t('HERO.STORIES')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -61,7 +61,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="series"
-                :label="$t('hero.series')"
+                :label="$t('HERO.SERIES')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -70,7 +70,7 @@
             <v-col cols="2">
               <v-text-field
                 v-model="events"
-                :label="$t('hero.events')"
+                :label="$t('HERO.EVENTS')"
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
@@ -79,7 +79,7 @@
           </v-row>
           <v-textarea
             v-model="description"
-            :label="$t('hero.description')"
+            :label="$t('HERO.DESCRIPTION')"
             background-color="rgb(255, 255, 255, 0.5)"
             counter="600"
             outlined
@@ -87,17 +87,17 @@
           ></v-textarea>
           <v-row class="my-4" no-gutters>
             <v-btn color="#ff554fee" dark @click="dialog = true">{{
-              $t('views.informations.supprimer')
+              $t('VIEWS.INFORMATIONS.REMOVE')
             }}</v-btn
             ><v-btn
               class="mx-5"
               color="#ff554fee"
               dark
               @click="synchronizeInformations(true)"
-              >{{ $t('views.informations.reinitialiser') }}</v-btn
+              >{{ $t('VIEWS.INFORMATIONS.RESET') }}</v-btn
             >
             <v-btn class="ml-auto" color="#ff554fee" dark @click="updateHero">{{
-              $t('views.informations.enregistrer')
+              $t('VIEWS.INFORMATIONS.SAVE')
             }}</v-btn>
           </v-row>
         </v-form>
@@ -106,15 +106,15 @@
     <v-dialog v-model="dialog" persistent width="auto">
       <v-card>
         <v-card-title>
-          {{ $t('notification.confirmation') }}
+          {{ $t('NOTIFICATION.CONFIRMATION') }}
         </v-card-title>
         <v-card-actions>
           <v-spacer />
           <v-btn text @click="dialog = false">
-            {{ $t('notification.non') }}
+            {{ $t('NOTIFICATION.NO') }}
           </v-btn>
           <v-btn color="#ff554fee" text @click="removeHero">
-            {{ $t('notification.oui') }}
+            {{ $t('NOTIFICATION.YES') }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -125,13 +125,19 @@
 <script>
 import { mapGetters, mapState } from 'vuex';
 import { fetchHeroByIdAPI } from '../api/marvel.js';
-import List from '../views/List.vue';
-import Header from '../components/Header.vue';
 import Hero from '../classes/hero';
+import Header from '../components/Header.vue';
+import List from '../views/List.vue';
 
 export default {
-  components: { Header, List },
   name: 'Informations',
+  components: { Header, List },
+
+  props: {
+    id: {
+      require,
+    },
+  },
 
   data: () => ({
     dialog: false,
@@ -151,18 +157,10 @@ export default {
     ...mapGetters(['getHeroById']),
   },
 
-  props: {
-    id: {
-      require,
-    },
-  },
-
   async created() {
     if (this.getHeroById(this.id) == null) {
       let result = [];
-
       await fetchHeroByIdAPI(this.id).then((value) => (result = value));
-
       this.hero = result.map((data) => {
         return new Hero(
           data.id,
@@ -180,7 +178,7 @@ export default {
   },
 
   beforeMount() {
-    this.$store.commit('setModal', { modal: true });
+    this.$store.commit('SET_MODAL', { modal: true });
   },
 
   methods: {
@@ -207,7 +205,7 @@ export default {
      *
      * @param {event} e The event associated
      */
-    onDrop(e) {
+    onDropImage(e) {
       e.stopPropagation();
       e.preventDefault();
       const files = e.dataTransfer.files;
@@ -219,19 +217,16 @@ export default {
       this.dialog = false;
       const id = this.id;
       if (!this.load)
-        this.showAlert(this.$t('notification.erreur.chargement'), false);
+        this.showAlert(this.$t('NOTIFICATION.ERROR.LOADING'), false);
       else
         try {
-          this.$store.commit('removeHero', { id });
-          this.showAlert(this.$t('notification.succes.suppression'), true);
+          this.$store.commit('REMOVE_HERO', { id });
+          this.showAlert(this.$t('NOTIFICATION.SUCCESS.DELETION'), true);
           window.history.length >= 2
             ? this.$router.go(-1)
             : this.$router.push('/List');
         } catch (error) {
-          this.showAlert(
-            this.$t('notification.erreur.suppression') + error,
-            false
-          );
+          this.showAlert(this.$t('NOTIFICATION.ERROR.DELETION') + error, false);
         }
     },
 
@@ -242,13 +237,13 @@ export default {
      * @param {string} success The alert's type (true = success/ false = error)
      */
     showAlert(text, success) {
-      this.$store.commit('setNotification', {
+      this.$store.commit('SET_NOTIFICATION', {
         display: true,
         success: success,
         text: text,
       });
       setTimeout(() => {
-        this.$store.commit('setNotification', {
+        this.$store.commit('SET_NOTIFICATION', {
           display: false,
           success: true,
           text: '',
@@ -286,28 +281,23 @@ export default {
         this.image = this.hero.image;
     },
 
-    /** Toggle the favorite status of the hero. */
-    toggleFavorite() {
-      this.favorite = !this.favorite;
-    },
-
     /** Save the modifications in the database. */
     updateHero() {
       if (!this.load)
-        this.showAlert(this.$t('notification.erreur.chargement'), false);
+        this.showAlert(this.$t('NOTIFICATION.ERROR.LOADING'), false);
       else if (this.name.split() == '')
-        this.showAlert(this.$t('notification.erreur.nom'), false);
+        this.showAlert(this.$t('NOTIFICATION.ERROR.NAME'), false);
       else if (this.$refs.form.validate()) {
         this.hero = this.getHeroById(this.id);
         try {
           this.synchronizeInformations(false);
-          this.showAlert(this.$t('notification.succes.modification'), true);
+          this.showAlert(this.$t('NOTIFICATION.SUCCESS.MODIFICATION'), true);
           window.history.length >= 2
             ? this.$router.go(-1)
             : this.$router.push('/List');
         } catch (error) {
           this.showAlert(
-            this.$t('notification.erreur.modification') + error,
+            this.$t('NOTIFICATION.ERROR.MODIFICATION') + error,
             false
           );
         }

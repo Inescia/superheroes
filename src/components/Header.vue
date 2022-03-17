@@ -14,8 +14,8 @@
     ></v-col>
     <v-col v-if="!modal" align-self="end" class="d-flex" cols="auto">
       <v-tabs background-color="transparent" centered ref="tabs">
-        <v-tab to="/">{{ $t('components.header.tab1') }}</v-tab>
-        <v-tab to="/List">{{ $t('components.header.tab2') }}</v-tab> </v-tabs
+        <v-tab to="/">{{ $t('COMPONENTS.HEADER.TAB1') }}</v-tab>
+        <v-tab to="/List">{{ $t('COMPONENTS.HEADER.TAB2') }}</v-tab> </v-tabs
       ><img
         :src="require('../assets/' + lang + '.png')"
         class="mx-4"
@@ -25,7 +25,7 @@
       />
     </v-col>
     <v-col v-else class="d-flex" justify-end cols="1">
-      <v-btn class="ml-auto" fab icon x-large @click="returnPreviousPage"
+      <v-btn class="ml-auto" fab icon x-large @click="backToPreviousPage"
         ><v-icon x-large> mdi-close </v-icon></v-btn
       >
     </v-col>
@@ -68,8 +68,8 @@ export default {
       this.$refs.tabs.callSlider();
     },
 
-    /** Return to the previous page if it exists, otherwise goes to List */
-    returnPreviousPage() {
+    /** Back to the previous page if it exists, otherwise goes to List */
+    backToPreviousPage() {
       window.history.length >= 2
         ? this.$router.go(-1)
         : this.$router.push('/List');

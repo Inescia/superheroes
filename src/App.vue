@@ -10,7 +10,7 @@
         /></v-col>
         <v-col v-show="!load" cols="auto"
           ><h3 style="text-align: left; opacity: 0.8">
-            {{ $t('loader') }}
+            {{ $t('LOADER') }}
           </h3></v-col
         >
       </v-row>

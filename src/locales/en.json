@@ -1,59 +1,58 @@
 {
-  "hero": {
-    "id": "ID",
-    "nom": "Name",
-    "description": "Description",
-    "comics": "Comics",
-    "stories": "Stories",
-    "series": "Series",
-    "events": "Events",
-    "favori": "Favorite",
-    "tooltip": "Drag and drop an image to change it"
+  "HERO": {
+    "ID": "ID",
+    "NAME": "Name",
+    "DESCRIPTION": "Description",
+    "COMICS": "Comics",
+    "STORIES": "Stories",
+    "SERIES": "Series",
+    "EVENTS": "Events",
+    "FAVORI": "Favorite",
+    "TOOLTIP": "Drag and drop an image to change it"
   },
-  "loader": "Loading heroes",
-  "notification": {
-    "erreur": {
-      "chargement": "Please wait until the heroes have finished loading",
-      "creation": "Superhero not created, error : ",
-      "modification": "Changes not saved, error : ",
-      "suppression": "Superhero not deleted, error : ",
-      "nom": "Name is required"
+  "LOADER": "Loading heroes",
+  "NOTIFICATION": {
+    "ERROR": {
+      "LOADING": "Please wait until the heroes have finished loading",
+      "CREATION": "Superhero not created, error : ",
+      "MODIFICATION": "Changes not saved, error : ",
+      "DELETION": "Superhero not deleted, error : ",
+      "NAME": "Name is required"
     },
-    "succes": {
-      "creation": "Superhero created",
-      "modification": "Changes saved",
-      "suppression": "Superhero deleted"
+    "SUCCESS": {
+      "CREATION": "Superhero created",
+      "MODIFICATION": "Changes saved",
+      "DELETION": "Superhero deleted"
     },
-    "confirmation": "Do you really want to delete this superhero ?",
-    "oui": "Yes",
-    "non": "No"
+    "CONFIRMATION": "Do you really want to delete this superhero ?",
+    "YES": "Yes",
+    "NO": "No"
   },
-  "components": {
-    "card": { "verso": "SEE MORE" },
-    "carousel": {},
-    "header": { "tab1": "Your Favorites", "tab2": "The Superheroes" }
+  "COMPONENTS": {
+    "CARD": { "SEE_MORE": "SEE MORE" },
+    "HEADER": { "TAB1": "Your Favorites", "TAB2": "The Superheroes" }
   },
-  "views": {
-    "dashboard": {
-      "titre": "FAVORITES.",
-      "vide": "You don't have any favorite yet."
+  "VIEWS": {
+    "DASHBOARD": {
+      "TITLE": "FAVORITES.",
+      "EMPTY": "You don't have any favorite yet."
     },
-    "informations": {
-      "titre": "INFORMATIONS.",
-      "supprimer": "Delete",
-      "reinitialiser": "Reset",
-      "enregistrer": "Save"
+    "INFORMATIONS": {
+      "TITLE": "INFORMATIONS.",
+      "REMOVE": "Remove",
+      "RESET": "Reset",
+      "SAVE": "Save"
     },
-    "list": {
-      "titre": "SUPERHEROES.",
-      "nouveau": "New Superhero",
-      "affichage": "Display :",
-      "liste": "List",
-      "cartes": "Cards",
-      "tri": "Sort :",
-      "nombre": "{amount}  heroes/pages",
-      "rechercher": "Search (name, id, description)",
-      "header": [
+    "LIST": {
+      "TITLE": "SUPERHEROES.",
+      "NEW": "New Superhero",
+      "DISPLAY": "Display :",
+      "LIST": "List",
+      "CARDS": "Cards",
+      "SORT": "Sort :",
+      "HEROES_AMOUNT": "{amount}  heroes/pages",
+      "SEARCH": "Search (name, id, description)",
+      "HEADERS": [
         "Avatar",
         "ID",
         "Name",
@@ -63,11 +62,11 @@
         "Events",
         "Favorite"
       ],
-      "itemsTri": ["ID ↑", "ID ↓", "Name ↑", "Name ↓"]
+      "SORT_TYPES": ["ID ↑", "ID ↓", "Name ↑", "Name ↓"]
     },
-    "new": {
-      "titre": "NEW SUPERHERO.",
-      "enregistrer": "Save"
+    "NEW": {
+      "TITLE": "NEW SUPERHERO.",
+      "SAVE": "Save"
     }
   }
 }

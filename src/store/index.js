@@ -13,23 +13,23 @@ const state = {
 };
 
 const mutations = {
-  addHero(state, { hero }) {
+  ADD_HERO(state, { hero }) {
     state.heroes = [hero].concat(state.heroes);
   },
 
-  setNotification(state, { display, success, text }) {
+  SET_NOTIFICATION(state, { display, success, text }) {
     state.notification = { display, success, text };
   },
 
-  removeHero(state, { id }) {
+  REMOVE_HERO(state, { id }) {
     state.heroes = state.heroes.filter((h) => h.id != id);
   },
 
-  retrieveHeroes(state, { heroes }) {
+  RETRIEVE_HEROES(state, { heroes }) {
     state.heroes = state.heroes.concat(heroes);
   },
 
-  setModal(state, { modal }) {
+  SET_MODAL(state, { modal }) {
     state.modal = modal;
   },
 };
@@ -45,7 +45,7 @@ const actions = {
         result = data;
       });
       if (result.length == 0) isFinished = true;
-      commit('retrieveHeroes', {
+      commit('RETRIEVE_HEROES', {
         heroes: result.map((data) => {
           return new Hero(
             data.id,

@@ -4,7 +4,7 @@
       ><div style="position: relative">
         <img :src="image" class="card__img1" />
         <div class="card__img2">
-          <h6>{{ $t('components.card.verso') }}</h6>
+          <h6>{{ $t('COMPONENTS.CARD.SEE_MORE') }}</h6>
         </div>
       </div>
     </router-link>
@@ -15,7 +15,7 @@
             {{ setSize(hero.name, 21) }}
           </h4></v-col
         >
-        <v-icon color="red" @click="toggleFavorite">
+        <v-icon color="red" @click="hero.favorite = !hero.favorite">
           {{ hero.favorite ? 'mdi-heart' : 'mdi-heart-outline' }}
         </v-icon></v-row
       >
@@ -33,6 +33,13 @@ import Hero from '../classes/hero.js';
 export default {
   name: 'Card',
 
+  props: {
+    hero: {
+      type: Hero,
+      require,
+    },
+  },
+
   computed: {
     image() {
       if (
@@ -41,13 +48,6 @@ export default {
       )
         return this.hero.image;
       else return require('../assets/test.jpeg');
-    },
-  },
-
-  props: {
-    hero: {
-      type: Hero,
-      require,
     },
   },
 
@@ -62,11 +62,6 @@ export default {
     setSize(text, size) {
       if (text.length > size + 1) return text.substring(0, size - 2) + '...';
       else return text;
-    },
-
-    /** Toggle the favorite status of the hero. */
-    toggleFavorite() {
-      this.hero.favorite = !this.hero.favorite;
     },
   },
 };

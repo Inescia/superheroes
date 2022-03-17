@@ -1,11 +1,11 @@
 <template>
   <div class="list d-flex flex-column">
-    <h1>{{ $t('views.list.titre') }}</h1>
+    <h1>{{ $t('VIEWS.LIST.TITLE') }}</h1>
     <div class="d-flex align-center justify-space-around my-n3 mx-12">
       <v-col align-self="start" cols="4">
         <v-text-field
           v-model="searchInput"
-          :label="$t('views.list.rechercher')"
+          :label="$t('VIEWS.LIST.SEARCH')"
           prepend-icon="mdi-magnify"
         ></v-text-field
       ></v-col>
@@ -14,7 +14,7 @@
           :color="cardsDisplay ? 'grey' : 'red'"
           fab
           text
-          @click="toggleDisplay(false)"
+          @click="cardsDisplay = false"
           ><v-icon :color="cardsDisplay ? 'grey' : 'red'" large
             >mdi-format-list-bulleted</v-icon
           ></v-btn
@@ -22,7 +22,7 @@
           :color="cardsDisplay ? 'red' : 'grey'"
           fab
           text
-          @click="toggleDisplay(true)"
+          @click="cardsDisplay = true"
           ><v-icon :color="cardsDisplay ? 'red' : 'grey'" large
             >mdi-dots-grid</v-icon
           ></v-btn
@@ -32,13 +32,13 @@
         <v-select
           v-model="currentSortType"
           :items="sortTypes"
-          placeholder="Tri"
+          :placeholder="$t('VIEWS.LIST.SORT')"
         ></v-select>
       </v-col>
       <v-col cols="3"
         ><v-slider
           v-model="sliderValue"
-          :label="$t('views.list.nombre', { amount: heroAmount })"
+          :label="$t('VIEWS.LIST.HEROES_AMOUNT', { amount: heroesAmount })"
           hide-details
           max="4"
           thumb-label
@@ -53,7 +53,7 @@
       v-if="!cardsDisplay"
       :headers="headers"
       :items="displayedHeroes"
-      :items-per-page="heroAmount"
+      :items-per-page="heroesAmount"
       :hide-default-footer="true"
       class="list__table mx-14"
       @dblclick:row="clickOnCard"
@@ -72,7 +72,7 @@
         />
       </template>
       <template #item.favorite="{ item }">
-        <v-icon color="red" @click.stop="toggleFavorite(item)">{{
+        <v-icon color="red" @click.stop="item.favorite = !item.favorite">{{
           item.favorite ? 'mdi-heart' : 'mdi-heart-outline'
         }}</v-icon>
       </template>
@@ -126,7 +126,7 @@
             ><v-icon v-on="on" color="white" x-large>mdi-plus</v-icon></v-btn
           ></template
         >
-        <span>{{ $t('views.list.nouveau') }}</span>
+        <span>{{ $t('VIEWS.LIST.NEW') }}</span>
       </v-tooltip></router-link
     >
   </div>
@@ -138,66 +138,66 @@ import Card from '../components/Card.vue';
 import Header from '../components/Header.vue';
 
 export default {
-  components: { Card, Header },
   name: 'List',
+  components: { Card, Header },
 
   data() {
     return {
       amountMap: [10, 25, 50, 75, 100],
       cardsDisplay: true,
-      currentSortType: this.$t('views.list.itemsTri[2]'),
-      sortTypes: this.$t('views.list.itemsTri'),
-      sliderValue: 3,
       currentPage: 1,
+      currentSortType: this.$t('VIEWS.LIST.SORT_TYPES[2]'),
+      sortTypes: this.$t('VIEWS.LIST.SORT_TYPES'),
+      sliderValue: 3,
       searchInput: '',
       headers: [
         {
-          text: this.$t('views.list.header[0]'),
+          text: this.$t('VIEWS.LIST.HEADERS[0]'),
           value: 'image',
           sortable: false,
         },
         {
-          text: this.$t('views.list.header[1]'),
+          text: this.$t('VIEWS.LIST.HEADERS[1]'),
           value: 'id',
           width: '17%',
           sortable: false,
         },
         {
-          text: this.$t('views.list.header[2]'),
+          text: this.$t('VIEWS.LIST.HEADERS[2]'),
           value: 'name',
           width: '28%',
           sortable: false,
         },
         {
-          text: this.$t('views.list.header[3]'),
+          text: this.$t('VIEWS.LIST.HEADERS[3]'),
           value: 'comics',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: this.$t('views.list.header[4]'),
+          text: this.$t('VIEWS.LIST.HEADERS[4]'),
           value: 'stories',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: this.$t('views.list.header[5]'),
+          text: this.$t('VIEWS.LIST.HEADERS[5]'),
           value: 'series',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: this.$t('views.list.header[6]'),
+          text: this.$t('VIEWS.LIST.HEADERS[6]'),
           value: 'events',
           align: 'center',
           width: '10%',
           sortable: false,
         },
         {
-          text: this.$t('views.list.header[7]'),
+          text: this.$t('VIEWS.LIST.HEADERS[7]'),
           value: 'favorite',
           align: 'center',
           width: '10%',
@@ -211,7 +211,7 @@ export default {
     ...mapState(['heroes']),
     ...mapGetters(['paginatedHeroes', 'getFilteredHeroes']),
 
-    heroAmount() {
+    heroesAmount() {
       return this.amountMap[this.sliderValue];
     },
 
@@ -224,8 +224,8 @@ export default {
       // if search bar is empty
       if (this.searchInput == '') {
         h = this.paginatedHeroes(
-          this.heroAmount,
-          this.heroAmount * (this.currentPage - 1),
+          this.heroesAmount,
+          this.heroesAmount * (this.currentPage - 1),
           byName
         );
       } else h = this.getFilteredHeroes(this.searchInput);
@@ -234,27 +234,20 @@ export default {
     },
 
     totalPages() {
-      if (this.heroes.length % this.heroAmount == 0)
-        return Math.floor(this.heroes.length / this.heroAmount);
-      else return Math.floor(this.heroes.length / this.heroAmount) + 1;
+      if (this.heroes.length % this.heroesAmount == 0)
+        return Math.floor(this.heroes.length / this.heroesAmount);
+      else return Math.floor(this.heroes.length / this.heroesAmount) + 1;
     },
   },
 
   beforeMount() {
-    this.$store.commit('setModal', { modal: false });
+    this.$store.commit('SET_MODAL', { modal: false });
   },
 
   methods: {
+    /* Go to the information page */
     clickOnCard(e) {
       this.$router.push('/Informations/' + e.id);
-    },
-
-    toggleDisplay(value) {
-      this.cardsDisplay = value;
-    },
-
-    toggleFavorite(hero) {
-      hero.favorite = !hero.favorite;
     },
   },
 };

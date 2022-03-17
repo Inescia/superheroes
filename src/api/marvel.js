@@ -5,7 +5,7 @@ import axios from 'axios';
  * If the request is not the last one, the function returns 100 heroes.
  *
  * @param {number} request the request number (used to calculate the offset)
- * @returns {Promise<array>} the array of heroes resulting from the query
+ * @returns {promise<array>} the array of heroes resulting from the query
  */
 export async function fetchHeroesAPI(request) {
   let results = null;
@@ -32,7 +32,7 @@ export async function fetchHeroesAPI(request) {
  * This function retrieves a hero according to its ID.
  *
  * @param {number} id the ID of the hero researched
- * @returns {Promise<array>} an array with the corresponding hero or an empty array
+ * @returns {promise<array>} an array with the corresponding hero or an empty array
  */
 export async function fetchHeroByIdAPI(id) {
   let results = null;

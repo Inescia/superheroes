@@ -8,7 +8,7 @@
     "SERIES": "Series",
     "EVENTS": "Eventos",
     "FAVORI": "Favoritos",
-    "TOOLTIP": "Arrastre y suelte una imagen para cambiarla"
+    "TOOLTIP": "Haga clic o arrastre y suelte para cambiar la imagen"
   },
   "LOADER": "Cargando héroes",
   "NOTIFICATION": {

@@ -97,7 +97,8 @@ const getters = {
     state.heroes.forEach((h) => {
       if (h.id > id) id = h.id;
     });
-    return id++;
+    id++;
+    return id;
   },
 };
 

@@ -8,7 +8,7 @@
     "SERIES": "Series",
     "EVENTS": "Events",
     "FAVORI": "Favorite",
-    "TOOLTIP": "Drag and drop an image to change it"
+    "TOOLTIP": "Click or Drag and Drop to edit the image"
   },
   "LOADER": "Loading heroes",
   "NOTIFICATION": {

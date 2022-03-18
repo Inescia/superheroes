@@ -1,12 +1,19 @@
 <template>
   <div class="new d-flex flex-column">
     <h1 style="text-align: right">{{ $t('VIEWS.NEW.TITLE') }}</h1>
+    <input
+      ref="file"
+      style="display: none"
+      type="file"
+      @change="onSelectImage"
+    />
     <div class="d-flex">
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }"
           ><v-col
             class="d-flex flex justify-center"
             cols="6"
+            @click="$refs.file.click()"
             @dragenter.prevent
             @dragover.prevent
             @drop.stop.prevent="onDropImage"
@@ -101,6 +108,7 @@ export default {
   components: { Header },
 
   data: () => ({
+    file: '',
     name: '',
     description: '',
     comics: 0,
@@ -177,10 +185,16 @@ export default {
      * @param {event} e The event associated
      */
     onDropImage(e) {
-      e.stopPropagation();
-      e.preventDefault();
-      const files = e.dataTransfer.files;
-      this.createImageFile(files[0]);
+      this.createImageFile(e.dataTransfer.files[0]);
+    },
+
+    /**
+     * Retrieve the file selected.
+     *
+     * @param {event} e The event associated
+     */
+    onSelectImage(e) {
+      this.createImageFile(e.target.files[0]);
     },
 
     /**

@@ -12,6 +12,7 @@
       <v-col class="d-flex" cols="auto">
         <v-btn
           :color="cardsDisplay ? 'grey' : 'red'"
+          :disabled="searchInput != '' ? true : false"
           fab
           text
           @click="cardsDisplay = false"
@@ -20,6 +21,7 @@
           ></v-btn
         ><v-btn
           :color="cardsDisplay ? 'red' : 'grey'"
+          :disabled="searchInput != '' ? true : false"
           fab
           text
           @click="cardsDisplay = true"
@@ -31,6 +33,7 @@
       <v-col class="" cols="2">
         <v-select
           v-model="currentSortType"
+          :disabled="searchInput != '' ? true : false"
           :items="sortTypes"
           :placeholder="$t('VIEWS.LIST.SORT')"
         ></v-select>
@@ -38,6 +41,7 @@
       <v-col cols="3"
         ><v-slider
           v-model="sliderValue"
+          :disabled="searchInput != '' ? true : false"
           :label="$t('VIEWS.LIST.HEROES_AMOUNT', { amount: heroesAmount })"
           hide-details
           max="4"

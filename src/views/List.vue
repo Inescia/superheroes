@@ -5,6 +5,13 @@
       <v-col align-self="start" cols="4">
         <v-text-field
           v-model="searchInput"
+          :hint="
+            searchInput != ''
+              ? $tc('HERO.HERO', displayedHeroes.length, {
+                  count: displayedHeroes.length,
+                })
+              : ''
+          "
           :label="$t('VIEWS.LIST.SEARCH')"
           prepend-icon="mdi-magnify"
         ></v-text-field
@@ -12,7 +19,6 @@
       <v-col class="d-flex" cols="auto">
         <v-btn
           :color="cardsDisplay ? 'grey' : 'red'"
-          :disabled="searchInput != '' ? true : false"
           fab
           text
           @click="cardsDisplay = false"
@@ -21,7 +27,6 @@
           ></v-btn
         ><v-btn
           :color="cardsDisplay ? 'red' : 'grey'"
-          :disabled="searchInput != '' ? true : false"
           fab
           text
           @click="cardsDisplay = true"
@@ -33,7 +38,6 @@
       <v-col class="" cols="2">
         <v-select
           v-model="currentSortType"
-          :disabled="searchInput != '' ? true : false"
           :items="sortTypes"
           :placeholder="$t('VIEWS.LIST.SORT')"
         ></v-select>
@@ -213,7 +217,7 @@ export default {
 
   computed: {
     ...mapState(['heroes']),
-    ...mapGetters(['paginatedHeroes', 'getFilteredHeroes']),
+    ...mapGetters(['getPaginatedHeroes', 'getFilteredHeroes']),
 
     heroesAmount() {
       return this.amountMap[this.sliderValue];
@@ -227,12 +231,12 @@ export default {
 
       // if search bar is empty
       if (this.searchInput == '') {
-        h = this.paginatedHeroes(
+        h = this.getPaginatedHeroes(
           this.heroesAmount,
           this.heroesAmount * (this.currentPage - 1),
           byName
         );
-      } else h = this.getFilteredHeroes(this.searchInput);
+      } else h = this.getFilteredHeroes(this.searchInput, byName);
       if (!crescent) h.reverse();
       return h;
     },

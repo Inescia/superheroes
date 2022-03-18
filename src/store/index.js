@@ -67,7 +67,7 @@ const actions = {
 };
 
 const getters = {
-  paginatedHeroes: (state) => (number, offset, byName) => {
+  getPaginatedHeroes: (state) => (number, offset, byName) => {
     let h = state.heroes;
     byName
       ? h.sort((a, b) => a.name.localeCompare(b.name))
@@ -79,13 +79,17 @@ const getters = {
     return state.heroes.find((h) => h.id == id);
   },
 
-  getFilteredHeroes: (state) => (text) => {
-    return state.heroes.filter(
+  getFilteredHeroes: (state) => (text, byName) => {
+    let h = state.heroes.filter(
       (hero) =>
         hero.name.toLowerCase().includes(text.toLowerCase()) ||
         hero.id.toString().includes(text) ||
         hero.description.toLowerCase().includes(text.toLowerCase())
     );
+    byName
+      ? h.sort((a, b) => a.name.localeCompare(b.name))
+      : h.sort((a, b) => a.id - b.id);
+    return h;
   },
 
   favoriteHeroes: (state) => {

@@ -1,5 +1,6 @@
 {
   "HERO": {
+    "HERO": "No heroes | 1 heroe | {count} heroes",
     "ID": "ID",
     "NAME": "Name",
     "DESCRIPTION": "Description",
@@ -50,7 +51,7 @@
       "LIST": "List",
       "CARDS": "Cards",
       "SORT": "Sort :",
-      "HEROES_AMOUNT": "{amount}  heroes/pages",
+      "HEROES_AMOUNT": "{amount} heroes/pages",
       "SEARCH": "Search (name, id, description)",
       "HEADERS": [
         "Avatar",

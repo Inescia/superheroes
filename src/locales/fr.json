@@ -1,5 +1,6 @@
 {
   "HERO": {
+    "HERO": "Pas de héro | 1 héro | {count} héros",
     "ID": "ID",
     "NAME": "Nom",
     "DESCRIPTION": "Description",

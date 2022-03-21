@@ -70,7 +70,9 @@
         <img
           :src="
             image ==
-            'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+              'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' ||
+            image ==
+              'http://i.annihil.us/u/prod/marvel/i/mg/f/60/4c002e0305708.gif'
               ? require('../assets/test.jpeg')
               : image
           "
@@ -254,8 +256,8 @@ export default {
 
   methods: {
     /* Go to the information page */
-    clickOnCard(e) {
-      this.$router.push('/Informations/' + e.id);
+    clickOnCard(event, object) {
+      this.$router.push('/Informations/' + object.item.id);
     },
   },
 };

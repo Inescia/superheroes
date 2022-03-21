@@ -289,7 +289,9 @@ export default {
       if (!getInfo) this.hero.image = this.image;
       else if (
         this.hero.image !=
-        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
+          'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg' &&
+        this.hero.image !=
+          'http://i.annihil.us/u/prod/marvel/i/mg/f/60/4c002e0305708.gif'
       )
         this.image = this.hero.image;
     },

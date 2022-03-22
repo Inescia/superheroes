@@ -21,7 +21,7 @@
         class="mx-4 mt-auto"
         height="45"
         style="cursor: pointer"
-        @click="changeCurrentLangage(lang)"
+        @click="changeCurrentLangage"
       />
     </v-col>
     <v-col v-else class="d-flex" cols="1" justify-end>
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import i18n from '../i18n';
-
 export default {
   name: 'Header',
 
@@ -44,37 +42,33 @@ export default {
     },
 
     lang() {
-      return i18n.locale;
-    },
-  },
-
-  watch: {
-    lang() {
-      document.title = this.$t('VIEWS.' + this.$route.meta.title + '.TITLE');
+      return this.$i18n.locale;
     },
   },
 
   methods: {
     /**
      * @method to change the langage used (according to this order : fr => en => es => ...)
-     * @param {string} lang the current langage
      */
-    changeCurrentLangage(lang) {
-      switch (lang) {
+    changeCurrentLangage() {
+      switch (this.lang) {
         case 'fr':
-          i18n.locale = 'en';
+          this.$i18n.locale = 'en';
           break;
         case 'en':
-          i18n.locale = 'es';
+          this.$i18n.locale = 'es';
           break;
         default:
-          i18n.locale = 'fr';
+          this.$i18n.locale = 'fr';
           break;
       }
-      this.$refs.tabs.callSlider();
+      if (this.$refs.tabs) this.$refs.tabs.callSlider();
+      document.title = this.$t('VIEWS.' + this.$route.meta.title + '.TITLE');
     },
 
-    /** @method to back to the previous page if it exists, otherwise goes to List. */
+    /**
+     * @method to back to the previous page if it exists, otherwise goes to List.
+     */
     backToPreviousPage() {
       window.history.length >= 2
         ? this.$router.go(-1)

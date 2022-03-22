@@ -55,8 +55,7 @@ export default {
 
   methods: {
     /**
-     * Set text's size, to avoid overflow.
-     *
+     * @method to set text's size, to avoid overflow.
      * @param {string} text The original text
      * @param {number} size The size required
      * @return {string} The resized text

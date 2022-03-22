@@ -22,9 +22,5 @@ export default {
       heroes: 'favoriteHeroes',
     }),
   },
-
-  beforeMount() {
-    this.$store.commit('SET_MODAL', { modal: false });
-  },
 };
 </script>

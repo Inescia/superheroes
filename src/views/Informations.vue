@@ -167,7 +167,9 @@ export default {
   async created() {
     if (this.getHeroById(this.id) == null) {
       let result = [];
-      await fetchHeroByIdAPI(this.id).then((value) => (result = value));
+      await fetchHeroByIdAPI(this.id).then((value) =>
+        value != null ? (result = value) : this.$router.push('/List')
+      );
       this.hero = result.map((data) => {
         return new Hero(
           data.id,
@@ -184,15 +186,10 @@ export default {
     this.synchronizeInformations(true);
   },
 
-  beforeMount() {
-    this.$store.commit('SET_MODAL', { modal: true });
-  },
-
   methods: {
     /**
-     * Create the file for the new image.
-     *
-     * @param {file} file The i dropped
+     * @method to create the file for the new image.
+     * @param {file} file The file dropped
      */
     createImageFile(file) {
       if (!file.type.match('image.*')) {
@@ -208,24 +205,22 @@ export default {
     },
 
     /**
-     * Retrieve the file dropped.
-     *
-     * @param {event} e The event associated
+     * @method to retrieve the file dropped.
+     * @param {object} dataTransfer The event associated
      */
-    onDropImage(e) {
-      this.createImageFile(e.dataTransfer.files[0]);
+    onDropImage({ dataTransfer }) {
+      this.createImageFile(dataTransfer.files[0]);
     },
 
     /**
-     * Retrieve the file selected.
-     *
-     * @param {event} e The event associated
+     * @method to retrieve the file selected.
+     * @param {object} target The event associated
      */
-    onSelectImage(e) {
-      this.createImageFile(e.target.files[0]);
+    onSelectImage({ target }) {
+      this.createImageFile(target.files[0]);
     },
 
-    /** Remove the hero in the database. */
+    /** @method to remove the hero in the database. */
     removeHero() {
       this.dialog = false;
       const id = this.id;
@@ -244,8 +239,7 @@ export default {
     },
 
     /**
-     * Show an alert during 4s.
-     *
+     * @method to show an alert during 4s.
      * @param {string} text The alert's text
      * @param {string} success The alert's type (true = success/ false = error)
      */
@@ -265,8 +259,7 @@ export default {
     },
 
     /**
-     * Synchronize the heroe's informations (get informations from the database or push informations to the database).
-     *
+     * @method to synchronize the heroe's informations (get informations from the database or push informations to the database).
      * @param {boolean} getInfo The type of synchronisation (true = get / false = push)
      */
     synchronizeInformations(getInfo) {
@@ -296,7 +289,7 @@ export default {
         this.image = this.hero.image;
     },
 
-    /** Save the modifications in the database. */
+    /** @method to save the modifications in the database. */
     updateHero() {
       if (!this.load)
         this.showAlert(this.$t('NOTIFICATION.ERROR.LOADING'), false);

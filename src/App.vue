@@ -5,13 +5,13 @@
         <v-col v-show="!load" cols="auto"
           ><img
             class="loader__img px-3"
-            height="70"
+            height="50"
             :src="require('./assets/bouclier.png')"
         /></v-col>
         <v-col v-show="!load" cols="auto"
-          ><h3 style="text-align: left; opacity: 0.8">
+          ><h4 style="text-align: left; opacity: 0.8">
             {{ $t('LOADER') }}
-          </h3></v-col
+          </h4></v-col
         >
       </v-row>
       <Alert
@@ -71,7 +71,7 @@ export default {
   position: absolute;
   left: 35%;
   right: 35%;
-  height: 120px;
+  height: 100px;
   z-index: 2;
 
   &__img {

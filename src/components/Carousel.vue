@@ -92,8 +92,7 @@ export default {
 
   methods: {
     /**
-     * Moves the carousel one step to the right or left if movement is allowed
-     *
+     * @method to moves the carousel one step to the right or left if movement is allowed.
      * @param {string} direction The desired direction (left or right)
      */
     moveCarousel(direction) {
@@ -103,8 +102,7 @@ export default {
     },
 
     /**
-     * Moves the carousel to a given index
-     *
+     * @method to moves the carousel to a given index.
      * @param {number} index The desired index
      */
     moveCarouselTo(index) {

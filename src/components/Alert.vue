@@ -1,5 +1,5 @@
 <template>
-  <div v-if="display" class="alert pt-5">
+  <div v-if="display" class="alert pt-3">
     <v-alert v-if="success" type="success">{{ text }}</v-alert>
     <v-alert v-else type="error">{{ text }}</v-alert>
   </div>
@@ -20,7 +20,6 @@ export default {
     },
     text: {
       type: String,
-      default: 'Modifications enregistrées.',
     },
   },
 };

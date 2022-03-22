@@ -124,12 +124,8 @@ export default {
     ...mapGetters({ id: 'newId' }),
   },
 
-  beforeMount() {
-    this.$store.commit('SET_MODAL', { modal: true });
-  },
-
   methods: {
-    /** Add the hero in the database. */
+    /** @method to add the hero in the database. */
     addHero() {
       if (!this.load)
         this.showAlert(this.$t('NOTIFICATION.ERROR.LOADING'), false);
@@ -161,8 +157,7 @@ export default {
     },
 
     /**
-     * Create the file for the new image.
-     *
+     * @method to create the file for the new image.
      * @param {file} file The i dropped
      */
     createImageFile(file) {
@@ -180,8 +175,7 @@ export default {
     },
 
     /**
-     * Retrieve the file dropped.
-     *
+     * @method to retrieve the file dropped.
      * @param {event} e The event associated
      */
     onDropImage(e) {
@@ -189,8 +183,7 @@ export default {
     },
 
     /**
-     * Retrieve the file selected.
-     *
+     * @method to retrieve the file selected.
      * @param {event} e The event associated
      */
     onSelectImage(e) {
@@ -198,8 +191,7 @@ export default {
     },
 
     /**
-     * Show an alert during 4s.
-     *
+     * @method to show an alert during 4s.
      * @param {string} text The alert's text
      */
     showAlert(text, success) {

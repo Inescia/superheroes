@@ -1,24 +1,24 @@
 <template>
   <v-row
-    class="pa-5"
+    class="pt-3 px-5"
     justify="space-between"
     no-gutters
-    style="max-height: 120px"
+    style="height: 120px"
   >
-    <v-col cols="auto"
-      ><router-link to="/"
-        ><img
-          :src="require('../assets/logo_header.png')"
-          contain
-          height="100" /></router-link
-    ></v-col>
-    <v-col v-if="!modal" align-self="end" class="d-flex" cols="auto">
+    <v-col justify-center cols="auto"
+      ><img
+        :src="require('../assets/logo_header.png')"
+        class="mt-4"
+        contain
+        height="80"
+    /></v-col>
+    <v-col v-if="!isClosable" align-self="end" class="d-flex" cols="auto">
       <v-tabs background-color="transparent" centered ref="tabs">
         <v-tab to="/">{{ $t('COMPONENTS.HEADER.TAB1') }}</v-tab>
         <v-tab to="/List">{{ $t('COMPONENTS.HEADER.TAB2') }}</v-tab> </v-tabs
       ><img
         :src="require('../assets/' + lang + '.png')"
-        class="mx-4"
+        class="mx-4 mt-auto"
         height="45"
         style="cursor: pointer"
         @click="changeCurrentLangage(lang)"
@@ -33,14 +33,15 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import i18n from '../i18n';
 
 export default {
   name: 'Header',
 
   computed: {
-    ...mapState(['modal']),
+    isClosable() {
+      return this.$route.meta.isClosable;
+    },
 
     lang() {
       return i18n.locale;
@@ -49,8 +50,7 @@ export default {
 
   methods: {
     /**
-     * Change the langage used (according to this order : fr => en => es => ...)
-     *
+     * @method to change the langage used (according to this order : fr => en => es => ...)
      * @param {string} lang the current langage
      */
     changeCurrentLangage(lang) {
@@ -68,7 +68,7 @@ export default {
       this.$refs.tabs.callSlider();
     },
 
-    /** Back to the previous page if it exists, otherwise goes to List */
+    /** @method to back to the previous page if it exists, otherwise goes to List. */
     backToPreviousPage() {
       window.history.length >= 2
         ? this.$router.go(-1)

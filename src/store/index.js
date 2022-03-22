@@ -8,7 +8,6 @@ Vue.use(Vuex);
 const state = {
   heroes: [],
   load: false,
-  modal: false,
   notification: { display: false, success: true, text: '' },
 };
 
@@ -27,10 +26,6 @@ const mutations = {
 
   RETRIEVE_HEROES(state, { heroes }) {
     state.heroes = state.heroes.concat(heroes);
-  },
-
-  SET_MODAL(state, { modal }) {
-    state.modal = modal;
   },
 };
 
@@ -67,11 +62,12 @@ const actions = {
 };
 
 const getters = {
-  getPaginatedHeroes: (state) => (number, offset, byName) => {
+  getPaginatedHeroes: (state) => (number, offset, byName, crescent) => {
     let h = state.heroes;
     byName
       ? h.sort((a, b) => a.name.localeCompare(b.name))
       : h.sort((a, b) => a.id - b.id);
+    if (!crescent) h.reverse();
     return h.slice(offset, number + offset);
   },
 
@@ -79,7 +75,7 @@ const getters = {
     return state.heroes.find((h) => h.id == id);
   },
 
-  getFilteredHeroes: (state) => (text, byName) => {
+  getFilteredHeroes: (state) => (text, byName, crescent) => {
     let h = state.heroes.filter(
       (hero) =>
         hero.name.toLowerCase().includes(text.toLowerCase()) ||
@@ -89,6 +85,7 @@ const getters = {
     byName
       ? h.sort((a, b) => a.name.localeCompare(b.name))
       : h.sort((a, b) => a.id - b.id);
+    if (!crescent) h.reverse();
     return h;
   },
 

@@ -1,4 +1,6 @@
 {
+  "PAGETITLES": ["Favoris", "Liste", "Informations", "Nouveau"],
+  "SUPERHEROES": "{page} - Superhéros",
   "HERO": {
     "HERO": "Pas de héro | 1 héro | {count} héros",
     "ID": "ID",
@@ -63,7 +65,7 @@
         "Evénements",
         "Favori"
       ],
-      "SORT_TYPES": ["ID ↑", "ID ↓", "Nom ↑", "Nom ↓"]
+      "SORT_TYPES": ["ID", "Nom"]
     },
     "NEW": {
       "TITLE": "NOUVEAU SUPERHERO.",

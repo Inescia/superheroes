@@ -14,8 +14,7 @@
           "
           :label="$t('VIEWS.LIST.SEARCH')"
           prepend-icon="mdi-magnify"
-        ></v-text-field
-      ></v-col>
+      /></v-col>
       <v-col class="d-flex" cols="auto">
         <v-btn
           :color="cardsDisplay ? 'grey' : 'red'"
@@ -35,12 +34,16 @@
           ></v-btn
         >
       </v-col>
-      <v-col class="" cols="2">
+      <v-col cols="2">
         <v-select
           v-model="currentSortType"
+          :append-outer-icon="
+            crescent ? 'mdi-arrow-top-right' : 'mdi-arrow-bottom-right'
+          "
           :items="sortTypes"
           :placeholder="$t('VIEWS.LIST.SORT')"
-        ></v-select>
+          @click:append-outer="crescent = !crescent"
+        />
       </v-col>
       <v-col cols="3"
         ><v-slider
@@ -155,12 +158,56 @@ export default {
     return {
       amountMap: [10, 25, 50, 75, 100],
       cardsDisplay: true,
+      currentSortType: null,
+      crescent: true,
       currentPage: 1,
-      currentSortType: this.$t('VIEWS.LIST.SORT_TYPES[2]'),
-      sortTypes: this.$t('VIEWS.LIST.SORT_TYPES'),
       sliderValue: 3,
       searchInput: '',
-      headers: [
+    };
+  },
+
+  computed: {
+    ...mapState(['heroes']),
+    ...mapGetters(['getPaginatedHeroes', 'getFilteredHeroes']),
+
+    displayedHeroes() {
+      let byName, sortIndex, h;
+      sortIndex = this.sortTypes.indexOf(this.currentSortType);
+      sortIndex > 0 ? (byName = true) : (byName = false);
+
+      // if search bar is empty
+      if (this.searchInput == '') {
+        h = this.getPaginatedHeroes(
+          this.heroesAmount,
+          this.heroesAmount * (this.currentPage - 1),
+          byName,
+          this.crescent
+        );
+      } else
+        h = this.getFilteredHeroes(this.searchInput, byName, this.crescent);
+      return h;
+    },
+
+    heroesAmount() {
+      return this.amountMap[this.sliderValue];
+    },
+
+    totalPages() {
+      if (this.heroes.length % this.heroesAmount == 0)
+        return Math.floor(this.heroes.length / this.heroesAmount);
+      else return Math.floor(this.heroes.length / this.heroesAmount) + 1;
+    },
+
+    // currentSortType() {
+    //   return this.$t('VIEWS.LIST.SORT_TYPES[2]');
+    // },
+
+    sortTypes() {
+      return this.$t('VIEWS.LIST.SORT_TYPES');
+    },
+
+    headers() {
+      return [
         {
           text: this.$t('VIEWS.LIST.HEADERS[0]'),
           value: 'image',
@@ -213,49 +260,15 @@ export default {
           width: '10%',
           sortable: false,
         },
-      ],
-    };
-  },
-
-  computed: {
-    ...mapState(['heroes']),
-    ...mapGetters(['getPaginatedHeroes', 'getFilteredHeroes']),
-
-    heroesAmount() {
-      return this.amountMap[this.sliderValue];
+      ];
     },
-
-    displayedHeroes() {
-      let crescent, byName, sortIndex, h;
-      sortIndex = this.sortTypes.indexOf(this.currentSortType);
-      sortIndex % 2 == 0 ? (crescent = true) : (crescent = false);
-      sortIndex > 1 ? (byName = true) : (byName = false);
-
-      // if search bar is empty
-      if (this.searchInput == '') {
-        h = this.getPaginatedHeroes(
-          this.heroesAmount,
-          this.heroesAmount * (this.currentPage - 1),
-          byName
-        );
-      } else h = this.getFilteredHeroes(this.searchInput, byName);
-      if (!crescent) h.reverse();
-      return h;
-    },
-
-    totalPages() {
-      if (this.heroes.length % this.heroesAmount == 0)
-        return Math.floor(this.heroes.length / this.heroesAmount);
-      else return Math.floor(this.heroes.length / this.heroesAmount) + 1;
-    },
-  },
-
-  beforeMount() {
-    this.$store.commit('SET_MODAL', { modal: false });
   },
 
   methods: {
-    /* Go to the information page */
+    /** @method to go to the information page
+     * @param {event} event The event associated to the click
+     * @param {object} object The object associated to the click
+     */
     clickOnCard(event, object) {
       this.$router.push('/Informations/' + object.item.id);
     },

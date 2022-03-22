@@ -36,8 +36,8 @@
                 v-model="name"
                 :label="$t('HERO.NAME')"
                 counter="30"
-              ></v-text-field
-            ></v-col>
+              />
+            </v-col>
             <v-col cols="1">
               <v-btn color="red" fab text @click="favorite = !favorite"
                 ><v-icon color="red" x-large>{{
@@ -54,7 +54,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
-              ></v-text-field>
+              />
             </v-col>
             <v-col cols="2">
               <v-text-field
@@ -63,8 +63,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
-              ></v-text-field
-            ></v-col>
+            /></v-col>
             <v-col cols="2">
               <v-text-field
                 v-model="series"
@@ -72,8 +71,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
-              ></v-text-field
-            ></v-col>
+            /></v-col>
             <v-col cols="2">
               <v-text-field
                 v-model="events"
@@ -81,8 +79,7 @@
                 background-color="rgb(255, 255, 255, 0.5)"
                 outlined
                 type="number"
-              ></v-text-field
-            ></v-col>
+            /></v-col>
           </v-row>
           <v-textarea
             v-model="description"
@@ -91,7 +88,7 @@
             counter="600"
             outlined
             rows="6"
-          ></v-textarea>
+          />
           <v-row class="my-4" no-gutters>
             <v-btn color="#ff554fee" dark @click="dialog = true">{{
               $t('VIEWS.INFORMATIONS.REMOVE')

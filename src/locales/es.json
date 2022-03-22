@@ -1,6 +1,4 @@
 {
-  "PAGETITLES": ["Favoritos", "Lista", "Informaciones", "Nuevo"],
-  "SUPERHEROES": "{page} - Superhéroes",
   "HERO": {
     "HERO": "No heroe | 1 heroe | {count} heroes",
     "ID": "ID",

@@ -1,7 +1,7 @@
 <template>
   <div class="list d-flex flex-column">
     <h1>{{ $t('VIEWS.LIST.TITLE') }}</h1>
-    <div class="d-flex align-center justify-space-around my-n3 mx-12">
+    <div class="align-center d-flex justify-space-around my-n3 mx-12">
       <v-col align-self="start" cols="4">
         <v-text-field
           v-model="searchInput"
@@ -93,11 +93,14 @@
     <div v-else class="list__heroes d-flex flex-wrap justify-center">
       <Card v-for="hero in displayedHeroes" :key="hero.id" :hero="hero" />
     </div>
-    <ul class="d-flex justify-center my-7" style="list-style: none">
+    <ul
+      class="align-center d-flex justify-center my-7 mx-16 px-14"
+      style="list-style: none"
+    >
       <li>
         <button
           v-show="currentPage != 1 && searchInput == ''"
-          class="list__page"
+          class="list__page mx-2"
           @click="currentPage--"
         >
           <v-icon color="#607d8b"> mdi-arrow-left</v-icon>
@@ -119,7 +122,7 @@
       <li>
         <button
           v-show="currentPage < totalPages && searchInput == ''"
-          class="list__page"
+          class="list__page mx-2"
           @click="currentPage++"
         >
           <v-icon color="#607d8b">mdi-arrow-right</v-icon>
@@ -197,10 +200,6 @@ export default {
         return Math.floor(this.heroes.length / this.heroesAmount);
       else return Math.floor(this.heroes.length / this.heroesAmount) + 1;
     },
-
-    // currentSortType() {
-    //   return this.$t('VIEWS.LIST.SORT_TYPES[2]');
-    // },
 
     sortTypes() {
       return this.$t('VIEWS.LIST.SORT_TYPES');

@@ -6,7 +6,7 @@
         cols="auto"
         :disabled="borderLeft"
         @click="moveCarousel('left')"
-      ></v-col>
+      />
       <v-col
         class="carousel__cards d-flex justify-center mx-5 pa-3"
         cols="auto"
@@ -26,7 +26,7 @@
         cols="auto"
         :disabled="borderRight"
         @click="moveCarousel('right')"
-      ></v-col>
+      />
     </v-row>
     <div>
       <ul class="carousel__pages d-flex justify-center my-8">
@@ -38,10 +38,9 @@
             :key="i"
             @click="moveCarouselTo(i)"
           >
-            <v-icon v-if="i - 1 == index" color="#ff554fee" small
+            <v-icon :color="i - 1 == index ? '#ff554fee' : '#00000055'" small
               >mdi-circle</v-icon
             >
-            <v-icon v-else color="#00000055" small>mdi-circle</v-icon>
           </button>
         </li>
       </ul>

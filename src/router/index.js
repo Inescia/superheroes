@@ -5,6 +5,7 @@ import List from '../views/List.vue';
 import Informations from '../views/Informations.vue';
 import New from '../views/New.vue';
 import i18n from '../i18n';
+//import { setDocumentTitle } from '@/util/i18n/document';
 
 Vue.use(VueRouter);
 
@@ -14,7 +15,7 @@ const routes = [
     name: 'Dashboard',
     component: Dashboard,
     meta: {
-      title: i18n.t('SUPERHEROES', { page: i18n.t('PAGETITLES[0]') }),
+      title: 'DASHBOARD',
       isClosable: false,
     },
   },
@@ -23,7 +24,7 @@ const routes = [
     name: 'List',
     component: List,
     meta: {
-      title: i18n.t('SUPERHEROES', { page: i18n.t('PAGETITLES[1]') }),
+      title: 'LIST',
       isClosable: false,
     },
   },
@@ -33,7 +34,7 @@ const routes = [
     component: Informations,
     props: true,
     meta: {
-      title: i18n.t('SUPERHEROES', { page: i18n.t('PAGETITLES[2]') }),
+      title: 'INFORMATIONS',
       isClosable: true,
     },
   },
@@ -42,7 +43,7 @@ const routes = [
     name: 'New',
     component: New,
     meta: {
-      title: i18n.t('SUPERHEROES', { page: i18n.t('PAGETITLES[3]') }),
+      title: 'NEW',
       isClosable: true,
     },
   },
@@ -53,12 +54,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  document.title = to.meta.title || 'Superheroes';
+  document.title = i18n.t('VIEWS.' + to.meta.title + '.TITLE') || 'Superheroes';
   next();
-});
-
-router.afterEach((to, from) => {
-  document.title = to.meta.title || 'Superheroes';
 });
 
 export default router;

@@ -39,9 +39,7 @@ export default {
   },
 
   created() {
-    if (!this.load) {
-      this.$store.dispatch('fetchHeroes');
-    }
+    if (!this.load) this.$store.dispatch('fetchHeroes');
   },
 };
 </script>

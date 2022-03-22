@@ -24,7 +24,7 @@
         @click="changeCurrentLangage(lang)"
       />
     </v-col>
-    <v-col v-else class="d-flex" justify-end cols="1">
+    <v-col v-else class="d-flex" cols="1" justify-end>
       <v-btn class="ml-auto" fab icon x-large @click="backToPreviousPage"
         ><v-icon x-large> mdi-close </v-icon></v-btn
       >
@@ -45,6 +45,12 @@ export default {
 
     lang() {
       return i18n.locale;
+    },
+  },
+
+  watch: {
+    lang() {
+      document.title = this.$t('VIEWS.' + this.$route.meta.title + '.TITLE');
     },
   },
 

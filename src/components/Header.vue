@@ -63,7 +63,7 @@ export default {
           break;
       }
       if (this.$refs.tabs) this.$refs.tabs.callSlider();
-      document.title = this.$t('VIEWS.' + this.$route.meta.title + '.TITLE');
+      document.title = this.$t('PAGE_TITLES.' + this.$route.meta.title);
     },
 
     /**

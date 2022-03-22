@@ -54,7 +54,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  document.title = i18n.t('VIEWS.' + to.meta.title + '.TITLE') || 'Superheroes';
+  document.title = i18n.t('PAGE_TITLES.' + to.meta.title) || 'Superheroes';
   next();
 });
 

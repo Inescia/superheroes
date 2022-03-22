@@ -1,4 +1,10 @@
 {
+  "PAGE_TITLES": {
+    "DASHBOARD": "Favoris - SuperHéros",
+    "LIST": "Liste - SuperHéros",
+    "INFORMATIONS": "Informations - SuperHéros",
+    "NEW": "Nouveau - SuperHéros"
+  },
   "HERO": {
     "HERO": "Pas de héro | 1 héro | {count} héros",
     "ID": "ID",
